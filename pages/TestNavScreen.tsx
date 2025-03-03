@@ -30,6 +30,10 @@ export default function TestNavScreen() {
             onPress={() => navigation.navigate("CollectFood")}
           />
           <Button title="Walk" onPress={() => navigation.navigate("Walk")} />
+          <Button
+            title="Loading"
+            onPress={() => navigation.navigate("Loading")}
+          />
         </View>
       </SafeAreaView>
     </SafeAreaProvider>

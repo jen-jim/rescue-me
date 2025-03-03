@@ -9,6 +9,7 @@ import InventoryScreen from "./pages/InventoryScreen";
 import CollectFoodScreen from "./pages/CollectFoodScreen";
 import WalkScreen from "./pages/WalkScreen";
 import TestNavScreen from "./pages/TestNavScreen";
+import LoadingScreen from "./pages/LoadingScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -56,6 +57,11 @@ export default function App() {
           name="Walk"
           component={WalkScreen}
           options={{ title: "Rescue Me" }}
+        />
+        <Stack.Screen
+          name="Loading"
+          component={LoadingScreen}
+          options={{ title: "Loding Screen" }}
         />
       </Stack.Navigator>
     </NavigationContainer>
