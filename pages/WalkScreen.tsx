@@ -1,10 +1,9 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, StyleSheet, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 
-const ArButton = () => {
+export const ArButton = () => {
   const navigation = useNavigation();
   return (
     <Button title="AR View" onPress={() => navigation.navigate("ARWalk")} />
@@ -12,14 +11,6 @@ const ArButton = () => {
 };
 
 export default function WalkScreen() {
-  const navigation = useNavigation();
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: ArButton,
-    });
-  }, [navigation]);
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>

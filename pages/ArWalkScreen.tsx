@@ -6,7 +6,7 @@ import {
   ViroTrackingReason,
   ViroTrackingStateConstants,
 } from "@reactvision/react-viro";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, StyleSheet } from "react-native";
 
 const HelloWorldSceneAR = () => {
@@ -33,7 +33,7 @@ const HelloWorldSceneAR = () => {
   );
 };
 
-const MapButton = () => {
+export const MapButton = () => {
   const navigation = useNavigation();
   return (
     <Button title="Map View" onPress={() => navigation.navigate("Walk")} />
@@ -41,14 +41,6 @@ const MapButton = () => {
 };
 
 export default function ArWalkScreen() {
-  const navigation = useNavigation();
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: MapButton,
-    });
-  }, [navigation]);
-
   return (
     <ViroARSceneNavigator
       autofocus={true}
