@@ -13,7 +13,20 @@ import ArWalkScreen, { MapButton } from "./pages/ArWalkScreen";
 import TestNavScreen from "./pages/TestNavScreen";
 import LoadingScreen from "./pages/LoadingScreen";
 
-const Stack = createNativeStackNavigator();
+export type StackParamList = {
+  TestNav: undefined;
+  Title: undefined;
+  Intro: undefined;
+  Incubation: undefined;
+  NamePet: undefined;
+  Pet: undefined;
+  Inventory: undefined;
+  CollectFood: undefined;
+  Walk: undefined;
+  ARWalk: undefined;
+  Loading: undefined;
+};
+const Stack = createNativeStackNavigator<StackParamList>();
 
 export default function App() {
   return (
