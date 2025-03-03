@@ -7,6 +7,7 @@ export default function TitleScreen({ navigation }) {
       <SafeAreaView>
         <View style={styles.container}>
           <Text style={styles.bigBlue}>RESCUE ME</Text>
+          {/* returning user logic here */}
           <Text style={styles.welcome}>Welcome to our app</Text>
           <Text style={styles.red}>
             Urgent: you are needed at the labs immediately
@@ -15,6 +16,8 @@ export default function TitleScreen({ navigation }) {
             title="Click to enter labs"
             onPress={() => navigation.navigate("Intro")}
           />
+          <Text style={styles.bigBlue}>OR</Text>
+          <ReturningUser navigation={navigation} />
         </View>
       </SafeAreaView>
     </SafeAreaProvider>
@@ -37,3 +40,19 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
 });
+
+function ReturningUser({ navigation }) {
+  return (
+    <>
+      <Text style={styles.welcome}>Welcome back</Text>
+      {/* notifications */}
+      <Text style={styles.red}>
+        Urgent: your pet has done cool stuff while you have been away!
+      </Text>
+      <Button title="View Pet" onPress={() => navigation.navigate("Pet")} />
+    </>
+  );
+}
+
+//accessing local storage:
+//isReturningUser &&  <ReturningUser navigation = {navigation}/>
