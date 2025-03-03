@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 const ArButton = () => {
   const navigation = useNavigation();
   return (
-    <Button title="AR View" onPress={() => navigation.navigate("Title")} />
+    <Button title="AR View" onPress={() => navigation.navigate("ARWalk")} />
   );
 };
 
