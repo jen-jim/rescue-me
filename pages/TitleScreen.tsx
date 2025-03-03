@@ -1,9 +1,14 @@
 import { Text, View } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function TitleScreen() {
   return (
-    <View>
-      <Text>In title screen</Text>
-    </View>
+    <SafeAreaProvider>
+      <SafeAreaView>
+        <View>
+          <Text>In title screen</Text>
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }

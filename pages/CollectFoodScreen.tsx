@@ -1,9 +1,14 @@
 import { Text, View } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function CollectFoodScreen() {
   return (
-    <View>
-      <Text>In collect food screen</Text>
-    </View>
+    <SafeAreaProvider>
+      <SafeAreaView>
+        <View>
+          <Text>In collect food screen</Text>
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }

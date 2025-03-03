@@ -17,14 +17,46 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="TestNav">
         <Stack.Screen name="TestNav" component={TestNavScreen} />
-        <Stack.Screen name="Title" component={TitleScreen} />
-        <Stack.Screen name="Intro" component={IntroScreen} />
-        <Stack.Screen name="Incubation" component={IncubationScreen} />
-        <Stack.Screen name="NamePet" component={NamePetScreen} />
-        <Stack.Screen name="Pet" component={PetScreen} />
-        <Stack.Screen name="Inventory" component={InventoryScreen} />
-        <Stack.Screen name="CollectFood" component={CollectFoodScreen} />
-        <Stack.Screen name="Walk" component={WalkScreen} />
+        <Stack.Screen
+          name="Title"
+          component={TitleScreen}
+          options={{ title: "Rescue Me" }}
+        />
+        <Stack.Screen
+          name="Intro"
+          component={IntroScreen}
+          options={{ title: "Rescue Me" }}
+        />
+        <Stack.Screen
+          name="Incubation"
+          component={IncubationScreen}
+          options={{ title: "Rescue Me" }}
+        />
+        <Stack.Screen
+          name="NamePet"
+          component={NamePetScreen}
+          options={{ title: "Rescue Me" }}
+        />
+        <Stack.Screen
+          name="Pet"
+          component={PetScreen}
+          options={{ title: "Rescue Me" }}
+        />
+        <Stack.Screen
+          name="Inventory"
+          component={InventoryScreen}
+          options={{ title: "Rescue Me" }}
+        />
+        <Stack.Screen
+          name="CollectFood"
+          component={CollectFoodScreen}
+          options={{ title: "Rescue Me" }}
+        />
+        <Stack.Screen
+          name="Walk"
+          component={WalkScreen}
+          options={{ title: "Rescue Me" }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
