@@ -1,56 +1,31 @@
-import {
-  ViroARScene,
-  ViroARSceneNavigator,
-  ViroText,
-  ViroTrackingReason,
-  ViroTrackingStateConstants,
-} from "@reactvision/react-viro";
-import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import PetScreen from "./pages/PetScreen";
+import TitleScreen from "./pages/TitleScreen";
+import IntroScreen from "./pages/IntroScreen";
+import IncubationScreen from "./pages/IncubationScreen";
+import NamePetScreen from "./pages/NamePetScreen";
+import InventoryScreen from "./pages/InventoryScreen";
+import CollectFoodScreen from "./pages/CollectFoodScreen";
+import WalkScreen from "./pages/WalkScreen";
+import TestNavScreen from "./pages/TestNavScreen";
 
-const HelloWorldSceneAR = () => {
-  const [text, setText] = useState("Initializing AR...");
+const Stack = createNativeStackNavigator();
 
-  function onInitialized(state: any, reason: ViroTrackingReason) {
-    console.log("onInitialized", state, reason);
-    if (state === ViroTrackingStateConstants.TRACKING_NORMAL) {
-      setText("Hello World!");
-    } else if (state === ViroTrackingStateConstants.TRACKING_UNAVAILABLE) {
-      // Handle loss of tracking
-    }
-  }
-
+export default function App() {
   return (
-    <ViroARScene onTrackingUpdated={onInitialized}>
-      <ViroText
-        text={text}
-        scale={[0.5, 0.5, 0.5]}
-        position={[0, 0, -1]}
-        style={styles.helloWorldTextStyle}
-      />
-    </ViroARScene>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="TestNav">
+        <Stack.Screen name="TestNav" component={TestNavScreen} />
+        <Stack.Screen name="Title" component={TitleScreen} />
+        <Stack.Screen name="Intro" component={IntroScreen} />
+        <Stack.Screen name="Incubation" component={IncubationScreen} />
+        <Stack.Screen name="NamePet" component={NamePetScreen} />
+        <Stack.Screen name="Pet" component={PetScreen} />
+        <Stack.Screen name="Inventory" component={InventoryScreen} />
+        <Stack.Screen name="CollectFood" component={CollectFoodScreen} />
+        <Stack.Screen name="Walk" component={WalkScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-};
-
-export default () => {
-  return (
-    <ViroARSceneNavigator
-      autofocus={true}
-      initialScene={{
-        scene: HelloWorldSceneAR,
-      }}
-      style={styles.f1}
-    />
-  );
-};
-
-var styles = StyleSheet.create({
-  f1: { flex: 1 },
-  helloWorldTextStyle: {
-    fontFamily: "Arial",
-    fontSize: 30,
-    color: "#ffffff",
-    textAlignVertical: "center",
-    textAlign: "center",
-  },
-});
+}
