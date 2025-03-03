@@ -15,6 +15,7 @@
     "@react-navigation/native-stack": "^6.11.0",
     "@react-navigation/stack": "^6.4.1",
     "@reactvision/react-viro": "^2.41.4",
+    "lottie-react-native": "^7.2.2",
     "react": "18.2.0",
     "react-native": "^0.73.11",
     "react-native-maps": "^1.13.2",
