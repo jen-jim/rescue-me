@@ -1,26 +1,24 @@
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, StyleSheet, Text, View } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function TitleScreen({ navigation }) {
   return (
-    <SafeAreaProvider>
-      <SafeAreaView>
-        <View style={styles.container}>
-          <Text style={styles.bigBlue}>RESCUE ME</Text>
-          {/* returning user logic here */}
-          <Text style={styles.welcome}>Welcome to our app</Text>
-          <Text style={styles.red}>
-            Urgent: you are needed at the labs immediately
-          </Text>
-          <Button
-            title="Click to enter labs"
-            onPress={() => navigation.navigate("Intro")}
-          />
-          <Text style={styles.bigBlue}>OR</Text>
-          <ReturningUser navigation={navigation} />
-        </View>
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <SafeAreaView>
+      <View style={styles.container}>
+        <Text style={styles.bigBlue}>RESCUE ME</Text>
+        {/* returning user logic here */}
+        <Text style={styles.welcome}>Welcome to our app</Text>
+        <Text style={styles.red}>
+          Urgent: you are needed at the labs immediately
+        </Text>
+        <Button
+          title="Click to enter labs"
+          onPress={() => navigation.navigate("Intro")}
+        />
+        <Text style={styles.bigBlue}>OR</Text>
+        <ReturningUser navigation={navigation} />
+      </View>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
