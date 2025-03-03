@@ -1,6 +1,12 @@
+import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+} from "react-native";
 import Video from "react-native-video";
 
 export default function IntroScreen({ navigation }) {
