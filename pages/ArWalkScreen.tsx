@@ -32,7 +32,7 @@ const HelloWorldSceneAR = () => {
   );
 };
 
-export default function WalkAr() {
+export default function ArWalkScreen() {
   return (
     <ViroARSceneNavigator
       autofocus={true}

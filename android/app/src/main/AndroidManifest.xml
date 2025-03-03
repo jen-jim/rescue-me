@@ -41,5 +41,7 @@
 
       <meta-data android:name="com.google.ar.core" android:value="optional" />
       <meta-data android:name="com.samsung.android.vr.application.mode" android:value="vr_only"/>
+      <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyBmhawOsB5l-2YbMFkzYIIDXMYA6D-ll58"/>
+
     </application>
 </manifest>
