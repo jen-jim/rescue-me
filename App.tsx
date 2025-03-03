@@ -8,12 +8,25 @@ import IncubationScreen from "./pages/IncubationScreen";
 import NamePetScreen from "./pages/NamePetScreen";
 import InventoryScreen from "./pages/InventoryScreen";
 import CollectFoodScreen from "./pages/CollectFoodScreen";
-import WalkScreen from "./pages/WalkScreen";
-import ArWalkScreen from "./pages/ArWalkScreen";
+import WalkScreen, { ArButton } from "./pages/WalkScreen";
+import ArWalkScreen, { MapButton } from "./pages/ArWalkScreen";
 import TestNavScreen from "./pages/TestNavScreen";
 import LoadingScreen from "./pages/LoadingScreen";
 
-const Stack = createNativeStackNavigator();
+export type StackParamList = {
+  TestNav: undefined;
+  Title: undefined;
+  Intro: undefined;
+  Incubation: undefined;
+  NamePet: undefined;
+  Pet: undefined;
+  Inventory: undefined;
+  CollectFood: undefined;
+  Walk: undefined;
+  ARWalk: undefined;
+  Loading: undefined;
+};
+const Stack = createNativeStackNavigator<StackParamList>();
 
 export default function App() {
   return (
@@ -59,12 +72,12 @@ export default function App() {
           <Stack.Screen
             name="Walk"
             component={WalkScreen}
-            options={{ title: "Rescue Me" }}
+            options={{ title: "Rescue Me", headerRight: ArButton }}
           />
           <Stack.Screen
             name="ARWalk"
             component={ArWalkScreen}
-            options={{ title: "Rescue Me" }}
+            options={{ title: "Rescue Me", headerRight: MapButton }}
           />
           <Stack.Screen
             name="Loading"
