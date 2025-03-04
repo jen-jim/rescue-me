@@ -1,0 +1,70 @@
+import { StyleSheet } from "react-native";
+
+export const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "#000",
+        width: "100%",
+        height: "100%",
+    },
+    videoContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#000",
+        width: "100%",
+        height: "100%",
+        position: "absolute",
+        top: 0,
+        left: 0,
+    },
+    video: {
+        width: "100%",
+        height: "100%",
+        position: "absolute",
+        top: 0,
+        left: 0,
+    },
+    errorText: {
+        color: "red",
+        fontSize: 16,
+        padding: 10,
+        backgroundColor: "rgba(0,0,0,0.7)",
+        zIndex: 10,
+    },
+    overlay: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: "flex-end",
+        alignItems: "center",
+        zIndex: 1,
+    },
+    bottomContainer: {
+        width: "100%",
+        alignItems: "center",
+        marginBottom: 50,
+    },
+    title: {
+        fontSize: 32,
+        fontWeight: "bold",
+        color: "#ffffff",
+        textShadowColor: "rgba(0, 0, 0, 0.7)",
+        textShadowOffset: { width: 2, height: 2 },
+        textShadowRadius: 5,
+        marginBottom: 20,
+    },
+    button: {
+        backgroundColor: "#ff6b6b",
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 10,
+    },
+    buttonText: {
+        color: "#fff",
+        fontSize: 18,
+        fontWeight: "bold",
+    },
+});
