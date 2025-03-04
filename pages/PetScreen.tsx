@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 import { getPetData, savePetData } from "../utils/Local-storage";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function PetScreen({ navigation }) {
   const [message, setMessage] = useState("");
@@ -21,15 +22,17 @@ export default function PetScreen({ navigation }) {
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const idleTimer = useRef(null);
 
-  useEffect(() => {
-    async function loadPet() {
-      const storedPet = await getPetData();
-      if (storedPet) {
-        setPetData(storedPet);
+  useFocusEffect(
+    useCallback(() => {
+      async function refreshPetData() {
+        const storedPet = await getPetData();
+        if (storedPet) {
+          setPetData(storedPet);
+        }
       }
-    }
-    loadPet();
-  }, []);
+      refreshPetData();
+    }, [])
+  );
 
   const updatePetData = async (newData) => {
     setPetData(newData);
