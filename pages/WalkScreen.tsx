@@ -34,26 +34,21 @@ export default function WalkScreen() {
       });
   }, []);
 
-  const mapRegion = {
-    latitude: 53.48187430107343,
-    longitude: -2.2408551764254514,
-    latitudeDelta: 0.03,
-    longitudeDelta: 0.03,
-  };
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
         <MapView
           style={styles.mapStyle}
           provider={PROVIDER_GOOGLE}
-          initialRegion={mapRegion}
           customMapStyle={mapStyle}
           showsUserLocation={true}
           showsMyLocationButton={true}
         >
           <Marker
-            coordinate={mapRegion}
+            coordinate={{
+              latitude: 53.48187430107343,
+              longitude: -2.2408551764254514,
+            }}
             title={"Northcoders"}
             description={"This is a description of the marker"}
           />
