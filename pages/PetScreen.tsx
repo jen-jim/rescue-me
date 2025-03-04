@@ -18,6 +18,7 @@ export default function PetScreen({ navigation }) {
     name: "Fluffy",
     happiness: 80,
     hunger: 20,
+    lastUpdated: Date.now(),
   });
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const idleTimer = useRef(null);
@@ -27,7 +28,27 @@ export default function PetScreen({ navigation }) {
       async function refreshPetData() {
         const storedPet = await getPetData();
         if (storedPet) {
-          setPetData(storedPet);
+          const now = Date.now();
+          const lastUpdated = storedPet.lastUpdated || now;
+          // Calculate the elapsed time in minutes
+          const elapsedMinutes = (now - lastUpdated) / 60000;
+          // 1 happiness point per minute (we will adjust this later when fine tuning)
+          const decayRate = 1;
+          const decayAmount = Math.floor(elapsedMinutes * decayRate);
+
+          const updatedHappiness = Math.max(
+            0,
+            storedPet.happiness - decayAmount
+          );
+
+          const updatedPet = {
+            ...storedPet,
+            happiness: updatedHappiness,
+            lastUpdated: now,
+          };
+
+          setPetData(updatedPet);
+          await savePetData(updatedPet);
         }
       }
       refreshPetData();
