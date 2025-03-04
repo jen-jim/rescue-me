@@ -13,7 +13,7 @@ export default function IntroScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <Video
-        source={require("./assets/video/puppy_test.mp4")}
+        source={require("./assets/video/intro.mp4")}
         style={styles.video}
         resizeMode="cover"
         repeat
