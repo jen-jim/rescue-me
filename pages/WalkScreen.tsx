@@ -3,6 +3,7 @@ import { Button, PermissionsAndroid, View } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { useNavigation } from "@react-navigation/native";
 import { mapStyle, styles } from "./StyleSheets/WalkScreenStyles";
+import { useEffect } from "react";
 
 export const ArButton = () => {
   const navigation = useNavigation();
@@ -11,35 +12,28 @@ export const ArButton = () => {
   );
 };
 
-export const UserLocationButton = () => {
-  return <Button title="Get Location" onPress={requestLocationPermission} />;
-};
-
 const requestLocationPermission = async () => {
-  try {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      {
-        title: "Geolocation Permission",
-        message: "Can we access your location?",
-        buttonNeutral: "Ask Me Later",
-        buttonNegative: "Cancel",
-        buttonPositive: "OK",
-      }
-    );
-    if (granted === "granted") {
-      console.log("You can use Geolocation");
-      return true;
-    } else {
-      console.log("You cannot use Geolocation");
-      return false;
+  return PermissionsAndroid.request(
+    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    {
+      title: "Geolocation Permission",
+      message: "Please allow access to your location",
+      buttonPositive: "OK",
     }
-  } catch (err) {
-    return false;
-  }
+  );
 };
 
 export default function WalkScreen() {
+  useEffect(() => {
+    requestLocationPermission()
+      .then((status) => {
+        console.log(status);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   const mapRegion = {
     latitude: 53.48187430107343,
     longitude: -2.2408551764254514,
