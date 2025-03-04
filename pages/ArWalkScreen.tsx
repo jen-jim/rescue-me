@@ -1,5 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import {
+  Viro3DObject,
+  ViroAmbientLight,
   ViroARScene,
   ViroARSceneNavigator,
   ViroText,
@@ -28,6 +30,22 @@ const HelloWorldSceneAR = () => {
         scale={[0.5, 0.5, 0.5]}
         position={[0, 0, -1]}
         style={styles.helloWorldTextStyle}
+      />
+      <ViroAmbientLight color={"#aaaaaa"} />
+      <Viro3DObject
+        source={require("../pages/assets/models/pug/pug_animated.vrx")}
+        type="VRX"
+        position={[0, -2, -5]}
+        scale={[1, 1, 1]}
+        rotation={[0, 0, 0]}
+        dragType="FixedToWorld"
+        onDrag={() => {}}
+        animation={{
+          name: "Take 001",
+          run: true,
+          loop: true,
+          delay: 1000,
+        }}
       />
     </ViroARScene>
   );
