@@ -1,22 +1,19 @@
-import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, Text, View } from "react-native";
 import LottieView from "lottie-react-native";
 
 export default function LoadingScreen() {
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
-        <View style={styles.welcome}>
-          <LottieView
-            style={{ flex: 1 }}
-            source={require("../assets/Loading.json")}
-            autoPlay
-            loop
-          />
-        </View>
-        <Text style={styles.text}>Loading Screen</Text>
+    <View style={styles.container}>
+      <View style={styles.welcome}>
+        <LottieView
+          style={{ flex: 1 }}
+          source={require("../assets/Loading.json")}
+          autoPlay
+          loop
+        />
       </View>
-    </SafeAreaView>
+      <Text style={styles.text}>Loading Screen</Text>
+    </View>
   );
 }
 
