@@ -6,10 +6,11 @@ import {
   View,
   ActivityIndicator,
 } from "react-native";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { useNavigation } from "@react-navigation/native";
 import { mapStyle, styles } from "./StyleSheets/WalkScreenStyles";
 import Geolocation from "@react-native-community/geolocation";
+import { FoodMarkers, Region } from "./components/FoodMarkers";
 
 export const ArButton = () => {
   const navigation = useNavigation();
@@ -36,13 +37,6 @@ const requestLocationPermission = async () => {
 };
 
 export default function WalkScreen() {
-  type Region = {
-    latitude: number;
-    longitude: number;
-    latitudeDelta: number;
-    longitudeDelta: number;
-  };
-
   const [region, setRegion] = useState<Region | null>(null);
 
   useEffect(() => {
@@ -90,11 +84,7 @@ export default function WalkScreen() {
           showsUserLocation={true}
           showsMyLocationButton={true}
         >
-          <Marker
-            coordinate={region}
-            title="Your Location"
-            description="You are here"
-          />
+          <FoodMarkers center={region} />
         </MapView>
       </View>
     </SafeAreaView>
