@@ -10,8 +10,15 @@ import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { useNavigation } from "@react-navigation/native";
 import { mapStyle, styles } from "./StyleSheets/WalkScreenStyles";
 import Geolocation from "@react-native-community/geolocation";
-import { FoodMarkers, Region } from "./components/FoodMarkers";
+import { FoodMarkers } from "./components/FoodMarkers";
 import { SpecialFoodMarker } from "./components/SpecialFoodMarker";
+
+export type Region = {
+  latitude: number;
+  longitude: number;
+  latitudeDelta: number;
+  longitudeDelta: number;
+};
 
 export const ArButton = () => {
   const navigation = useNavigation();
@@ -85,7 +92,11 @@ export default function WalkScreen() {
           showsUserLocation={true}
           showsMyLocationButton={true}
         >
-          <Marker coordinate={region} title="Test marker" />
+          <Marker
+            coordinate={region}
+            title="Test marker"
+            description="to test food proximity mechanics"
+          />
           <FoodMarkers
             center={region}
             count={10}

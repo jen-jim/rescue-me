@@ -1,12 +1,6 @@
 import React from "react";
 import { Marker } from "react-native-maps";
-
-export type Region = {
-  latitude: number;
-  longitude: number;
-  latitudeDelta: number;
-  longitudeDelta: number;
-};
+import { Region } from "../WalkScreen";
 
 interface FoodMarkerProps {
   center: Region;
