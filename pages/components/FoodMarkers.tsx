@@ -5,20 +5,20 @@ import { Region } from "../WalkScreen";
 import { generateFoodCoords } from "../../utils/generateFoodCoords";
 
 interface FoodMarkersProps {
-  center: Region;
+  userLocation: Region;
   count?: number;
   range?: number;
 }
 
 export const FoodMarkers: React.FC<FoodMarkersProps> = ({
-  center,
+  userLocation,
   count = 10,
   range = 0.008,
 }) => {
   const foodCoords = [];
 
   for (let i = 0; i < count; i++) {
-    foodCoords.push(generateFoodCoords(center, range));
+    foodCoords.push(generateFoodCoords(userLocation, range));
   }
 
   return (

@@ -16,8 +16,6 @@ import { SpecialFoodMarker } from "./components/SpecialFoodMarker";
 export type Region = {
   latitude: number;
   longitude: number;
-  latitudeDelta: number;
-  longitudeDelta: number;
 };
 
 export const ArButton = () => {
@@ -45,7 +43,7 @@ const requestLocationPermission = async () => {
 };
 
 export default function WalkScreen() {
-  const [region, setRegion] = useState<Region | null>(null);
+  const [userLocation, setUserLocation] = useState<Region | null>(null);
 
   useEffect(() => {
     requestLocationPermission().then((status) => {
@@ -53,11 +51,9 @@ export default function WalkScreen() {
         Geolocation.getCurrentPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
-            setRegion({
+            setUserLocation({
               latitude,
               longitude,
-              latitudeDelta: 0.008,
-              longitudeDelta: 0.008,
             });
           },
           (error) => {
@@ -71,7 +67,7 @@ export default function WalkScreen() {
     });
   }, []);
 
-  if (!region) {
+  if (!userLocation) {
     return (
       <SafeAreaView
         style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
@@ -81,28 +77,37 @@ export default function WalkScreen() {
     );
   }
 
+  const userRegion = {
+    ...userLocation,
+    latitudeDelta: 0.008,
+    longitudeDelta: 0.008,
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
         <MapView
           style={styles.mapStyle}
           provider={PROVIDER_GOOGLE}
-          initialRegion={region}
+          initialRegion={userRegion}
           customMapStyle={mapStyle}
           showsUserLocation={true}
           showsMyLocationButton={true}
         >
           <Marker
-            coordinate={region}
+            coordinate={userLocation}
             title="Test marker"
             description="to test food proximity mechanics"
           />
           <FoodMarkers
-            center={region}
+            userLocation={userLocation}
             count={10}
-            range={region.latitudeDelta}
+            range={userRegion.latitudeDelta}
           />
-          <SpecialFoodMarker center={region} range={region.latitudeDelta} />
+          <SpecialFoodMarker
+            userLocation={userLocation}
+            range={userRegion.latitudeDelta}
+          />
         </MapView>
       </View>
     </SafeAreaView>

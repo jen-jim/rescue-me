@@ -5,7 +5,7 @@ import { Region } from "../WalkScreen";
 import { generateFoodCoords } from "../../utils/generateFoodCoords";
 
 interface FoodMarkerProps {
-  center: Region;
+  userLocation: Region;
   range?: number;
 }
 
@@ -37,10 +37,10 @@ const foodTypes = [
 ];
 
 export const SpecialFoodMarker: React.FC<FoodMarkerProps> = ({
-  center,
+  userLocation,
   range = 0.008,
 }) => {
-  const foodCoords = generateFoodCoords(center, range);
+  const foodCoords = generateFoodCoords(userLocation, range);
   const foodType = foodTypes[Math.floor(Math.random() * foodTypes.length)];
 
   return (
