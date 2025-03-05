@@ -1,18 +1,29 @@
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import {
   Viro3DObject,
   ViroAmbientLight,
   ViroARScene,
   ViroARSceneNavigator,
+  ViroImage,
   ViroText,
   ViroTrackingReason,
   ViroTrackingStateConstants,
 } from "@reactvision/react-viro";
 import React, { useState } from "react";
 import { Button, StyleSheet } from "react-native";
+import { Region } from "./WalkScreen";
+
+type RootStackParamList = {
+  ARWalk: {
+    foodMarker?: Region;
+  };
+};
 
 const HelloWorldSceneAR = () => {
   const [text, setText] = useState("Initializing AR...");
+
+  const route = useRoute<RouteProp<RootStackParamList, "ARWalk">>();
+  const foodMarker = route.params?.foodMarker;
 
   function onInitialized(state: any, reason: ViroTrackingReason) {
     console.log("onInitialized", state, reason);
@@ -47,6 +58,16 @@ const HelloWorldSceneAR = () => {
           delay: 1000,
         }}
       />
+      {foodMarker && (
+        <ViroImage
+          source={require("../pages/assets/icons/food_icon.png")}
+          position={foodMarker ? [0, -0.5, -1] : undefined}
+          scale={[0.5, 0.5, 0.5]}
+          onClick={() => {
+            console.log("Food icon clicked!");
+          }}
+        />
+      )}
     </ViroARScene>
   );
 };
