@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import { mapStyle, styles } from "./StyleSheets/WalkScreenStyles";
 import Geolocation from "@react-native-community/geolocation";
 import { FoodMarkers, Region } from "./components/FoodMarkers";
+import { SpecialFoodMarker } from "./components/SpecialFoodMarker";
 
 export const ArButton = () => {
   const navigation = useNavigation();
@@ -84,7 +85,12 @@ export default function WalkScreen() {
           showsUserLocation={true}
           showsMyLocationButton={true}
         >
-          <FoodMarkers center={region} />
+          <FoodMarkers
+            center={region}
+            count={10}
+            range={region.latitudeDelta}
+          />
+          <SpecialFoodMarker center={region} range={region.latitudeDelta} />
         </MapView>
       </View>
     </SafeAreaView>

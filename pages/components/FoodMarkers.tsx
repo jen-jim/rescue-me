@@ -50,7 +50,8 @@ export const FoodMarkers: React.FC<FoodMarkersProps> = ({
           key={index}
           coordinate={marker}
           title="Food"
-          description="Food description/stats"
+          description="Delicious and nutritious"
+          pinColor={"#FF3838"}
         />
       ))}
     </>
