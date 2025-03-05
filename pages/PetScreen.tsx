@@ -40,9 +40,11 @@ export default function PetScreen({ navigation }) {
             0,
             storedPet.happiness - decayAmount
           );
+          const updatedHunger = Math.max(0, storedPet.hunger + decayAmount);
 
           const updatedPet = {
             ...storedPet,
+            hunger: updatedHunger,
             happiness: updatedHappiness,
             lastUpdated: now,
           };
@@ -72,6 +74,18 @@ export default function PetScreen({ navigation }) {
 
     await updatePetData(updatedPet);
     showMessage("That was tasty!");
+  };
+
+  const handlePet = async () => {
+    // increase happiness
+    const happinessValue = petData.happiness + 7;
+    const updatedPet = {
+      ...petData,
+      happiness: happinessValue,
+    };
+
+    await updatePetData(updatedPet);
+    showMessage("That was nice!");
   };
 
   const showMessage = (text) => {
@@ -126,10 +140,7 @@ export default function PetScreen({ navigation }) {
           <Icon name="fast-food" size={24} color="white" />
           <Text style={styles.buttonText}>Feed</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => showMessage("That was nice!", 3)}
-        >
+        <TouchableOpacity style={styles.button} onPress={handlePet}>
           <Icon name="hand-left" size={24} color="white" />
           <Text style={styles.buttonText}>Pet</Text>
         </TouchableOpacity>
