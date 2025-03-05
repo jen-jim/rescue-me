@@ -8,7 +8,7 @@ import IncubationScreen from "./pages/IncubationScreen";
 import NamePetScreen from "./pages/NamePetScreen";
 import InventoryScreen from "./pages/InventoryScreen";
 import CollectFoodScreen from "./pages/CollectFoodScreen";
-import WalkScreen, { ArButton } from "./pages/WalkScreen";
+import WalkScreen, { ArButton, Region } from "./pages/WalkScreen";
 import ArWalkScreen, { MapButton } from "./pages/ArWalkScreen";
 import TestNavScreen from "./pages/TestNavScreen";
 import LoadingScreen from "./pages/LoadingScreen";
@@ -23,7 +23,7 @@ export type StackParamList = {
   Inventory: undefined;
   CollectFood: undefined;
   Walk: undefined;
-  ARWalk: undefined;
+  ARWalk: { foodMarker: Region } | undefined;
   Loading: undefined;
 };
 const Stack = createNativeStackNavigator<StackParamList>();

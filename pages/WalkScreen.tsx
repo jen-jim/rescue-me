@@ -6,12 +6,19 @@ import {
   View,
   ActivityIndicator,
 } from "react-native";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { useNavigation } from "@react-navigation/native";
 import { mapStyle, styles } from "./StyleSheets/WalkScreenStyles";
 import Geolocation from "@react-native-community/geolocation";
-import { FoodMarkers, Region } from "./components/FoodMarkers";
+import { FoodMarkers } from "./components/FoodMarkers";
 import { SpecialFoodMarker } from "./components/SpecialFoodMarker";
+import { generateFoodCoords } from "../utils/generateFoodCoords";
+import { FoodProximityButton } from "./components/FoodProximityButton";
+
+export type Region = {
+  latitude: number;
+  longitude: number;
+};
 
 export const ArButton = () => {
   const navigation = useNavigation();
@@ -38,7 +45,9 @@ const requestLocationPermission = async () => {
 };
 
 export default function WalkScreen() {
-  const [region, setRegion] = useState<Region | null>(null);
+  const [userLocation, setUserLocation] = useState<Region | null>(null);
+  const [foodCoords, setFoodCoords] = useState<Region[]>([]);
+  const [specialFoodCoords, setSpecialFoodCoords] = useState<Region>();
 
   useEffect(() => {
     requestLocationPermission().then((status) => {
@@ -46,11 +55,9 @@ export default function WalkScreen() {
         Geolocation.getCurrentPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
-            setRegion({
+            setUserLocation({
               latitude,
               longitude,
-              latitudeDelta: 0.008,
-              longitudeDelta: 0.008,
             });
           },
           (error) => {
@@ -64,7 +71,29 @@ export default function WalkScreen() {
     });
   }, []);
 
-  if (!region) {
+  const deltas = {
+    latitudeDelta: 0.008,
+    longitudeDelta: 0.008,
+  };
+
+  useEffect(() => {
+    if (userLocation) {
+      const foodMarkers = [];
+      const numOfFoodMarkers = 10;
+      for (let i = 0; i < numOfFoodMarkers; i++) {
+        foodMarkers.push(
+          generateFoodCoords(userLocation, deltas.latitudeDelta)
+        );
+      }
+      setFoodCoords(foodMarkers);
+
+      setSpecialFoodCoords(
+        generateFoodCoords(userLocation, deltas.latitudeDelta)
+      );
+    }
+  }, [userLocation, deltas.latitudeDelta]);
+
+  if (!userLocation) {
     return (
       <SafeAreaView
         style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
@@ -74,24 +103,37 @@ export default function WalkScreen() {
     );
   }
 
+  const userRegion = {
+    ...userLocation,
+    ...deltas,
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
         <MapView
           style={styles.mapStyle}
           provider={PROVIDER_GOOGLE}
-          initialRegion={region}
+          initialRegion={userRegion}
           customMapStyle={mapStyle}
           showsUserLocation={true}
           showsMyLocationButton={true}
         >
-          <FoodMarkers
-            center={region}
-            count={10}
-            range={region.latitudeDelta}
+          <Marker
+            coordinate={userLocation}
+            title="Test marker"
+            description="to test food proximity mechanics"
           />
-          <SpecialFoodMarker center={region} range={region.latitudeDelta} />
+          <FoodMarkers foodCoords={foodCoords} />
+          <SpecialFoodMarker specialFoodCoords={specialFoodCoords} />
         </MapView>
+        <FoodProximityButton
+          userLocation={userLocation}
+          allFoodCoords={[
+            ...foodCoords,
+            ...(specialFoodCoords ? [specialFoodCoords] : []),
+          ]}
+        />
       </View>
     </SafeAreaView>
   );

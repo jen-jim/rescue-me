@@ -1,65 +1,55 @@
 import React from "react";
 import { Marker } from "react-native-maps";
-
-export type Region = {
-  latitude: number;
-  longitude: number;
-  latitudeDelta: number;
-  longitudeDelta: number;
-};
+import Icon from "react-native-vector-icons/Ionicons";
+import { Region } from "../WalkScreen";
 
 interface FoodMarkerProps {
-  center: Region;
-  range?: number;
+  specialFoodCoords: Region | undefined;
 }
 
 const foodTypes = [
   {
     title: "Vitality Boost Food",
     description: "Increases energy levels",
-    color: "#46E646",
+    icon: "flash",
+    color: "#5FD75F",
   },
   {
     title: "Happiness Boost Food",
     description: "Improves your mood",
+    icon: "happy",
     color: "#FCD734",
   },
   {
     title: "Cuteness Boost Food",
     description: "Adds an extra dose of cuteness",
-    color: "#CF9FFF",
+    icon: "heart",
+    color: "#FF98A9",
   },
   {
     title: "Slow Release Food",
     description: "Provides long-lasting energy",
+    icon: "timer",
     color: "#00C3FF",
   },
 ];
 
-const generateFoodMarker = (center: Region, range: number): Region => {
-  const randomLatitude = center.latitude + (Math.random() - 0.5) * range;
-  const randomLongitude = center.longitude + (Math.random() - 0.5) * range;
-  return {
-    latitude: randomLatitude,
-    longitude: randomLongitude,
-    latitudeDelta: center.latitudeDelta,
-    longitudeDelta: center.longitudeDelta,
-  };
-};
-
 export const SpecialFoodMarker: React.FC<FoodMarkerProps> = ({
-  center,
-  range = 0.008,
+  specialFoodCoords,
 }) => {
-  const markerCoordinate = generateFoodMarker(center, range);
+  if (!specialFoodCoords) {
+    return null;
+  }
+
   const foodType = foodTypes[Math.floor(Math.random() * foodTypes.length)];
 
   return (
     <Marker
-      coordinate={markerCoordinate}
+      coordinate={specialFoodCoords}
       title={foodType.title}
       description={foodType.description}
-      pinColor={foodType.color}
-    />
+    >
+      <Icon name={foodType.icon} size={32} color="#FF0000" />
+    </Marker>
   );
 };
