@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -9,11 +9,70 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
+import { getPetData, savePetData } from "../utils/Local-storage";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function PetScreen({ navigation }) {
   const [message, setMessage] = useState("");
+  const [petData, setPetData] = useState({
+    name: "Fluffy",
+    happiness: 80,
+    hunger: 20,
+    lastUpdated: Date.now(),
+  });
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const idleTimer = useRef(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      async function refreshPetData() {
+        const storedPet = await getPetData();
+        if (storedPet) {
+          const now = Date.now();
+          const lastUpdated = storedPet.lastUpdated || now;
+          // Calculate the elapsed time in minutes
+          const elapsedMinutes = (now - lastUpdated) / 60000;
+          // 1 happiness point per minute (we will adjust this later when fine tuning)
+          const decayRate = 1;
+          const decayAmount = Math.floor(elapsedMinutes * decayRate);
+
+          const updatedHappiness = Math.max(
+            0,
+            storedPet.happiness - decayAmount
+          );
+
+          const updatedPet = {
+            ...storedPet,
+            happiness: updatedHappiness,
+            lastUpdated: now,
+          };
+
+          setPetData(updatedPet);
+          await savePetData(updatedPet);
+        }
+      }
+      refreshPetData();
+    }, [])
+  );
+
+  const updatePetData = async (newData) => {
+    setPetData(newData);
+    await savePetData(newData);
+  };
+
+  const handleFeed = async () => {
+    // Decrease hunger and increase happiness
+    const hungerValue = Math.max(0, petData.hunger - 10);
+    const happinessValue = petData.happiness + 5;
+    const updatedPet = {
+      ...petData,
+      hunger: hungerValue,
+      happiness: happinessValue,
+    };
+
+    await updatePetData(updatedPet);
+    showMessage("That was tasty!");
+  };
 
   const showMessage = (text) => {
     fadeAnim.setValue(1);
@@ -63,10 +122,7 @@ export default function PetScreen({ navigation }) {
           <Icon name="game-controller" size={24} color="white" />
           <Text style={styles.buttonText}>Play</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => showMessage("That was tasty!", 2)}
-        >
+        <TouchableOpacity style={styles.button} onPress={handleFeed}>
           <Icon name="fast-food" size={24} color="white" />
           <Text style={styles.buttonText}>Feed</Text>
         </TouchableOpacity>
@@ -84,6 +140,11 @@ export default function PetScreen({ navigation }) {
           <Icon name="walk" size={24} color="white" />
           <Text style={styles.buttonText}>Walk</Text>
         </TouchableOpacity>
+      </View>
+      <View style={styles.petStats}>
+        <Text style={styles.statsText}>Name: {petData.name}</Text>
+        <Text style={styles.statsText}>Happiness: {petData.happiness}</Text>
+        <Text style={styles.statsText}>Hunger: {petData.hunger}</Text>
       </View>
     </SafeAreaView>
   );
@@ -154,5 +215,16 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  petStats: {
+    padding: 10,
+    backgroundColor: "#fff",
+    width: "100%",
+    alignItems: "center",
+  },
+  statsText: {
+    color: "black",
+    fontSize: 16,
+    fontWeight: "500",
   },
 });
