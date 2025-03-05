@@ -1,7 +1,7 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useEffect, useState } from "react";
-import Icon from "react-native-vector-icons/Ionicons";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { getInventoryData, saveInventoryData } from "../utils/Local-storage";
 
 export default function InventoryScreen() {
@@ -65,9 +65,9 @@ const formatItemName = (item) =>
 
 const getCategoryIcon = (category) => {
   const icons = {
-    food: "fast-food-outline",
-    medicines: "medkit-outline",
-    toys: "balloon-outline",
+    food: "food",
+    medicines: "medical-bag",
+    toys: "teddy-bear",
   };
   return (
     <Icon name={icons[category] || "help-circle"} size={24} color="#ff69b4" />
@@ -76,15 +76,15 @@ const getCategoryIcon = (category) => {
 
 const getItemIcon = (item) => {
   const icons = {
-    normal: "fast-food",
+    normal: "bowl-mix",
     vitalityBoost: "flash",
-    happinessBoost: "happy",
+    happinessBoost: "emoticon-happy",
     cutenessBoost: "heart",
     slowRelease: "timer",
     recoveryBoost: "bandage",
-    growthBoost: "leaf",
+    growthBoost: "sprout",
     sleepAid: "bed",
-    butterflies: "bug",
+    butterflies: "butterfly",
     catScratcher: "paw",
   };
   return icons[item] || "help-circle";
