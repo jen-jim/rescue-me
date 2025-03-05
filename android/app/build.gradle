@@ -75,9 +75,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.virostarterkit"
+    namespace "com.RescueMe"
     defaultConfig {
-        applicationId "com.virostarterkit"
+        applicationId "com.RescueMe"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -123,7 +123,7 @@ dependencies {
     implementation 'com.google.protobuf.nano:protobuf-javanano:3.1.0'
     implementation 'com.google.protobuf.nano:protobuf-javanano:3.1.0'
     // ========================================================================
-    
+
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
