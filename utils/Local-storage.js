@@ -18,6 +18,24 @@ export const getPetData = async () => {
   }
 };
 
+export const saveInventoryData = async (inventory) => {
+  try {
+    await AsyncStorage.setItem("inventory", JSON.stringify(inventory));
+    console.log("Inventory data saved");
+  } catch (error) {
+    console.error("Error saving inventory data:", error);
+  }
+};
+
+export const getInventoryData = async () => {
+  try {
+    const data = await AsyncStorage.getItem("inventory");
+    return data != null ? JSON.parse(data) : null;
+  } catch (error) {
+    console.error("Error reading inventory data:", error);
+  }
+};
+
 // // how to use pet storage functions
 
 // // example pet obj
