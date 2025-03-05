@@ -6,7 +6,7 @@ import {
   View,
   ActivityIndicator,
 } from "react-native";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { useNavigation } from "@react-navigation/native";
 import { mapStyle, styles } from "./StyleSheets/WalkScreenStyles";
 import Geolocation from "@react-native-community/geolocation";
@@ -85,6 +85,7 @@ export default function WalkScreen() {
           showsUserLocation={true}
           showsMyLocationButton={true}
         >
+          <Marker coordinate={region} title="Test marker" />
           <FoodMarkers
             center={region}
             count={10}
