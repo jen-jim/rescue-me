@@ -5,29 +5,31 @@ import { Region } from "../WalkScreen";
 
 interface FoodProximityButtonProps {
   userLocation: Region;
-  foodMarker: Region;
+  allFoodCoords: Region[];
 }
 
 export const FoodProximityButton: React.FC<FoodProximityButtonProps> = ({
   userLocation,
-  foodMarker,
+  allFoodCoords,
 }) => {
   const navigation = useNavigation();
 
-  const latDiff = Math.abs(userLocation.latitude - foodMarker.latitude);
-  const lonDiff = Math.abs(userLocation.longitude - foodMarker.longitude);
-  const threshold = 0.002;
+  const nearFood = allFoodCoords.filter((foodCoords) => {
+    const latDiff = Math.abs(userLocation.latitude - foodCoords.latitude);
+    const lonDiff = Math.abs(userLocation.longitude - foodCoords.longitude);
+    const threshold = 0.002;
 
-  const isNearMarker = latDiff < threshold && lonDiff < threshold;
+    return latDiff < threshold && lonDiff < threshold;
+  });
 
-  if (!isNearMarker) {
+  if (nearFood.length === 0) {
     return null;
   }
 
   return (
     <Button
       title="View Food in AR"
-      onPress={() => navigation.navigate("ARWalk", { foodMarker })}
+      onPress={() => navigation.navigate("ARWalk", { foodMarker: nearFood[0] })}
     />
   );
 };

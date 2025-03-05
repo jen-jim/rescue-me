@@ -12,6 +12,8 @@ import { mapStyle, styles } from "./StyleSheets/WalkScreenStyles";
 import Geolocation from "@react-native-community/geolocation";
 import { FoodMarkers } from "./components/FoodMarkers";
 import { SpecialFoodMarker } from "./components/SpecialFoodMarker";
+import { generateFoodCoords } from "../utils/generateFoodCoords";
+import { FoodProximityButton } from "./components/FoodProximityButton";
 
 export type Region = {
   latitude: number;
@@ -44,6 +46,8 @@ const requestLocationPermission = async () => {
 
 export default function WalkScreen() {
   const [userLocation, setUserLocation] = useState<Region | null>(null);
+  const [foodCoords, setFoodCoords] = useState<Region[]>([]);
+  const [specialFoodCoords, setSpecialFoodCoords] = useState<Region>();
 
   useEffect(() => {
     requestLocationPermission().then((status) => {
@@ -67,6 +71,28 @@ export default function WalkScreen() {
     });
   }, []);
 
+  const deltas = {
+    latitudeDelta: 0.008,
+    longitudeDelta: 0.008,
+  };
+
+  useEffect(() => {
+    if (userLocation) {
+      const foodMarkers = [];
+      const numOfFoodMarkers = 10;
+      for (let i = 0; i < numOfFoodMarkers; i++) {
+        foodMarkers.push(
+          generateFoodCoords(userLocation, deltas.latitudeDelta)
+        );
+      }
+      setFoodCoords(foodMarkers);
+
+      setSpecialFoodCoords(
+        generateFoodCoords(userLocation, deltas.latitudeDelta)
+      );
+    }
+  }, [userLocation, deltas.latitudeDelta]);
+
   if (!userLocation) {
     return (
       <SafeAreaView
@@ -79,8 +105,7 @@ export default function WalkScreen() {
 
   const userRegion = {
     ...userLocation,
-    latitudeDelta: 0.008,
-    longitudeDelta: 0.008,
+    ...deltas,
   };
 
   return (
@@ -99,16 +124,16 @@ export default function WalkScreen() {
             title="Test marker"
             description="to test food proximity mechanics"
           />
-          <FoodMarkers
-            userLocation={userLocation}
-            count={10}
-            range={userRegion.latitudeDelta}
-          />
-          <SpecialFoodMarker
-            userLocation={userLocation}
-            range={userRegion.latitudeDelta}
-          />
+          <FoodMarkers foodCoords={foodCoords} />
+          <SpecialFoodMarker specialFoodCoords={specialFoodCoords} />
         </MapView>
+        <FoodProximityButton
+          userLocation={userLocation}
+          allFoodCoords={[
+            ...foodCoords,
+            ...(specialFoodCoords ? [specialFoodCoords] : []),
+          ]}
+        />
       </View>
     </SafeAreaView>
   );
