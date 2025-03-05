@@ -21,9 +21,9 @@ export type StackParamList = {
   NamePet: undefined;
   Pet: undefined;
   Inventory: undefined;
-  CollectFood: undefined;
+  CollectFood: { foodMarker: Region } | undefined;
   Walk: undefined;
-  ARWalk: { foodMarker: Region } | undefined;
+  ARWalk: undefined;
   Loading: undefined;
 };
 const Stack = createNativeStackNavigator<StackParamList>();
@@ -67,7 +67,7 @@ export default function App() {
           <Stack.Screen
             name="CollectFood"
             component={CollectFoodScreen}
-            options={{ title: "Rescue Me" }}
+            options={{ title: "Rescue Me", headerRight: MapButton }}
           />
           <Stack.Screen
             name="Walk"
