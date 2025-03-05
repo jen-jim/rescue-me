@@ -2,6 +2,7 @@ import React from "react";
 import { Marker } from "react-native-maps";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Region } from "../WalkScreen";
+import { generateFoodCoords } from "../../utils/generateFoodCoords";
 
 interface FoodMarkerProps {
   center: Region;
@@ -35,27 +36,16 @@ const foodTypes = [
   },
 ];
 
-const generateFoodMarker = (center: Region, range: number): Region => {
-  const randomLatitude = center.latitude + (Math.random() - 0.5) * range;
-  const randomLongitude = center.longitude + (Math.random() - 0.5) * range;
-  return {
-    latitude: randomLatitude,
-    longitude: randomLongitude,
-    latitudeDelta: center.latitudeDelta,
-    longitudeDelta: center.longitudeDelta,
-  };
-};
-
 export const SpecialFoodMarker: React.FC<FoodMarkerProps> = ({
   center,
   range = 0.008,
 }) => {
-  const markerCoordinate = generateFoodMarker(center, range);
+  const foodCoords = generateFoodCoords(center, range);
   const foodType = foodTypes[Math.floor(Math.random() * foodTypes.length)];
 
   return (
     <Marker
-      coordinate={markerCoordinate}
+      coordinate={foodCoords}
       title={foodType.title}
       description={foodType.description}
     >
