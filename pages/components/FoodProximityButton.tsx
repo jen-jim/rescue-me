@@ -28,8 +28,10 @@ export const FoodProximityButton: React.FC<FoodProximityButtonProps> = ({
 
   return (
     <Button
-      title="View Food in AR"
-      onPress={() => navigation.navigate("ARWalk", { foodMarker: nearFood[0] })}
+      title="Collect food"
+      onPress={() =>
+        navigation.navigate("CollectFood", { foodMarker: nearFood[0] })
+      }
     />
   );
 };
