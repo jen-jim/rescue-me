@@ -14,6 +14,7 @@ import { FoodMarkers } from "./components/FoodMarkers";
 import { SpecialFoodMarker } from "./components/SpecialFoodMarker";
 import { generateFoodCoords } from "../utils/generateFoodCoords";
 import { FoodProximityButton } from "./components/FoodProximityButton";
+import { foodTypes, specialFoodData } from "../utils/foodTypes";
 
 export type Region = {
   latitude: number;
@@ -47,7 +48,10 @@ const requestLocationPermission = async () => {
 export default function WalkScreen() {
   const [userLocation, setUserLocation] = useState<Region | null>(null);
   const [foodCoords, setFoodCoords] = useState<Region[]>([]);
-  const [specialFoodCoords, setSpecialFoodCoords] = useState<Region>();
+  const [specialFood, setSpecialFood] = useState<{
+    coords: Region;
+    data: specialFoodData;
+  }>();
 
   useEffect(() => {
     requestLocationPermission().then((status) => {
@@ -87,9 +91,12 @@ export default function WalkScreen() {
       }
       setFoodCoords(foodMarkers);
 
-      setSpecialFoodCoords(
-        generateFoodCoords(userLocation, deltas.latitudeDelta)
-      );
+      const specialFoodType =
+        foodTypes[Math.floor(Math.random() * foodTypes.length)];
+      setSpecialFood({
+        coords: generateFoodCoords(userLocation, deltas.latitudeDelta),
+        data: specialFoodType,
+      });
     }
   }, [userLocation, deltas.latitudeDelta]);
 
@@ -125,14 +132,15 @@ export default function WalkScreen() {
             description="to test food proximity mechanics"
           />
           <FoodMarkers foodCoords={foodCoords} />
-          <SpecialFoodMarker specialFoodCoords={specialFoodCoords} />
+          <SpecialFoodMarker specialFood={specialFood} />
         </MapView>
         <FoodProximityButton
           userLocation={userLocation}
           allFoodCoords={[
             ...foodCoords,
-            ...(specialFoodCoords ? [specialFoodCoords] : []),
+            ...(specialFood ? [specialFood.coords] : []),
           ]}
+          specialFood={specialFood}
         />
       </View>
     </SafeAreaView>

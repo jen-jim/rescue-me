@@ -14,21 +14,22 @@ import { Button, StyleSheet } from "react-native";
 import { Region } from "./WalkScreen";
 
 type RootStackParamList = {
-  ARWalk: {
+  CollectFood: {
     foodMarker?: Region;
+    foodType: string;
   };
 };
 
 const CollectFoodSceneAR = (): JSX.Element => {
   const [text, setText] = useState("Initializing AR...");
 
-  const route = useRoute<RouteProp<RootStackParamList, "ARWalk">>();
-  const foodMarker = route.params?.foodMarker;
+  const route = useRoute<RouteProp<RootStackParamList, "CollectFood">>();
+  const { foodMarker, foodType } = route.params;
 
   function onInitialized(state: any, reason: ViroTrackingReason) {
     console.log("onInitialized", state, reason);
     if (state === ViroTrackingStateConstants.TRACKING_NORMAL) {
-      setText("Click food to collect!");
+      setText("Click food to collect");
     } else if (state === ViroTrackingStateConstants.TRACKING_UNAVAILABLE) {
       // Handle loss of tracking
     }
@@ -64,7 +65,7 @@ const CollectFoodSceneAR = (): JSX.Element => {
           position={foodMarker ? [0, -0.5, -1] : undefined}
           scale={[0.5, 0.5, 0.5]}
           onClick={() => {
-            console.log("Food icon clicked!");
+            console.log(`${foodType} food clicked!`);
           }}
         />
       </ViroARScene>
