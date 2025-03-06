@@ -13,6 +13,14 @@ import { Dimensions } from "react-native";
 export default function LoginScreen() {
   const [username, onSubmitEditingUsername] = useState("");
   const [password, onSubmitEditingPassword] = useState("");
+  const [passwordAgain, onSubmitEditingPasswordAgain] = useState("");
+  const [onNewUserPage, setOnNewUserPage] = useState(false);
+
+  const createAccount = () => {
+    onSubmitEditingPassword("");
+    onSubmitEditingUsername("");
+    setOnNewUserPage(true);
+  };
 
   const createAccountInFirbase = () => {
     auth()
@@ -53,7 +61,7 @@ export default function LoginScreen() {
 
   /* ===================================================
 
-    **THIS IS HERE AS AN EXAMPLE ON HOW TO LOG OUT**
+    **THIS HERE IS AS AN EXAMPLE ON HOW TO LOG OUT**
 
     **EXAMPLE**
 
@@ -65,7 +73,61 @@ export default function LoginScreen() {
 
     **END OF EXAMPLE**
 
+    **WHEN THE SIGNOUT FUNCTION IS CALLED, THE CURRENT
+      USER WILL BE LOGGED OUT, PLEASE NOTE THAT THIS 
+      CURRENTLY, TO THE BEST OF MY KNOWLEDGE, DOES 
+      NOT EFFECT THE APP IN ANY NOTICABLE WAY**
+
   ===================================================== */
+
+  if (onNewUserPage === true) {
+    return (
+      <SafeAreaProvider>
+        <SafeAreaView style={styles.container}>
+          <View style={styles.loginDetails}>
+            <Text style={styles.title}>Create Page</Text>
+            <TextInput
+              style={styles.input}
+              onSubmitEditing={(newText) =>
+                onSubmitEditingUsername(String(newText))
+              }
+              placeholder="Username/Email"
+              defaultValue={username}
+              inputMode="email"
+            />
+
+            <TextInput
+              style={styles.input}
+              onSubmitEditing={(newText) =>
+                onSubmitEditingPassword(String(newText))
+              }
+              placeholder="Password"
+              defaultValue={password}
+              secureTextEntry={true}
+            />
+            <TextInput
+              style={styles.input}
+              onSubmitEditing={(newText) =>
+                onSubmitEditingPasswordAgain(String(newText))
+              }
+              placeholder="Repeat Password"
+              defaultValue={passwordAgain}
+              secureTextEntry={true}
+            />
+
+            <View style={styles.buttonsContainer}>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => createAccountInFirbase()}
+              >
+                <Text style={{ color: "white" }}>Create</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </SafeAreaView>
+      </SafeAreaProvider>
+    );
+  }
 
   return (
     <SafeAreaProvider>
@@ -74,14 +136,18 @@ export default function LoginScreen() {
           <Text style={styles.title}>Login Page</Text>
           <TextInput
             style={styles.input}
-            onSubmitEditing={(newText) => onSubmitEditingUsername(newText)}
+            onSubmitEditing={(newText) =>
+              onSubmitEditingUsername(String(newText))
+            }
             placeholder="Username/Email"
             defaultValue={username}
             inputMode="email"
           />
           <TextInput
             style={styles.input}
-            onSubmitEditing={(newText) => onSubmitEditingPassword(newText)}
+            onSubmitEditing={(newText) =>
+              onSubmitEditingPassword(String(newText))
+            }
             placeholder="Password"
             defaultValue={password}
             secureTextEntry={true}
@@ -89,20 +155,26 @@ export default function LoginScreen() {
           <View style={styles.buttonsContainer}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => createAccountInFirbase()}
-            >
-              <Text style={{ color: "white" }}>Create</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
               onPress={() => loginWithEmailAndPassword()}
             >
               <Text style={{ color: "white" }}>Login</Text>
             </TouchableOpacity>
-            {/* <TouchableOpacity style={styles.button} onPress={() => signOut()}>
+            {/* ===================================
+            
+              **USED FOR TESTING THE SIGNOUT FUNCTION**
+
+            <TouchableOpacity style={styles.button} onPress={() => signOut()}>
               <Text style={{ color: "white" }}>Logout</Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity> 
+            
+            =================================== */}
           </View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => createAccount()}
+          >
+            <Text style={{ color: "white" }}>Or creaete your own here</Text>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     </SafeAreaProvider>
