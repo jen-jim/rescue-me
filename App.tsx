@@ -8,7 +8,7 @@ import IncubationScreen from "./pages/IncubationScreen";
 import NamePetScreen from "./pages/NamePetScreen";
 import InventoryScreen from "./pages/InventoryScreen";
 import CollectFoodScreen from "./pages/CollectFoodScreen";
-import WalkScreen, { ArButton } from "./pages/WalkScreen";
+import WalkScreen, { ArButton, Region } from "./pages/WalkScreen";
 import ArWalkScreen, { MapButton } from "./pages/ArWalkScreen";
 import TestNavScreen from "./pages/TestNavScreen";
 import LoadingScreen from "./pages/LoadingScreen";
@@ -21,7 +21,7 @@ export type StackParamList = {
   NamePet: undefined;
   Pet: undefined;
   Inventory: undefined;
-  CollectFood: undefined;
+  CollectFood: { foodMarker: Region } | undefined;
   Walk: undefined;
   ARWalk: undefined;
   Loading: undefined;
@@ -67,7 +67,7 @@ export default function App() {
           <Stack.Screen
             name="CollectFood"
             component={CollectFoodScreen}
-            options={{ title: "Rescue Me" }}
+            options={{ title: "Rescue Me", headerRight: MapButton }}
           />
           <Stack.Screen
             name="Walk"

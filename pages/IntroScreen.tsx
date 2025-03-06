@@ -1,16 +1,9 @@
 import React, { useState, useRef } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import Video from "react-native-video";
 import { styles } from "./StyleSheets/IntroScreenStyles";
 
-const { width, height } = Dimensions.get("window");
-
-export default function IntroScreen({ navigation }) {
+const IntroScreen = ({ navigation }) => {
   const [videoError, setVideoError] = useState(null);
   const [videoEnded, setVideoEnded] = useState(false);
   const videoRef = useRef(null);
@@ -27,34 +20,31 @@ export default function IntroScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <Video
+        ref={videoRef}
+        source={require("./assets/video/intro.mp4")}
+        style={styles.video}
+        resizeMode="contain"
+        repeat={false}
+        onError={handleVideoError}
+        onEnd={handleVideoEnd}
+        controls={false}
+        muted={false}
+        ignoreSilentSwitch="ignore"
+        playInBackground={false}
+        playWhenInactive={false}
+      />
+
       {videoError && (
         <Text style={styles.errorText}>
           Error loading video: {videoError.toString()}
         </Text>
       )}
 
-      <View style={styles.videoContainer}>
-        <Video
-          ref={videoRef}
-          source={require("./assets/video/intro.mp4")}
-          style={styles.video}
-          resizeMode="cover"
-          repeat={false}
-          onError={handleVideoError}
-          onEnd={handleVideoEnd}
-          controls={false}
-          muted={false}
-          ignoreSilentSwitch="ignore"
-          playInBackground={false}
-          playWhenInactive={false}
-        />
-      </View>
-
       {videoEnded && (
         <View style={styles.overlay}>
           <View style={styles.bottomContainer}>
             <Text style={styles.title}>Rescue Me</Text>
-
             <TouchableOpacity
               style={styles.button}
               onPress={() => navigation.navigate("NamePet")}
@@ -66,4 +56,6 @@ export default function IntroScreen({ navigation }) {
       )}
     </View>
   );
-}
+};
+
+export default IntroScreen;
