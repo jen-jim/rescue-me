@@ -1,17 +1,27 @@
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Dimensions } from "react-native";
 import Video from "react-native-video";
 import { styles } from "./StyleSheets/TitleScreenStyles";
+import { getPetData } from "../utils/Local-storage";
 
 export default function IntroScreen({ navigation }) {
   const { width, height } = Dimensions.get("window");
   const insets = useSafeAreaInsets();
-  const isFirstTimeUser = true;
+  const [isFirstTimeUser, setIsFirstTimeU] = useState(true);
+
+  useEffect(() => {
+    async function checkPet() {
+      const data = await getPetData();
+      if (data) {
+        setIsFirstTimeU(false);
+      }
+    }
+    checkPet();
+  }, []);
 
   return (
     <View style={styles.container}>
-
       <Video
         source={require("./assets/video/puppy_test.mp4")}
         style={styles.video}
@@ -31,7 +41,7 @@ export default function IntroScreen({ navigation }) {
             }
           >
             <Text style={styles.buttonText}>
-              {isFirstTimeUser ? "Enter the Lab" : "See Your Pet"}
+              {isFirstTimeUser ? "Start Rescue Mission" : "See Your Pet"}
             </Text>
           </TouchableOpacity>
         </View>
@@ -39,4 +49,3 @@ export default function IntroScreen({ navigation }) {
     </View>
   );
 }
-

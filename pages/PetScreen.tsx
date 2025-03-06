@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Animated,
   Dimensions,
+  Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -14,46 +15,47 @@ import { useFocusEffect } from "@react-navigation/native";
 
 export default function PetScreen({ navigation }) {
   const [message, setMessage] = useState("");
-  const [petData, setPetData] = useState({
-    name: "Fluffy",
-    happiness: 80,
-    hunger: 20,
-    lastUpdated: Date.now(),
-  });
+  const [petData, setPetData] = useState({});
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const idleTimer = useRef(null);
 
+  // Combined refresh function that applies decay based on elapsed time.
+  const refreshPetData = useCallback(async () => {
+    const storedPet = await getPetData();
+    if (storedPet) {
+      const now = Date.now();
+      const lastUpdated = storedPet.lastUpdated || now;
+      // Calculate elapsed time in minutes.
+      const elapsedMinutes = (now - lastUpdated) / 60000;
+      const decayRate = 1; // 1 happiness point per minute.
+      const decayAmount = Math.floor(elapsedMinutes * decayRate);
+      const updatedHappiness = Math.max(0, storedPet.happiness - decayAmount);
+      const updatedHunger = Math.min(100, storedPet.hunger + decayAmount);
+      const updatedPet = {
+        ...storedPet,
+        hunger: updatedHunger,
+        happiness: updatedHappiness,
+        lastUpdated: now, // Reset timestamp after applying decay.
+      };
+      setPetData(updatedPet);
+      await savePetData(updatedPet);
+    }
+  }, []);
+
+  // Refresh pet data when the screen regains focus.
   useFocusEffect(
     useCallback(() => {
-      async function refreshPetData() {
-        const storedPet = await getPetData();
-        if (storedPet) {
-          const now = Date.now();
-          const lastUpdated = storedPet.lastUpdated || now;
-          // Calculate the elapsed time in minutes
-          const elapsedMinutes = (now - lastUpdated) / 60000;
-          // 1 happiness point per minute (we will adjust this later when fine tuning)
-          const decayRate = 1;
-          const decayAmount = Math.floor(elapsedMinutes * decayRate);
-
-          const updatedHappiness = Math.max(
-            0,
-            storedPet.happiness - decayAmount
-          );
-
-          const updatedPet = {
-            ...storedPet,
-            happiness: updatedHappiness,
-            lastUpdated: now,
-          };
-
-          setPetData(updatedPet);
-          await savePetData(updatedPet);
-        }
-      }
       refreshPetData();
-    }, [])
+    }, [refreshPetData])
   );
+
+  // Set up an interval to refresh pet data in real time while mounted.
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refreshPetData();
+    }, 60000);
+    return () => clearInterval(interval);
+  }, [refreshPetData]);
 
   const updatePetData = async (newData) => {
     setPetData(newData);
@@ -72,6 +74,18 @@ export default function PetScreen({ navigation }) {
 
     await updatePetData(updatedPet);
     showMessage("That was tasty!");
+  };
+
+  const handlePet = async () => {
+    // increase happiness
+    const happinessValue = petData.happiness + 10;
+    const updatedPet = {
+      ...petData,
+      happiness: happinessValue,
+    };
+
+    await updatePetData(updatedPet);
+    showMessage("That was nice!");
   };
 
   const showMessage = (text) => {
@@ -102,6 +116,13 @@ export default function PetScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.petContainer}>
+        <View style={styles.petBox}>
+          <Image
+            source={require("./assets/video/placeholder_img.png")}
+            style={styles.petImage}
+          />
+        </View>
+
         {message !== "" && (
           <Animated.View style={[styles.speechBubble, { opacity: fadeAnim }]}>
             <Text style={styles.speechText}>{message}</Text>
@@ -126,10 +147,7 @@ export default function PetScreen({ navigation }) {
           <Icon name="fast-food" size={24} color="white" />
           <Text style={styles.buttonText}>Feed</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => showMessage("That was nice!", 3)}
-        >
+        <TouchableOpacity style={styles.button} onPress={handlePet}>
           <Icon name="hand-left" size={24} color="white" />
           <Text style={styles.buttonText}>Pet</Text>
         </TouchableOpacity>
@@ -184,6 +202,7 @@ const styles = StyleSheet.create({
   speechText: {
     fontSize: 16,
     fontWeight: "bold",
+    color: "black",
   },
   buttonsContainer: {
     flexDirection: "row",
@@ -226,5 +245,20 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 16,
     fontWeight: "500",
+  },
+  petBox: {
+    width: 200,
+    height: 200,
+    borderRadius: 20,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+    marginBottom: 20,
+  },
+  petImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
   },
 });

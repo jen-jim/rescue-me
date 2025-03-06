@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const savePetData = async (pet) => {
+export const savePetData = async (pet: any) => {
   try {
     await AsyncStorage.setItem("pet", JSON.stringify(pet));
     console.log("Pet data saved");
@@ -18,7 +18,32 @@ export const getPetData = async () => {
   }
 };
 
-export const saveInventoryData = async (inventory) => {
+export type FoodInventory = {
+  normal: number;
+  vitalityBoost: number;
+  happinessBoost: number;
+  cutenessBoost: number;
+  slowRelease: number;
+};
+
+export type MedicineInventory = {
+  recoveryBoost: number;
+  growthBoost: number;
+  sleepAid: number;
+};
+
+export type ToyInventory = {
+  butterflies: number;
+  catScratcher: number;
+};
+
+export type Inventory = {
+  food: FoodInventory;
+  medicines: MedicineInventory;
+  toys: ToyInventory;
+};
+
+export const saveInventoryData = async (inventory: Inventory) => {
   try {
     await AsyncStorage.setItem("inventory", JSON.stringify(inventory));
     console.log("Inventory data saved");
@@ -30,9 +55,10 @@ export const saveInventoryData = async (inventory) => {
 export const getInventoryData = async () => {
   try {
     const data = await AsyncStorage.getItem("inventory");
-    return data != null ? JSON.parse(data) : null;
+    return data != null ? (JSON.parse(data) as Inventory) : null;
   } catch (error) {
     console.error("Error reading inventory data:", error);
+    return null;
   }
 };
 
