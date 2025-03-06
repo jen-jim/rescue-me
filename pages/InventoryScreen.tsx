@@ -1,39 +1,11 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { useEffect, useState } from "react";
+import { useContext } from "react";
+import { InventoryContext } from "../contexts/InventoryContext";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { getInventoryData, saveInventoryData } from "../utils/Local-storage";
 
 export default function InventoryScreen() {
-  const [inventory, setInventory] = useState({});
-
-  useEffect(() => {
-    //hard coding inventory data:
-    saveInventoryData({
-      food: {
-        normal: 20,
-        vitalityBoost: 3,
-        happinessBoost: 3,
-        cutenessBoost: 3,
-        slowRelease: 5, // pauses/slows hunger for a while
-      },
-      medicines: {
-        recoveryBoost: 2,
-        growthBoost: 2,
-        sleepAid: 3,
-      },
-      toys: {
-        butterflies: 5,
-        catScratcher: 1,
-      },
-    })
-      .then(() => {
-        return getInventoryData(); // normally would start from here
-      })
-      .then((data) => {
-        setInventory(data);
-      });
-  }, []);
+  const { inventory } = useContext(InventoryContext);
 
   return (
     <SafeAreaView style={styles.container}>
