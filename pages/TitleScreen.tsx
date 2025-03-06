@@ -4,6 +4,7 @@ import { View, Text, TouchableOpacity, Dimensions } from "react-native";
 import Video from "react-native-video";
 import { styles } from "./StyleSheets/TitleScreenStyles";
 import { getPetData } from "../utils/Local-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function IntroScreen({ navigation }) {
   const { width, height } = Dimensions.get("window");
@@ -19,6 +20,15 @@ export default function IntroScreen({ navigation }) {
     }
     checkPet();
   }, []);
+
+  const handleDelete = async () => {
+    try {
+      await AsyncStorage.clear();
+      console.log("data deleted");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -43,6 +53,10 @@ export default function IntroScreen({ navigation }) {
             <Text style={styles.buttonText}>
               {isFirstTimeUser ? "Start Rescue Mission" : "See Your Pet"}
             </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={handleDelete}>
+            <Text style={styles.buttonText}>Delete Saved Data</Text>
           </TouchableOpacity>
         </View>
       </View>
