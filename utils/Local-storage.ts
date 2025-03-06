@@ -37,6 +37,11 @@ export type ToyInventory = {
   catScratcher: number;
 };
 
+export type InventoryKeys =
+  | keyof FoodInventory
+  | keyof MedicineInventory
+  | keyof ToyInventory;
+
 export type Inventory = {
   food: FoodInventory;
   medicines: MedicineInventory;

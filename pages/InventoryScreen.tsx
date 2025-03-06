@@ -3,39 +3,57 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { useContext } from "react";
 import { InventoryContext } from "../contexts/InventoryContext";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import {
+  FoodInventory,
+  Inventory,
+  InventoryKeys,
+  MedicineInventory,
+  ToyInventory,
+} from "../utils/Local-storage";
 
 export default function InventoryScreen() {
   const { inventory } = useContext(InventoryContext);
+
+  const inventoryEntries = Object.entries(inventory) as [
+    keyof Inventory,
+    FoodInventory | MedicineInventory | ToyInventory
+  ][];
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>🎒 Your Inventory</Text>
       <ScrollView>
-        {Object.entries(inventory).map(([category, items]) => (
-          <View key={category} style={styles.section}>
-            <Text style={styles.sectionTitle}>
-              {getCategoryIcon(category)} {formatCategoryName(category)}
-            </Text>
-            {Object.entries(items).map(([item, quantity]) => (
-              <View key={item} style={styles.itemRow}>
-                <Icon name={getItemIcon(item)} size={24} color="#ffcc00" />
-                <Text style={styles.itemText}>{formatItemName(item)}</Text>
-                <Text style={styles.quantity}>x{quantity}</Text>
-              </View>
-            ))}
-          </View>
-        ))}
+        {inventoryEntries.map(([category, items]) => {
+          const itemsEntries = Object.entries(items) as [
+            InventoryKeys,
+            number
+          ][];
+          return (
+            <View key={category} style={styles.section}>
+              <Text style={styles.sectionTitle}>
+                {getCategoryIcon(category)} {formatCategoryName(category)}
+              </Text>
+              {itemsEntries.map(([item, quantity]) => (
+                <View key={item} style={styles.itemRow}>
+                  <Icon name={getItemIcon(item)} size={24} color="#ffcc00" />
+                  <Text style={styles.itemText}>{formatItemName(item)}</Text>
+                  <Text style={styles.quantity}>x{quantity}</Text>
+                </View>
+              ))}
+            </View>
+          );
+        })}
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-const formatCategoryName = (category) =>
+const formatCategoryName = (category: keyof Inventory) =>
   category.charAt(0).toUpperCase() + category.slice(1);
-const formatItemName = (item) =>
+const formatItemName = (item: InventoryKeys) =>
   item.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase());
 
-const getCategoryIcon = (category) => {
+const getCategoryIcon = (category: keyof Inventory) => {
   const icons = {
     food: "food",
     medicines: "medical-bag",
@@ -46,7 +64,7 @@ const getCategoryIcon = (category) => {
   );
 };
 
-const getItemIcon = (item) => {
+const getItemIcon = (item: InventoryKeys) => {
   const icons = {
     normal: "bowl-mix",
     vitalityBoost: "flash",
