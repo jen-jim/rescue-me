@@ -1,15 +1,17 @@
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Dimensions } from "react-native";
 import Video from "react-native-video";
 import { styles } from "./StyleSheets/TitleScreenStyles";
 import { getPetData } from "../utils/Local-storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { InventoryContext } from "../contexts/InventoryContext";
 
 export default function IntroScreen({ navigation }) {
   const { width, height } = Dimensions.get("window");
   const insets = useSafeAreaInsets();
   const [isFirstTimeUser, setIsFirstTimeU] = useState(true);
+  const { resetInventory } = useContext(InventoryContext);
 
   useEffect(() => {
     async function checkPet() {
@@ -24,6 +26,7 @@ export default function IntroScreen({ navigation }) {
   const handleDelete = async () => {
     try {
       await AsyncStorage.clear();
+      resetInventory();
       console.log("data deleted");
     } catch (error) {
       console.log(error);
