@@ -21,7 +21,7 @@ export type StackParamList = {
   NamePet: undefined;
   Pet: undefined;
   Inventory: undefined;
-  CollectFood: { foodMarker: Region } | undefined;
+  CollectFood: { foodMarker: Region; foodType: string } | undefined;
   Walk: undefined;
   ARWalk: undefined;
   Loading: undefined;

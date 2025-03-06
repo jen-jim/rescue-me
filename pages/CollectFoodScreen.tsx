@@ -9,26 +9,46 @@ import {
   ViroTrackingReason,
   ViroTrackingStateConstants,
 } from "@reactvision/react-viro";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, StyleSheet } from "react-native";
 import { Region } from "./WalkScreen";
+import {
+  FoodInventory,
+  getInventoryData,
+  saveInventoryData,
+} from "../utils/Local-storage";
 
 type RootStackParamList = {
-  ARWalk: {
+  CollectFood: {
     foodMarker?: Region;
+    foodType: keyof FoodInventory;
   };
 };
 
+function addFood(foodInventory: FoodInventory, food: keyof FoodInventory) {
+  return {
+    ...foodInventory,
+    [food]: foodInventory[food] + 1,
+  };
+}
+
 const CollectFoodSceneAR = (): JSX.Element => {
   const [text, setText] = useState("Initializing AR...");
+  const [foodInventory, setFoodInventory] = useState<FoodInventory>();
 
-  const route = useRoute<RouteProp<RootStackParamList, "ARWalk">>();
-  const foodMarker = route.params?.foodMarker;
+  const route = useRoute<RouteProp<RootStackParamList, "CollectFood">>();
+  const { foodMarker, foodType } = route.params;
+
+  useEffect(() => {
+    getInventoryData().then(({ food }) => {
+      setFoodInventory(food);
+    });
+  }, []);
 
   function onInitialized(state: any, reason: ViroTrackingReason) {
     console.log("onInitialized", state, reason);
     if (state === ViroTrackingStateConstants.TRACKING_NORMAL) {
-      setText("Click food to collect!");
+      setText("Click food to collect");
     } else if (state === ViroTrackingStateConstants.TRACKING_UNAVAILABLE) {
       // Handle loss of tracking
     }
@@ -64,7 +84,16 @@ const CollectFoodSceneAR = (): JSX.Element => {
           position={foodMarker ? [0, -0.5, -1] : undefined}
           scale={[0.5, 0.5, 0.5]}
           onClick={() => {
-            console.log("Food icon clicked!");
+            console.log(`${foodType} food clicked!`);
+            if (foodInventory) {
+              setFoodInventory(addFood(foodInventory, foodType));
+            }
+            getInventoryData().then((inventory) =>
+              saveInventoryData({
+                ...inventory,
+                food: foodInventory,
+              })
+            );
           }}
         />
       </ViroARScene>
