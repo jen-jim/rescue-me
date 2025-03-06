@@ -9,14 +9,11 @@ import {
   ViroTrackingReason,
   ViroTrackingStateConstants,
 } from "@reactvision/react-viro";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
+import { InventoryContext } from "../contexts/InventoryContext";
+import { FoodInventory } from "../utils/Local-storage";
 import { Button, StyleSheet } from "react-native";
 import { Region } from "./WalkScreen";
-import {
-  FoodInventory,
-  getInventoryData,
-  saveInventoryData,
-} from "../utils/Local-storage";
 
 type RootStackParamList = {
   CollectFood: {
@@ -34,16 +31,10 @@ function addFood(foodInventory: FoodInventory, food: keyof FoodInventory) {
 
 const CollectFoodSceneAR = (): JSX.Element => {
   const [text, setText] = useState("Initializing AR...");
-  const [foodInventory, setFoodInventory] = useState<FoodInventory>();
+  const { inventory, setInventory } = useContext(InventoryContext);
 
   const route = useRoute<RouteProp<RootStackParamList, "CollectFood">>();
   const { foodMarker, foodType } = route.params;
-
-  useEffect(() => {
-    getInventoryData().then(({ food }) => {
-      setFoodInventory(food);
-    });
-  }, []);
 
   function onInitialized(state: any, reason: ViroTrackingReason) {
     console.log("onInitialized", state, reason);
@@ -85,15 +76,11 @@ const CollectFoodSceneAR = (): JSX.Element => {
           scale={[0.5, 0.5, 0.5]}
           onClick={() => {
             console.log(`${foodType} food clicked!`);
-            if (foodInventory) {
-              setFoodInventory(addFood(foodInventory, foodType));
-            }
-            getInventoryData().then((inventory) =>
-              saveInventoryData({
-                ...inventory,
-                food: foodInventory,
-              })
-            );
+            const foodInventory = addFood(inventory.food, foodType);
+            setInventory((prevInventory) => ({
+              ...prevInventory,
+              food: foodInventory,
+            }));
           }}
         />
       </ViroARScene>
