@@ -13,9 +13,28 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function PetScreen({ navigation }) {
   const [message, setMessage] = useState("");
   const [fadeAnim] = useState(new Animated.Value(1));
+  const [progress, setProgress] = useState(0);
+  const [progressColour, setProgressColour] = useState("red");
+  const [disabled, setDisabled] = useState(true);
+  const [progressButtonStyle, setProgressButtonStyle] = useState(
+    styles.disabledButton
+  );
 
   function showMessage(message) {
     setMessage(message);
+    setProgress(progress + 0.1);
+    if (progress >= 0.9) {
+      setProgress(1);
+    }
+    if (progress >= 0.75) {
+      setProgressColour("green");
+      setDisabled(false);
+    } else if (progress >= 0.15) {
+      setProgressColour("orange");
+    }
+    if (disabled === false) {
+      setProgressButtonStyle(styles.buttonProgress);
+    }
     fadeAnim.setValue(1);
     Animated.timing(fadeAnim, {
       toValue: 0,
@@ -25,6 +44,7 @@ export default function PetScreen({ navigation }) {
       if (finished) setMessage("");
     });
   }
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Pet Recovery</Text>
@@ -32,10 +52,37 @@ export default function PetScreen({ navigation }) {
         <View style={styles.petModel}>
           <Text>[Ill pet]</Text>
         </View>
-      </View>
-      <Text style={{ color: "black" }}>Health</Text>
-      <View style={styles.progressBar}>
-        <Progress.Bar progress={0.3} width={300} height={25} />
+        <Text style={{ color: "black", paddingTop: 25, paddingBottom: 10 }}>
+          Health
+        </Text>
+
+        <View style={styles.progressBar}>
+          <Progress.Bar
+            progress={progress}
+            color={progressColour}
+            width={300}
+            height={25}
+            borderColor={"pink"}
+            borderWidth={2}
+          />
+          <Text
+            style={{
+              color: "black",
+              position: "absolute",
+              alignSelf: "center",
+              top: 2,
+            }}
+          >
+            {Math.round(progress * 100)}%
+          </Text>
+        </View>
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity style={progressButtonStyle} disabled={disabled}>
+            <Text style={styles.buttonTextProgress}>
+              [Progress button, don't know what that is going to look like.]
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={styles.buttonsContainer}>
         {message !== "" && (
@@ -115,6 +162,7 @@ const styles = StyleSheet.create({
   message: {
     fontSize: 16,
     fontWeight: "bold",
+    color: "black",
   },
   buttonsContainer: {
     flexDirection: "row",
@@ -132,5 +180,31 @@ const styles = StyleSheet.create({
     margin: 10,
     gap: 8,
   },
-  buttonText: {},
+  buttonText: {
+    color: "white",
+  },
+  buttonProgress: {
+    backgroundColor: "#ff6b6b",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    margin: 20,
+    gap: 10,
+  },
+  disabledButton: {
+    backgroundColor: "#ff8c8c",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    margin: 20,
+    gap: 10,
+  },
+  buttonTextProgress: {
+    textAlign: "center",
+    color: "white",
+  },
 });
