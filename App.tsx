@@ -87,6 +87,11 @@ export default function App() {
               component={LoadingScreen}
               options={{ title: "Loding Screen" }}
             />
+            <Stack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{ title: "Login Screen" }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
