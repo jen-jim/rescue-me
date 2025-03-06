@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import {
   View,
   Text,
@@ -9,6 +9,9 @@ import {
 } from "react-native";
 import * as Progress from "react-native-progress";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { getPetData, savePetData } from "../utils/Local-storage";
+import { useFocusEffect } from "@react-navigation/native";
+import { formatTimeString } from "../utils/hatchUtils";
 
 export default function PetScreen({ navigation }) {
   const [message, setMessage] = useState("");
@@ -18,6 +21,37 @@ export default function PetScreen({ navigation }) {
   const [disabled, setDisabled] = useState(true);
   const [progressButtonStyle, setProgressButtonStyle] = useState(
     styles.disabledButton
+  );
+  const [hatchTime, setHatchTime] = useState(0);
+
+  useFocusEffect(
+    useCallback(() => {
+      //calculate remaining hatch time on screen focus
+      getPetData().then(
+        (storedPetData = { name: "Fluffy", happiness: 80, hunger: 20 }) => {
+          const now = Date.now();
+          const beganIncubation = storedPetData.beganIncubation || now;
+          const storedHatchTime = storedPetData.hatchTime || 86400000;
+
+          const elapsedHatchTime = now - beganIncubation;
+          const remainingHatchTime = 86400000 - elapsedHatchTime;
+
+          setHatchTime(remainingHatchTime);
+
+          if (!storedPetData.beganIncubation) {
+            const newPetData = { ...storedPetData, beganIncubation };
+            savePetData(newPetData);
+          }
+        }
+      );
+
+      //visible countdown
+      const intervalId = setInterval(() => {
+        setHatchTime((currHatchTime) => Math.max(currHatchTime - 1000, 0));
+      }, 1000);
+
+      return () => clearInterval(intervalId);
+    }, [])
   );
 
   function showMessage(message) {
@@ -45,6 +79,17 @@ export default function PetScreen({ navigation }) {
     });
   }
 
+  function handleHatch() {
+    getPetData()
+      .then((petData) => {
+        return savePetData({ ...petData, justHatched: true });
+      })
+      .then(navigation.navigate("Pet"));
+    //some logic on pet page to show a congratulations message
+    // when justHatched===true, after which justHatched is set
+    // to false (so the congratulations only shows first time)
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Pet Recovery</Text>
@@ -52,6 +97,19 @@ export default function PetScreen({ navigation }) {
         <View style={styles.petModel}>
           <Text>[Ill pet]</Text>
         </View>
+
+        <View>
+          {hatchTime > 0 ? ( // Change > to < to view hatch me button
+            <Text style={styles.hatchCountdownText}>
+              ⏳ {formatTimeString(hatchTime)} remaining to hatch!
+            </Text>
+          ) : (
+            <TouchableOpacity style={styles.hatchButton} onPress={handleHatch}>
+              <Text style={styles.hatchButtonText}>✨ Hatch Me! 🐣 ✨</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
         <Text style={{ color: "black", paddingTop: 25, paddingBottom: 10 }}>
           Health
         </Text>
@@ -78,12 +136,11 @@ export default function PetScreen({ navigation }) {
         </View>
         <View style={styles.buttonsContainer}>
           <TouchableOpacity style={progressButtonStyle} disabled={disabled}>
-            <Text style={styles.buttonTextProgress}>
-              [Progress button, don't know what that is going to look like.]
-            </Text>
+            <Text style={styles.buttonTextProgress}>[progress btn text]</Text>
           </TouchableOpacity>
         </View>
       </View>
+
       <View style={styles.buttonsContainer}>
         {message !== "" && (
           <Animated.View style={[styles.speechBubble, { opacity: fadeAnim }]}>
@@ -206,5 +263,42 @@ const styles = StyleSheet.create({
   buttonTextProgress: {
     textAlign: "center",
     color: "white",
+  },
+  hatchCountdownText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#ff69b4",
+    backgroundColor: "#fff0f5",
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    borderRadius: 15,
+    borderWidth: 2,
+    borderColor: "#ffb6c1",
+    textAlign: "center",
+    marginTop: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 2, height: 2 },
+  },
+  hatchButton: {
+    backgroundColor: "#ffccff",
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: "#ff69b4",
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 2, height: 2 },
+    marginTop: 20,
+  },
+
+  hatchButtonText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#ff1493",
+    textShadowColor: "white",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 5,
   },
 });
