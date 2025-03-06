@@ -11,7 +11,7 @@ import CollectFoodScreen from "./pages/CollectFoodScreen";
 import WalkScreen, { ArButton, Region } from "./pages/WalkScreen";
 import ArWalkScreen, { MapButton } from "./pages/ArWalkScreen";
 import TestNavScreen from "./pages/TestNavScreen";
-import LoadingScreen from "./pages/LoadingScreen";
+import LoadingScreen from "./pages/components/LoadingScreen";
 
 export type StackParamList = {
   TestNav: undefined;
