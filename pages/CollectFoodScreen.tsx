@@ -30,8 +30,10 @@ function addFood(foodInventory: FoodInventory, food: keyof FoodInventory) {
 }
 
 const CollectFoodSceneAR = (): JSX.Element => {
+  const navigation = useNavigation();
   const [text, setText] = useState("Initializing AR...");
   const { inventory, setInventory } = useContext(InventoryContext);
+  const [isCollected, setIsCollected] = useState(false);
 
   const route = useRoute<RouteProp<RootStackParamList, "CollectFood">>();
   const { foodMarker, foodType } = route.params;
@@ -70,19 +72,23 @@ const CollectFoodSceneAR = (): JSX.Element => {
             delay: 1000,
           }}
         />
-        <ViroImage
-          source={require("../pages/assets/icons/food_icon.png")}
-          position={foodMarker ? [0, -0.5, -1] : undefined}
-          scale={[0.5, 0.5, 0.5]}
-          onClick={() => {
-            console.log(`${foodType} food clicked!`);
-            const foodInventory = addFood(inventory.food, foodType);
-            setInventory((prevInventory) => ({
-              ...prevInventory,
-              food: foodInventory,
-            }));
-          }}
-        />
+        {!isCollected && (
+          <ViroImage
+            source={require("../pages/assets/icons/food_icon.png")}
+            position={foodMarker ? [0, -0.5, -1] : undefined}
+            scale={[0.5, 0.5, 0.5]}
+            onClick={() => {
+              console.log(`${foodType} food clicked!`);
+              const foodInventory = addFood(inventory.food, foodType);
+              setInventory((prevInventory) => ({
+                ...prevInventory,
+                food: foodInventory,
+              }));
+              setIsCollected(true);
+              navigation.navigate("Walk", { collectedFood: foodMarker });
+            }}
+          />
+        )}
       </ViroARScene>
     );
   } else {

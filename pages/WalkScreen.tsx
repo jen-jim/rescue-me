@@ -7,7 +7,11 @@ import {
   ActivityIndicator,
 } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import { useNavigation } from "@react-navigation/native";
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import { mapStyle, styles } from "./StyleSheets/WalkScreenStyles";
 import Geolocation from "@react-native-community/geolocation";
 import { FoodMarkers } from "./components/FoodMarkers";
@@ -46,12 +50,15 @@ const requestLocationPermission = async () => {
 };
 
 export default function WalkScreen() {
+  const navigation = useNavigation();
   const [userLocation, setUserLocation] = useState<Region | null>(null);
   const [foodCoords, setFoodCoords] = useState<Region[]>([]);
   const [specialFood, setSpecialFood] = useState<{
     coords: Region;
     data: specialFoodData;
   }>();
+
+  const route = useRoute();
 
   useEffect(() => {
     requestLocationPermission().then((status) => {
@@ -99,6 +106,29 @@ export default function WalkScreen() {
       });
     }
   }, [userLocation, deltas.latitudeDelta]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if ((route.params as any)?.collectedFood) {
+        const collectedFood: Region = (route.params as any).collectedFood;
+        setFoodCoords((prev) =>
+          prev.filter(
+            (marker) =>
+              marker.latitude !== collectedFood.latitude ||
+              marker.longitude !== collectedFood.longitude
+          )
+        );
+        if (
+          specialFood?.coords &&
+          specialFood.coords.latitude === collectedFood.latitude &&
+          specialFood.coords.longitude === collectedFood.longitude
+        ) {
+          setSpecialFood(undefined);
+        }
+        navigation.setParams({ collectedFood: undefined });
+      }
+    }, [navigation, route.params, specialFood?.coords])
+  );
 
   if (!userLocation) {
     return (

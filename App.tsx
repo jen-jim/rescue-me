@@ -23,7 +23,7 @@ export type StackParamList = {
   Pet: undefined;
   Inventory: undefined;
   CollectFood: { foodMarker: Region; foodType: string } | undefined;
-  Walk: undefined;
+  Walk: { collectedFood: Region } | undefined;
   ARWalk: undefined;
   Loading: undefined;
 };
