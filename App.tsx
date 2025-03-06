@@ -12,6 +12,7 @@ import WalkScreen, { ArButton, Region } from "./pages/WalkScreen";
 import ArWalkScreen, { MapButton } from "./pages/ArWalkScreen";
 import TestNavScreen from "./pages/TestNavScreen";
 import LoadingScreen from "./pages/components/LoadingScreen";
+import LoginScreen from "./pages/LoginScreen";
 
 export type StackParamList = {
   TestNav: undefined;
@@ -83,6 +84,11 @@ export default function App() {
             name="Loading"
             component={LoadingScreen}
             options={{ title: "Loding Screen" }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{ title: "Login Screen" }}
           />
         </Stack.Navigator>
       </NavigationContainer>

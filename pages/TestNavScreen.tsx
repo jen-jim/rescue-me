@@ -29,6 +29,7 @@ export default function TestNavScreen() {
           title="Loading"
           onPress={() => navigation.navigate("Loading")}
         />
+        <Button title="Login" onPress={() => navigation.navigate("Login")} />
       </View>
     </SafeAreaView>
   );

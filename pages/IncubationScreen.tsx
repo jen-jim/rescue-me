@@ -60,7 +60,7 @@ export default function PetScreen({ navigation }) {
     if (progress >= 0.9) {
       setProgress(1);
     }
-    if (progress >= 0.75) {
+    if (progress >= 0.7) {
       setProgressColour("green");
       setDisabled(false);
     } else if (progress >= 0.15) {
