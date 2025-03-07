@@ -7,6 +7,8 @@ import {
   ViroText,
   ViroTrackingReason,
   ViroTrackingStateConstants,
+  ViroNode,
+  ViroCamera,
 } from "@reactvision/react-viro";
 import React, { useState } from "react";
 import { Button, StyleSheet } from "react-native";
@@ -33,20 +35,23 @@ const WalkSceneAR = () => {
       />
       <ViroAmbientLight color={"#aaaaaa"} />
       <Viro3DObject
-        source={require("../pages/assets/models/pug/pug_animated.vrx")}
-        type="VRX"
-        position={[0, -2, -5]}
-        scale={[1, 1, 1]}
-        rotation={[0, 0, 0]}
+        source={require("./assets/models/toon_cat_free.glb")}
+        type="GLB"
+        position={[-0.1, -1, -1]}
+        scale={[0.003, 0.003, 0.003]}
+        rotation={[0, 45, 0]}
         dragType="FixedToWorld"
-        onDrag={() => {}}
+        onDrag={() => { }}
+        onLoadEnd={(event) => console.log("Available Animations:", event.nativeEvent.animationNames)}
+        onError={(error) => console.error("Model load error:", error)}
         animation={{
-          name: "Take 001",
+          name: "Scene",
           run: true,
           loop: true,
           delay: 1000,
         }}
       />
+
     </ViroARScene>
   );
 };
