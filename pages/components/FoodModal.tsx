@@ -26,22 +26,56 @@ export const FoodModal: React.FC<FoodModalProps> = ({
     const foodType = food as keyof FoodInventory;
 
     if (inventory.food[foodType] > 0) {
-      // Adjust values based on food type. Customize these as needed.
-      const hungerReduction = 10;
-      const happinessIncrease = foodType === "normal" ? 5 : 10;
+      let hungerReduction = 0;
+      let happinessIncrease = 0;
+      let energyIncrease = 0;
+      let cutenessIncrease = 0;
 
-      const hungerValue = Math.max(0, petData.hunger - hungerReduction);
-      const happinessValue = petData.happiness + happinessIncrease;
+      switch (foodType) {
+        case "normal":
+          hungerReduction = 100;
+          happinessIncrease = 20;
+          break;
+        case "vitalityBoost":
+          hungerReduction = 100;
+          happinessIncrease = 20;
+          energyIncrease = 100;
+          break;
+        case "happinessBoost":
+          hungerReduction = 100;
+          happinessIncrease = 100;
+          break;
+        case "cutenessBoost":
+          hungerReduction = 100;
+          happinessIncrease = 20;
+          cutenessIncrease = 10;
+          break;
+        case "slowRelease":
+          // Implement slow release functionality here
+          hungerReduction = 10;
+          break;
+        default:
+          hungerReduction = 100;
+      }
+
+      const updatedHunger = Math.max(0, petData.hunger - hungerReduction);
+      const updatedHappiness = Math.min(
+        100,
+        petData.happiness + happinessIncrease
+      );
+      const updatedEnergy = Math.min(100, petData.energy + energyIncrease);
+      const updatedCuteness = petData.cuteness + cutenessIncrease;
+
       const updatedPet = {
         ...petData,
-        hunger: hungerValue,
-        happiness: happinessValue,
+        hunger: updatedHunger,
+        happiness: updatedHappiness,
+        energy: updatedEnergy,
+        cuteness: updatedCuteness,
       };
 
-      // Update pet data
       setPetData(updatedPet);
 
-      // Decrement inventory
       setInventory((prevInventory) => ({
         ...prevInventory,
         food: {
@@ -57,7 +91,6 @@ export const FoodModal: React.FC<FoodModalProps> = ({
     onClose(); // Close the modal after feeding
   };
 
-  // Get all food items with quantity > 0
   const foodItems = Object.entries(inventory.food).filter(
     ([, quantity]) => quantity > 0
   );
