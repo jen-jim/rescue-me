@@ -12,7 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { PetContext } from "../contexts/PetContext";
 import { FoodModal } from "./components/FoodModal";
-import * as Progress from "react-native-progress";
+import PetStats from "./components/PetStats";
 import Icon from "react-native-vector-icons/Ionicons";
 
 export default function PetScreen() {
@@ -149,33 +149,12 @@ export default function PetScreen() {
           <Text style={styles.buttonText}>Walk</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.petStats}>
-        <Text style={styles.statsText}>Name: {petData.name}</Text>
-        <Text style={styles.statsText}>Hunger: </Text>
-        <Progress.Bar
-          progress={petData.hunger / 100}
-          width={Dimensions.get("window").width * 0.8}
-          color="#ff6b6b"
-        />
-        <Text style={styles.statsText}>Happiness: </Text>
-        <Progress.Bar
-          progress={petData.happiness / 100}
-          width={Dimensions.get("window").width * 0.8}
-          color="#ff6b6b"
-        />
-        <Text style={styles.statsText}>Energy: </Text>
-        <Progress.Bar
-          progress={petData.energy / 100}
-          width={Dimensions.get("window").width * 0.8}
-          color="#ff6b6b"
-        />
-        <Text style={styles.statsText}>Cuteness: {petData.cuteness}</Text>
-      </View>
       <FoodModal
         visible={foodModalVisible}
         onClose={() => setFoodModalVisible(false)}
         showMessage={showMessage}
       />
+      <PetStats />
     </SafeAreaView>
   );
 }
@@ -220,7 +199,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
-    paddingBottom: 20,
+    paddingBottom: 10,
   },
   button: {
     backgroundColor: "#ff6b6b",
@@ -246,17 +225,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
-  },
-  petStats: {
-    padding: 10,
-    backgroundColor: "#fff",
-    width: "100%",
-    alignItems: "center",
-  },
-  statsText: {
-    color: "black",
-    fontSize: 16,
-    fontWeight: "500",
   },
   petBox: {
     width: 200,
