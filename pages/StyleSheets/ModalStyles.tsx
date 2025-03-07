@@ -20,7 +20,23 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   foodButton: {
-    backgroundColor: "#ff6b6b",
+    backgroundColor: "#FF9009",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginVertical: 5,
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  foodButtonText: {
+    color: "white",
+    fontSize: 16,
+    alignItems: "center",
+  },
+  inventoryButton: {
+    backgroundColor: "#ff69b4",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -28,8 +44,13 @@ export const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
   },
-  foodButtonText: {
-    color: "white",
-    fontSize: 16,
+  cancelButton: {
+    backgroundColor: "#ccc",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginVertical: 5,
+    width: "100%",
+    alignItems: "center",
   },
 });

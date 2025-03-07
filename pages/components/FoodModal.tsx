@@ -1,7 +1,9 @@
 import React, { useContext } from "react";
 import { Modal, View, Text, TouchableOpacity } from "react-native";
 import { InventoryContext } from "../../contexts/InventoryContext";
+import { useNavigation } from "@react-navigation/native";
 import { styles } from "../StyleSheets/ModalStyles";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 interface FoodModalProps {
   visible: boolean;
@@ -19,6 +21,7 @@ export const FoodModal: React.FC<FoodModalProps> = ({
   showMessage,
 }) => {
   const { inventory, setInventory } = useContext(InventoryContext);
+  const navigation = useNavigation();
 
   const feedFood = async (foodType: string) => {
     if (inventory.food[foodType] > 0) {
@@ -48,7 +51,7 @@ export const FoodModal: React.FC<FoodModalProps> = ({
 
       showMessage("That was tasty!");
     } else {
-      showMessage("Out of that food!");
+      showMessage("Out of that food :(");
     }
     onClose(); // Close the modal after feeding
   };
@@ -67,26 +70,50 @@ export const FoodModal: React.FC<FoodModalProps> = ({
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Choose Food to Feed</Text>
+          <Text style={styles.modalTitle}>What should I eat?</Text>
           {foodItems.map(([foodType, quantity]) => (
             <TouchableOpacity
               key={foodType}
               style={styles.foodButton}
               onPress={() => feedFood(foodType)}
             >
+              <Icon
+                name={getItemIcon(foodType)}
+                style={styles.foodButtonText}
+              />
               <Text style={styles.foodButtonText}>
-                {foodType} (x{quantity})
+                {formatFoodName(foodType)}
               </Text>
+              <Text style={styles.foodButtonText}>(x{quantity})</Text>
             </TouchableOpacity>
           ))}
           <TouchableOpacity
-            style={[styles.foodButton, { backgroundColor: "#ccc" }]}
-            onPress={onClose}
+            style={[styles.inventoryButton]}
+            onPress={() => {
+              navigation.navigate("Inventory");
+            }}
           >
+            <Text style={styles.foodButtonText}>View inventory</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.cancelButton]} onPress={onClose}>
             <Text style={styles.foodButtonText}>Cancel</Text>
           </TouchableOpacity>
         </View>
       </View>
     </Modal>
   );
+};
+
+const formatFoodName = (item: string) =>
+  item.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase());
+
+const getItemIcon = (item: string) => {
+  const icons = {
+    normal: "bowl-mix",
+    vitalityBoost: "flash",
+    happinessBoost: "emoticon-happy",
+    cutenessBoost: "heart",
+    slowRelease: "timer",
+  };
+  return icons[item] || "help-circle";
 };
