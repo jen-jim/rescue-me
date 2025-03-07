@@ -1,29 +1,30 @@
 import React, { useContext } from "react";
 import { Modal, View, Text, TouchableOpacity } from "react-native";
+import { PetContext } from "../../contexts/PetContext";
 import { InventoryContext } from "../../contexts/InventoryContext";
 import { useNavigation } from "@react-navigation/native";
+import { FoodInventory } from "../../utils/Local-storage";
 import { styles } from "../StyleSheets/ModalStyles";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 interface FoodModalProps {
   visible: boolean;
   onClose: () => void;
-  petData: any; // Replace 'any' with your pet data type
-  updatePetData: (newData: any) => Promise<void>;
   showMessage: (message: string) => void;
 }
 
 export const FoodModal: React.FC<FoodModalProps> = ({
   visible,
   onClose,
-  petData,
-  updatePetData,
   showMessage,
 }) => {
+  const { petData, setPetData } = useContext(PetContext);
   const { inventory, setInventory } = useContext(InventoryContext);
   const navigation = useNavigation();
 
-  const feedFood = async (foodType: string) => {
+  const feedFood = async (food: string) => {
+    const foodType = food as keyof FoodInventory;
+
     if (inventory.food[foodType] > 0) {
       // Adjust values based on food type. Customize these as needed.
       const hungerReduction = 10;
@@ -38,7 +39,7 @@ export const FoodModal: React.FC<FoodModalProps> = ({
       };
 
       // Update pet data
-      await updatePetData(updatedPet);
+      setPetData(updatedPet);
 
       // Decrement inventory
       setInventory((prevInventory) => ({
@@ -78,7 +79,7 @@ export const FoodModal: React.FC<FoodModalProps> = ({
               onPress={() => feedFood(foodType)}
             >
               <Icon
-                name={getItemIcon(foodType)}
+                name={getFoodIcon(foodType)}
                 style={styles.foodButtonText}
               />
               <Text style={styles.foodButtonText}>
@@ -107,7 +108,9 @@ export const FoodModal: React.FC<FoodModalProps> = ({
 const formatFoodName = (item: string) =>
   item.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase());
 
-const getItemIcon = (item: string) => {
+const getFoodIcon = (food: string) => {
+  const foodType = food as keyof FoodInventory;
+
   const icons = {
     normal: "bowl-mix",
     vitalityBoost: "flash",
@@ -115,5 +118,5 @@ const getItemIcon = (item: string) => {
     cutenessBoost: "heart",
     slowRelease: "timer",
   };
-  return icons[item] || "help-circle";
+  return icons[foodType] || "help-circle";
 };

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import {
   View,
   Text,
@@ -10,8 +10,8 @@ import {
 } from "react-native";
 import * as Progress from "react-native-progress";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { getPetData, savePetData } from "../utils/Local-storage";
-import { useFocusEffect } from "@react-navigation/native";
+import { PetContext } from "../contexts/PetContext";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { formatTimeString } from "../utils/hatchUtils";
 import PrematureHatchButton from "./components/PrematureHatchButton";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -25,7 +25,9 @@ import {
 } from "./components/IncubationInfoModals";
 import { InfoPanel } from "./components/InfoPanel";
 
-export default function PetScreen({ navigation }) {
+export default function PetScreen() {
+  const navigation = useNavigation();
+  const { petData, setPetData } = useContext(PetContext);
   const [message, setMessage] = useState("");
   const [fadeAnim] = useState(new Animated.Value(1));
   const [progress, setProgress] = useState(0);
@@ -47,24 +49,19 @@ export default function PetScreen({ navigation }) {
   useFocusEffect(
     useCallback(() => {
       //calculate remaining hatch time on screen focus
-      getPetData().then(
-        (storedPetData = { name: "Fluffy", happiness: 80, hunger: 20 }) => {
-          // (hard code example data)
-          const now = Date.now();
-          const beganIncubation = storedPetData.beganIncubation || now;
-          // const storedHatchTime = storedPetData.hatchTime || 86400000;
-          const extraTime = storedPetData.extraTime || 0;
-          const elapsedHatchTime = now - beganIncubation;
-          const remainingHatchTime = 86400000 - elapsedHatchTime + extraTime;
+      const now = Date.now();
+      const beganIncubation = petData.beganIncubation || now;
+      // const storedHatchTime = petData.hatchTime || 86400000;
+      const extraTime = petData.extraTime || 0;
+      const elapsedHatchTime = now - beganIncubation;
+      const remainingHatchTime = 86400000 - elapsedHatchTime + extraTime;
 
-          setHatchTime(remainingHatchTime);
+      setHatchTime(remainingHatchTime);
 
-          if (!storedPetData.beganIncubation || extraTime) {
-            const newPetData = { ...storedPetData, beganIncubation, extraTime };
-            savePetData(newPetData);
-          }
-        }
-      );
+      if (!petData.beganIncubation || extraTime) {
+        const newPetData = { ...petData, beganIncubation, extraTime };
+        setPetData(newPetData);
+      }
 
       //visible countdown
       const intervalId = setInterval(() => {
@@ -72,11 +69,11 @@ export default function PetScreen({ navigation }) {
       }, 1000);
 
       return () => clearInterval(intervalId);
-    }, [])
+    }, [petData, setPetData])
   );
 
-  function showMessage(message) {
-    setMessage(message);
+  function showMessage(text: string) {
+    setMessage(text);
 
     if (progress >= 0.9) {
       setProgress(1);
@@ -100,16 +97,18 @@ export default function PetScreen({ navigation }) {
       duration: 2000,
       useNativeDriver: true,
     }).start(({ finished }) => {
-      if (finished) setMessage("");
+      if (finished) {
+        setMessage("");
+      }
     });
   }
 
   function handleHatch() {
-    getPetData()
-      .then((petData) => {
-        return savePetData({ ...petData, justHatched: true });
-      })
-      .then(navigation.navigate("Pet"));
+    setPetData({
+      ...petData,
+      justHatched: true,
+    });
+    navigation.navigate("Pet");
     //some logic on pet page to show a congratulations message
     // when justHatched===true, after which justHatched is set
     // to false (so the congratulations only shows first time)
@@ -121,7 +120,7 @@ export default function PetScreen({ navigation }) {
   function handleHealth() {
     setHealthModalVisible(true);
   }
-  function handleInteractionInfo(interaction) {
+  function handleInteractionInfo(interaction: string) {
     switch (interaction) {
       case "Feed":
         setFeedInfoModalVisible(true);
