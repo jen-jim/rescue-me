@@ -8,6 +8,9 @@ export type PetData = {
   cuteness: number;
   growth: number;
   lastUpdated: number;
+  beganIncubation: number | undefined;
+  extraTime: number;
+  justHatched: boolean;
 };
 
 export const savePetData = async (pet: PetData) => {

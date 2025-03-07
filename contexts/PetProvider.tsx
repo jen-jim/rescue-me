@@ -8,12 +8,15 @@ interface PetProviderProps {
 
 const initialPetData = {
   name: undefined,
-  hunger: 0,
-  happiness: 10,
+  hunger: 30,
+  happiness: 0,
   energy: 100,
   cuteness: 10,
-  growth: 5,
+  growth: 1,
   lastUpdated: Date.now(),
+  beganIncubation: undefined,
+  extraTime: 0,
+  justHatched: false,
 };
 
 export default function PetProvider({ children }: PetProviderProps) {
