@@ -16,7 +16,7 @@ export default function PrematureHatchButton({ progress, handleHatch }) {
               ? styles.prematureButtonEnabled
               : styles.prematureButtonDisabled,
           ]}
-          // disabled={progress < 0.8}
+          activeOpacity={progress >= 0.8 ? 1 : 0.6}
           onPress={() => {
             progress < 0.8 ? setInfoVisible(true) : setModalVisible(true);
           }}
@@ -89,14 +89,21 @@ const styles = StyleSheet.create({
   container: { alignItems: "center" },
   buttonRow: { flexDirection: "row", alignItems: "center", gap: 10 },
   prematureButton: {
-    marginTop: 20,
+    marginVertical: 20,
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 10,
     alignItems: "center",
   },
-  prematureButtonEnabled: { backgroundColor: "#ba68c8" },
-  prematureButtonDisabled: { backgroundColor: "#d1a3e0", opacity: 0.6 },
+  prematureButtonEnabled: {
+    //backgroundColor: "#ba68c8"
+    backgroundColor: "#ff6b6b",
+  },
+  prematureButtonDisabled: {
+    //backgroundColor: "#d1a3e0"
+    backgroundColor: "#ffb3b3",
+    opacity: 0.6,
+  },
   prematureButtonText: { color: "white", fontSize: 16, fontWeight: "bold" },
   infoIcon: { marginLeft: 10 },
   overlay: {
