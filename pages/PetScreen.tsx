@@ -12,6 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { PetContext } from "../contexts/PetContext";
 import { FoodModal } from "./components/FoodModal";
+import * as Progress from "react-native-progress";
 import Icon from "react-native-vector-icons/Ionicons";
 
 export default function PetScreen() {
@@ -150,9 +151,24 @@ export default function PetScreen() {
       </View>
       <View style={styles.petStats}>
         <Text style={styles.statsText}>Name: {petData.name}</Text>
-        <Text style={styles.statsText}>Hunger: {petData.hunger}/100</Text>
-        <Text style={styles.statsText}>Happiness: {petData.happiness}/100</Text>
-        <Text style={styles.statsText}>Energy: {petData.energy}/100</Text>
+        <Text style={styles.statsText}>Hunger: </Text>
+        <Progress.Bar
+          progress={petData.hunger / 100}
+          width={Dimensions.get("window").width * 0.8}
+          color="#ff6b6b"
+        />
+        <Text style={styles.statsText}>Happiness: </Text>
+        <Progress.Bar
+          progress={petData.happiness / 100}
+          width={Dimensions.get("window").width * 0.8}
+          color="#ff6b6b"
+        />
+        <Text style={styles.statsText}>Energy: </Text>
+        <Progress.Bar
+          progress={petData.energy / 100}
+          width={Dimensions.get("window").width * 0.8}
+          color="#ff6b6b"
+        />
         <Text style={styles.statsText}>Cuteness: {petData.cuteness}</Text>
       </View>
       <FoodModal
