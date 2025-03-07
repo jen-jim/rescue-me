@@ -1,65 +1,54 @@
-import { useNavigation } from "@react-navigation/native";
+import React, { useState } from "react";
 import {
-  Viro3DObject,
-  ViroAmbientLight,
   ViroARScene,
   ViroARSceneNavigator,
+  Viro3DObject,
+  ViroAmbientLight,
   ViroText,
-  ViroTrackingReason,
-  ViroTrackingStateConstants,
   ViroNode,
-  ViroCamera,
 } from "@reactvision/react-viro";
-import React, { useState } from "react";
-import { Button, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
 const WalkSceneAR = () => {
-  const [text, setText] = useState("Initializing AR...");
+  const [userPosition, setUserPosition] = useState([0, 0, -1]);
+  const [userRotation, setUserRotation] = useState([0, 0, 0]);
 
-  function onInitialized(state: any, reason: ViroTrackingReason) {
-    console.log("onInitialized", state, reason);
-    if (state === ViroTrackingStateConstants.TRACKING_NORMAL) {
-      setText("Hello World!");
-    } else if (state === ViroTrackingStateConstants.TRACKING_UNAVAILABLE) {
-      // Handle loss of tracking
-    }
-  }
+  const onCameraTransformUpdate = (camera) => {
+    const { position, rotation } = camera;
+
+
+    const distance = 1;
+    const radianAngle = (rotation[1] * Math.PI) / 180;
+
+    const newX = position[0] - distance * Math.sin(radianAngle);
+    const newZ = position[2] - distance * Math.cos(radianAngle);
+
+
+    setUserPosition([newX, -1, newZ]);
+
+    setUserRotation([rotation[0], rotation[1], rotation[2]]);
+  };
 
   return (
-    <ViroARScene onTrackingUpdated={onInitialized}>
-      <ViroText
-        text={text}
-        scale={[0.5, 0.5, 0.5]}
-        position={[0, 0, -1]}
-        style={styles.text}
-      />
-      <ViroAmbientLight color={"#aaaaaa"} />
-      <Viro3DObject
-        source={require("./assets/models/toon_cat_free.glb")}
-        type="GLB"
-        position={[-0.1, -1, -1]}
-        scale={[0.003, 0.003, 0.003]}
-        rotation={[0, 45, 0]}
-        dragType="FixedToWorld"
-        onDrag={() => { }}
-        onLoadEnd={(event) => console.log("Available Animations:", event.nativeEvent.animationNames)}
-        onError={(error) => console.error("Model load error:", error)}
-        animation={{
-          name: "Scene",
-          run: true,
-          loop: true,
-          delay: 1000,
-        }}
-      />
+    <ViroARScene onCameraTransformUpdate={onCameraTransformUpdate}>
+      <ViroNode position={userPosition} rotation={userRotation}>
+        <ViroAmbientLight color={"#aaaaaa"} />
+        <Viro3DObject
+          source={require("./assets/models/toon_cat_free.glb")}
+          type="GLB"
+          scale={[0.002, 0.002, 0.002]}
+          position={[0, 0, 0]}
+          rotation={[0, 180, 0]}
+          animation={{
+            name: "Scene",
+            run: true,
+            loop: true,
+            delay: 1000,
+          }}
+        />
 
+      </ViroNode>
     </ViroARScene>
-  );
-};
-
-export const MapButton = () => {
-  const navigation = useNavigation();
-  return (
-    <Button title="Map View" onPress={() => navigation.navigate("Walk")} />
   );
 };
 
@@ -67,15 +56,13 @@ export default function ArWalkScreen() {
   return (
     <ViroARSceneNavigator
       autofocus={true}
-      initialScene={{
-        scene: WalkSceneAR,
-      }}
+      initialScene={{ scene: WalkSceneAR }}
       style={styles.f1}
     />
   );
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   f1: { flex: 1 },
   text: {
     fontFamily: "Arial",
