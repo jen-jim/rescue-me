@@ -14,6 +14,7 @@ import ArWalkScreen, { MapButton } from "./pages/ArWalkScreen";
 import TestNavScreen from "./pages/TestNavScreen";
 import LoadingScreen from "./pages/components/LoadingScreen";
 import MiniGames from "./pages/MiniGames";
+import PetProvider from "./contexts/PetProvider";
 
 export type StackParamList = {
   TestNav: undefined;
@@ -33,69 +34,71 @@ const Stack = createNativeStackNavigator<StackParamList>();
 
 export default function App() {
   return (
-    <InventoryProvider>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName="TestNav">
-            <Stack.Screen name="TestNav" component={TestNavScreen} />
-            <Stack.Screen
-              name="Title"
-              component={TitleScreen}
-              options={{ title: "Rescue Me" }}
-            />
-            <Stack.Screen
-              name="Intro"
-              component={IntroScreen}
-              options={{ title: "Rescue Me" }}
-            />
-            <Stack.Screen
-              name="Incubation"
-              component={IncubationScreen}
-              options={{ title: "Rescue Me" }}
-            />
-            <Stack.Screen
-              name="NamePet"
-              component={NamePetScreen}
-              options={{ title: "Rescue Me" }}
-            />
-            <Stack.Screen
-              name="Pet"
-              component={PetScreen}
-              options={{ title: "Rescue Me" }}
-            />
-            <Stack.Screen
-              name="Inventory"
-              component={InventoryScreen}
-              options={{ title: "Rescue Me" }}
-            />
-            <Stack.Screen
-              name="CollectFood"
-              component={CollectFoodScreen}
-              options={{ title: "Rescue Me", headerRight: MapButton }}
-            />
-            <Stack.Screen
-              name="Walk"
-              component={WalkScreen}
-              options={{ title: "Rescue Me", headerRight: ArButton }}
-            />
-            <Stack.Screen
-              name="ARWalk"
-              component={ArWalkScreen}
-              options={{ title: "Rescue Me", headerRight: MapButton }}
-            />
-            <Stack.Screen
-              name="MiniGames"
-              component={MiniGames}
-              options={{ title: "Rescue Me" }}
-            />
-            <Stack.Screen
-              name="Loading"
-              component={LoadingScreen}
-              options={{ title: "Loding Screen" }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </SafeAreaProvider>
-    </InventoryProvider>
+    <PetProvider>
+      <InventoryProvider>
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName="TestNav">
+              <Stack.Screen name="TestNav" component={TestNavScreen} />
+              <Stack.Screen
+                name="Title"
+                component={TitleScreen}
+                options={{ title: "Rescue Me" }}
+              />
+              <Stack.Screen
+                name="Intro"
+                component={IntroScreen}
+                options={{ title: "Rescue Me" }}
+              />
+              <Stack.Screen
+                name="Incubation"
+                component={IncubationScreen}
+                options={{ title: "Rescue Me" }}
+              />
+              <Stack.Screen
+                name="NamePet"
+                component={NamePetScreen}
+                options={{ title: "Rescue Me" }}
+              />
+              <Stack.Screen
+                name="Pet"
+                component={PetScreen}
+                options={{ title: "Rescue Me" }}
+              />
+              <Stack.Screen
+                name="Inventory"
+                component={InventoryScreen}
+                options={{ title: "Rescue Me" }}
+              />
+              <Stack.Screen
+                name="CollectFood"
+                component={CollectFoodScreen}
+                options={{ title: "Rescue Me", headerRight: MapButton }}
+              />
+              <Stack.Screen
+                name="Walk"
+                component={WalkScreen}
+                options={{ title: "Rescue Me", headerRight: ArButton }}
+              />
+              <Stack.Screen
+                name="ARWalk"
+                component={ArWalkScreen}
+                options={{ title: "Rescue Me", headerRight: MapButton }}
+              />
+              <Stack.Screen
+                name="MiniGames"
+                component={MiniGames}
+                options={{ title: "Rescue Me" }}
+              />
+              <Stack.Screen
+                name="Loading"
+                component={LoadingScreen}
+                options={{ title: "Loding Screen" }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </InventoryProvider>
+    </PetProvider>
   );
 }

@@ -1,6 +1,16 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const savePetData = async (pet: any) => {
+export type PetData = {
+  name: string | undefined;
+  hunger: number;
+  happiness: number;
+  energy: number;
+  cuteness: number;
+  growth: number;
+  lastUpdated: number;
+};
+
+export const savePetData = async (pet: PetData) => {
   try {
     await AsyncStorage.setItem("pet", JSON.stringify(pet));
     console.log("Pet data saved");
