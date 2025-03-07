@@ -150,8 +150,10 @@ export default function PetScreen() {
       </View>
       <View style={styles.petStats}>
         <Text style={styles.statsText}>Name: {petData.name}</Text>
-        <Text style={styles.statsText}>Happiness: {petData.happiness}</Text>
-        <Text style={styles.statsText}>Hunger: {petData.hunger}</Text>
+        <Text style={styles.statsText}>Hunger: {petData.hunger}/100</Text>
+        <Text style={styles.statsText}>Happiness: {petData.happiness}/100</Text>
+        <Text style={styles.statsText}>Energy: {petData.energy}/100</Text>
+        <Text style={styles.statsText}>Cuteness: {petData.cuteness}</Text>
       </View>
       <FoodModal
         visible={foodModalVisible}
