@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useContext } from "react";
 import {
   View,
   Text,
@@ -7,13 +7,18 @@ import {
   Animated,
   Dimensions,
   Image,
+  Modal,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 import { getPetData, savePetData } from "../utils/Local-storage";
 import { useFocusEffect } from "@react-navigation/native";
+import { InventoryContext } from "../contexts/InventoryContext";
+import { FoodModal } from "./components/FoodModal";
 
 export default function PetScreen({ navigation }) {
+  const { inventory, setInventory } = useContext(InventoryContext);
+  const [foodModalVisible, setFoodModalVisible] = useState(false);
   const [message, setMessage] = useState("");
   const [petData, setPetData] = useState({});
   const fadeAnim = useRef(new Animated.Value(1)).current;
@@ -62,18 +67,8 @@ export default function PetScreen({ navigation }) {
     await savePetData(newData);
   };
 
-  const handleFeed = async () => {
-    // Decrease hunger and increase happiness
-    const hungerValue = Math.max(0, petData.hunger - 10);
-    const happinessValue = petData.happiness + 5;
-    const updatedPet = {
-      ...petData,
-      hunger: hungerValue,
-      happiness: happinessValue,
-    };
-
-    await updatePetData(updatedPet);
-    showMessage("That was tasty!");
+  const showFood = () => {
+    setFoodModalVisible(true);
   };
 
   const handlePet = async () => {
@@ -96,13 +91,17 @@ export default function PetScreen({ navigation }) {
       duration: 2000,
       useNativeDriver: true,
     }).start(({ finished }) => {
-      if (finished) setMessage("");
+      if (finished) {
+        setMessage("");
+      }
     });
     resetIdleTimer();
   };
 
   const resetIdleTimer = () => {
-    if (idleTimer.current) clearTimeout(idleTimer.current);
+    if (idleTimer.current) {
+      clearTimeout(idleTimer.current);
+    }
     idleTimer.current = setTimeout(() => {
       setMessage("Interact with me!");
     }, 4000);
@@ -138,12 +137,12 @@ export default function PetScreen({ navigation }) {
       <View style={styles.buttonsContainer}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => showMessage("That was fun!", 1)}
+          onPress={() => navigation.navigate("MiniGames")}
         >
           <Icon name="game-controller" size={24} color="white" />
           <Text style={styles.buttonText}>Play</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleFeed}>
+        <TouchableOpacity style={styles.button} onPress={showFood}>
           <Icon name="fast-food" size={24} color="white" />
           <Text style={styles.buttonText}>Feed</Text>
         </TouchableOpacity>
@@ -164,6 +163,13 @@ export default function PetScreen({ navigation }) {
         <Text style={styles.statsText}>Happiness: {petData.happiness}</Text>
         <Text style={styles.statsText}>Hunger: {petData.hunger}</Text>
       </View>
+      <FoodModal
+        visible={foodModalVisible}
+        onClose={() => setFoodModalVisible(false)}
+        petData={petData}
+        updatePetData={updatePetData}
+        showMessage={showMessage}
+      />
     </SafeAreaView>
   );
 }

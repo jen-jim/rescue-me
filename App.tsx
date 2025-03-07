@@ -13,6 +13,7 @@ import WalkScreen, { ArButton, Region } from "./pages/WalkScreen";
 import ArWalkScreen, { MapButton } from "./pages/ArWalkScreen";
 import TestNavScreen from "./pages/TestNavScreen";
 import LoadingScreen from "./pages/components/LoadingScreen";
+import MiniGames from "./pages/MiniGames";
 import LoginScreen from "./pages/LoginScreen";
 
 export type StackParamList = {
@@ -24,9 +25,10 @@ export type StackParamList = {
   Pet: undefined;
   Inventory: undefined;
   CollectFood: { foodMarker: Region; foodType: string } | undefined;
-  Walk: undefined;
+  Walk: { collectedFood: Region } | undefined;
   ARWalk: undefined;
   Loading: undefined;
+  MiniGames: undefined;
 };
 const Stack = createNativeStackNavigator<StackParamList>();
 
@@ -81,6 +83,11 @@ export default function App() {
               name="ARWalk"
               component={ArWalkScreen}
               options={{ title: "Rescue Me", headerRight: MapButton }}
+            />
+            <Stack.Screen
+              name="MiniGames"
+              component={MiniGames}
+              options={{ title: "Rescue Me" }}
             />
             <Stack.Screen
               name="Loading"

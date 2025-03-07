@@ -26,6 +26,10 @@ export default function TestNavScreen() {
         />
         <Button title="Walk" onPress={() => navigation.navigate("Walk")} />
         <Button
+          title="MiniGames"
+          onPress={() => navigation.navigate("MiniGames")}
+        />
+        <Button
           title="Loading"
           onPress={() => navigation.navigate("Loading")}
         />
