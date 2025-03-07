@@ -138,7 +138,7 @@ export default function PetScreen({ navigation }) {
       <View style={styles.buttonsContainer}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => showMessage("That was fun!", 1)}
+          onPress={() => navigation.navigate("MiniGames")}
         >
           <Icon name="game-controller" size={24} color="white" />
           <Text style={styles.buttonText}>Play</Text>
