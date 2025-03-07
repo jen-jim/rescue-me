@@ -211,8 +211,7 @@ export function MainInfoModal({
         <View style={styles.modalContainer}>
           <Text style={styles.modalTitle}>Nurture Chamber</Text>
           <Text style={styles.modalContent}>
-            This is where your pet recovers after rescue. Click on items and
-            labels to learn more about the page.
+            This is where your pet recovers after rescue.
           </Text>
 
           <Text style={styles.modalImportantInfo}>

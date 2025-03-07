@@ -7,7 +7,6 @@ import {
   Animated,
   Dimensions,
   ScrollView,
-  Modal,
 } from "react-native";
 import * as Progress from "react-native-progress";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -24,6 +23,7 @@ import {
   MedicineInfoModal,
   PettingInfoModal,
 } from "./components/IncubationInfoModals";
+import { InfoPanel } from "./components/InfoPanel";
 
 export default function PetScreen({ navigation }) {
   const [message, setMessage] = useState("");
@@ -201,33 +201,6 @@ export default function PetScreen({ navigation }) {
           </TouchableOpacity>
         </View>
 
-        <MainInfoModal
-          isMainInfoModalVisible={isMainInfoModalVisible}
-          setMainInfoModalVisible={setMainInfoModalVisible}
-        />
-
-        <HealthInfoModal
-          isHealthModalVisible={isHealthModalVisible}
-          setHealthModalVisible={setHealthModalVisible}
-        />
-
-        <FeedInfoModal
-          isFeedInfoModalVisible={isFeedInfoModalVisible}
-          setFeedInfoModalVisible={setFeedInfoModalVisible}
-        />
-        <MedicineInfoModal
-          isMedicineInfoModalVisible={isMedicineInfoModalVisible}
-          setMedicineInfoModalVisible={setMedicineInfoModalVisible}
-        />
-        <PettingInfoModal
-          isPettingInfoModalVisible={isPettingInfoModalVisible}
-          setPettingInfoModalVisible={setPettingInfoModalVisible}
-        />
-        <CleanInfoModal
-          isCleanInfoModalVisible={isCleanInfoModalVisible}
-          setCleanInfoModalVisible={setCleanInfoModalVisible}
-        />
-
         <View style={styles.buttonsContainer}>
           {message !== "" && (
             <Animated.View style={[styles.speechBubble, { opacity: fadeAnim }]}>
@@ -274,6 +247,35 @@ export default function PetScreen({ navigation }) {
           </View>
         </View>
       </ScrollView>
+
+      <InfoPanel />
+
+      <MainInfoModal
+        isMainInfoModalVisible={isMainInfoModalVisible}
+        setMainInfoModalVisible={setMainInfoModalVisible}
+      />
+
+      <HealthInfoModal
+        isHealthModalVisible={isHealthModalVisible}
+        setHealthModalVisible={setHealthModalVisible}
+      />
+
+      <FeedInfoModal
+        isFeedInfoModalVisible={isFeedInfoModalVisible}
+        setFeedInfoModalVisible={setFeedInfoModalVisible}
+      />
+      <MedicineInfoModal
+        isMedicineInfoModalVisible={isMedicineInfoModalVisible}
+        setMedicineInfoModalVisible={setMedicineInfoModalVisible}
+      />
+      <PettingInfoModal
+        isPettingInfoModalVisible={isPettingInfoModalVisible}
+        setPettingInfoModalVisible={setPettingInfoModalVisible}
+      />
+      <CleanInfoModal
+        isCleanInfoModalVisible={isCleanInfoModalVisible}
+        setCleanInfoModalVisible={setCleanInfoModalVisible}
+      />
     </SafeAreaView>
   );
 }
