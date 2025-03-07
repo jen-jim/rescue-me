@@ -7,45 +7,39 @@ import {
   Animated,
   Dimensions,
   Image,
-  Modal,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Icon from "react-native-vector-icons/Ionicons";
-import { getPetData, savePetData } from "../utils/Local-storage";
-import { useFocusEffect } from "@react-navigation/native";
-import { InventoryContext } from "../contexts/InventoryContext";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { PetContext } from "../contexts/PetContext";
 import { FoodModal } from "./components/FoodModal";
+import Icon from "react-native-vector-icons/Ionicons";
 
-export default function PetScreen({ navigation }) {
-  const { inventory, setInventory } = useContext(InventoryContext);
+export default function PetScreen() {
+  const navigation = useNavigation();
+  const { petData, setPetData } = useContext(PetContext);
   const [foodModalVisible, setFoodModalVisible] = useState(false);
   const [message, setMessage] = useState("");
-  const [petData, setPetData] = useState({});
   const fadeAnim = useRef(new Animated.Value(1)).current;
-  const idleTimer = useRef(null);
+  const idleTimer = useRef<NodeJS.Timeout | null>(null);
 
   // Combined refresh function that applies decay based on elapsed time.
   const refreshPetData = useCallback(async () => {
-    const storedPet = await getPetData();
-    if (storedPet) {
+    setPetData((prevPet) => {
+      if (!prevPet) {
+        return prevPet;
+      }
       const now = Date.now();
-      const lastUpdated = storedPet.lastUpdated || now;
-      // Calculate elapsed time in minutes.
+      const lastUpdated = prevPet.lastUpdated || now;
       const elapsedMinutes = (now - lastUpdated) / 60000;
-      const decayRate = 1; // 1 happiness point per minute.
-      const decayAmount = Math.floor(elapsedMinutes * decayRate);
-      const updatedHappiness = Math.max(0, storedPet.happiness - decayAmount);
-      const updatedHunger = Math.min(100, storedPet.hunger + decayAmount);
-      const updatedPet = {
-        ...storedPet,
-        hunger: updatedHunger,
-        happiness: updatedHappiness,
-        lastUpdated: now, // Reset timestamp after applying decay.
+      const decayAmount = Math.floor(elapsedMinutes * 1);
+      return {
+        ...prevPet,
+        happiness: Math.max(0, prevPet.happiness - decayAmount),
+        hunger: Math.min(100, prevPet.hunger + decayAmount),
+        lastUpdated: now,
       };
-      setPetData(updatedPet);
-      await savePetData(updatedPet);
-    }
-  }, []);
+    });
+  }, [setPetData]);
 
   // Refresh pet data when the screen regains focus.
   useFocusEffect(
@@ -62,28 +56,20 @@ export default function PetScreen({ navigation }) {
     return () => clearInterval(interval);
   }, [refreshPetData]);
 
-  const updatePetData = async (newData) => {
-    setPetData(newData);
-    await savePetData(newData);
-  };
-
   const showFood = () => {
     setFoodModalVisible(true);
   };
 
   const handlePet = async () => {
     // increase happiness
-    const happinessValue = petData.happiness + 10;
-    const updatedPet = {
+    setPetData({
       ...petData,
-      happiness: happinessValue,
-    };
-
-    await updatePetData(updatedPet);
+      happiness: petData.happiness + 10,
+    });
     showMessage("That was nice!");
   };
 
-  const showMessage = (text) => {
+  const showMessage = (text: string) => {
     fadeAnim.setValue(1);
     setMessage(text);
     Animated.timing(fadeAnim, {
@@ -109,7 +95,11 @@ export default function PetScreen({ navigation }) {
 
   useEffect(() => {
     resetIdleTimer();
-    return () => clearTimeout(idleTimer.current);
+    return () => {
+      if (idleTimer.current) {
+        clearTimeout(idleTimer.current);
+      }
+    };
   }, [message]);
 
   return (
@@ -166,8 +156,6 @@ export default function PetScreen({ navigation }) {
       <FoodModal
         visible={foodModalVisible}
         onClose={() => setFoodModalVisible(false)}
-        petData={petData}
-        updatePetData={updatePetData}
         showMessage={showMessage}
       />
     </SafeAreaView>
