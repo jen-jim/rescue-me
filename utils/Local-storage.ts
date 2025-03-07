@@ -22,9 +22,10 @@ export const savePetData = async (pet: PetData) => {
 export const getPetData = async () => {
   try {
     const data = await AsyncStorage.getItem("pet");
-    return data != null ? JSON.parse(data) : null;
+    return data != null ? (JSON.parse(data) as PetData) : null;
   } catch (error) {
     console.error("Error reading pet data:", error);
+    return null;
   }
 };
 
