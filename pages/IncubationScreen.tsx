@@ -16,6 +16,14 @@ import { useFocusEffect } from "@react-navigation/native";
 import { formatTimeString } from "../utils/hatchUtils";
 import PrematureHatchButton from "./components/PrematureHatchButton";
 import Icon from "react-native-vector-icons/Ionicons";
+import {
+  CleanInfoModal,
+  FeedInfoModal,
+  HealthInfoModal,
+  MainInfoModal,
+  MedicineInfoModal,
+  PettingInfoModal,
+} from "./components/IncubationInfoModals";
 
 export default function PetScreen({ navigation }) {
   const [message, setMessage] = useState("");
@@ -27,7 +35,14 @@ export default function PetScreen({ navigation }) {
   //   styles.disabledButton
   // );
   const [hatchTime, setHatchTime] = useState(0);
+  const [isMainInfoModalVisible, setMainInfoModalVisible] = useState(true);
   const [isHealthModalVisible, setHealthModalVisible] = useState(false);
+  const [isFeedInfoModalVisible, setFeedInfoModalVisible] = useState(false);
+  const [isMedicineInfoModalVisible, setMedicineInfoModalVisible] =
+    useState(false);
+  const [isPettingInfoModalVisible, setPettingInfoModalVisible] =
+    useState(false);
+  const [isCleanInfoModalVisible, setCleanInfoModalVisible] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -100,17 +115,37 @@ export default function PetScreen({ navigation }) {
     // to false (so the congratulations only shows first time)
   }
 
+  function handleTitle() {
+    setMainInfoModalVisible(true);
+  }
   function handleHealth() {
     setHealthModalVisible(true);
   }
+  function handleInteractionInfo(interaction) {
+    switch (interaction) {
+      case "Feed":
+        setFeedInfoModalVisible(true);
+        break;
 
-  function closeModal() {
-    setHealthModalVisible(false);
+      case "Medicine":
+        setMedicineInfoModalVisible(true);
+        break;
+
+      case "Pet":
+        setPettingInfoModalVisible(true);
+        break;
+
+      case "Clean":
+        setCleanInfoModalVisible(true);
+        break;
+    }
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>🌿 Nurture Chamber 🌿</Text>
+      <TouchableOpacity activeOpacity={1} onPress={handleTitle}>
+        <Text style={styles.title}>🌿 Nurture Chamber 🌿</Text>
+      </TouchableOpacity>
       <ScrollView>
         <View style={styles.petContainer}>
           <View style={styles.petModel}>
@@ -137,12 +172,6 @@ export default function PetScreen({ navigation }) {
               handleHatch={handleHatch}
             />
           )}
-          {/* <View style={[styles.recoveryTimeContainer, styles.section]}>
-            <Text style={styles.healthText}>Recovery time:</Text>
-            <Text style={styles.hatchCountdownText2}>
-              {formatTimeString(hatchTime)}
-            </Text>
-          </View> */}
 
           <TouchableOpacity
             style={[styles.healthContainer, styles.section]}
@@ -172,34 +201,32 @@ export default function PetScreen({ navigation }) {
           </TouchableOpacity>
         </View>
 
-        <Modal
-          visible={isHealthModalVisible}
-          transparent={true}
-          animationType="fade"
-          onRequestClose={closeModal}
-        >
-          <View style={styles.modalBackground}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.modalTitle}>Pet's Health</Text>
-              <Text style={styles.modalContent}>
-                This represents your pet's health status. You need to ensure it
-                stays healthy by feeding, giving medicine, and providing care.
-              </Text>
+        <MainInfoModal
+          isMainInfoModalVisible={isMainInfoModalVisible}
+          setMainInfoModalVisible={setMainInfoModalVisible}
+        />
 
-              <Text style={styles.modalImportantInfo}>
-                The health of your pet will decrease by 1% every minute if no
-                interaction is made. If health drops below 5%, the pet will
-                enter hibernation.
-              </Text>
-              {/* and recovery will pause. Revival pills will be required to exit
-                hibernation mode. */}
+        <HealthInfoModal
+          isHealthModalVisible={isHealthModalVisible}
+          setHealthModalVisible={setHealthModalVisible}
+        />
 
-              <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
-                <Text style={styles.modalButtonText}>Got it!</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
+        <FeedInfoModal
+          isFeedInfoModalVisible={isFeedInfoModalVisible}
+          setFeedInfoModalVisible={setFeedInfoModalVisible}
+        />
+        <MedicineInfoModal
+          isMedicineInfoModalVisible={isMedicineInfoModalVisible}
+          setMedicineInfoModalVisible={setMedicineInfoModalVisible}
+        />
+        <PettingInfoModal
+          isPettingInfoModalVisible={isPettingInfoModalVisible}
+          setPettingInfoModalVisible={setPettingInfoModalVisible}
+        />
+        <CleanInfoModal
+          isCleanInfoModalVisible={isCleanInfoModalVisible}
+          setCleanInfoModalVisible={setCleanInfoModalVisible}
+        />
 
         <View style={styles.buttonsContainer}>
           {message !== "" && (
@@ -233,7 +260,14 @@ export default function PetScreen({ navigation }) {
                   >
                     <Icon name={btn.icon} size={30} color="white" />
                   </TouchableOpacity>
-                  <Text style={styles.interactionText}>{btn.text}</Text>
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() => {
+                      handleInteractionInfo(btn.text);
+                    }}
+                  >
+                    <Text style={styles.interactionText}>{btn.text}</Text>
+                  </TouchableOpacity>
                 </View>
               );
             })}
@@ -493,65 +527,4 @@ const styles = StyleSheet.create({
   //   textShadowOffset: { width: 1, height: 1 },
   //   textShadowRadius: 5,
   // },
-  modalBackground: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Dim the background
-  },
-  modalContainer: {
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 10,
-    width: "80%",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 15,
-    color: "#5a4a42",
-  },
-  modalContent: {
-    fontSize: 16,
-    marginBottom: 20,
-    color: "#5a4a42",
-    textAlign: "justify",
-  },
-  // modalAdditionalInfo: {
-  //   fontSize: 14,
-  //   color: "#5a4a42",
-  //   textAlign: "center",
-  //   marginBottom: 20,
-  // },
-  // infoText: {
-  //   fontSize: 14,
-  //   color: "#5a4a42",
-  //   textAlign: "center",
-  //   fontWeight: "300",
-  //   marginBottom: 20,
-  // },
-  modalImportantInfo: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#d9534f",
-    textAlign: "justify",
-    marginBottom: 20,
-    // paddingHorizontal: 20,
-  },
-  modalButton: {
-    backgroundColor: "#ff6b6b",
-    paddingVertical: 10,
-    paddingHorizontal: 25,
-    borderRadius: 10,
-  },
-  modalButtonText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
 });
