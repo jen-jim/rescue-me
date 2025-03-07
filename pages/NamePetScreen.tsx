@@ -1,21 +1,21 @@
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { PetContext } from "../contexts/PetContext";
+import { useNavigation } from "@react-navigation/native";
 import { Text, View, TextInput, TouchableOpacity, Image } from "react-native";
 import { styles } from "./StyleSheets/NamePetScreenStyles";
-import { savePetData } from "../utils/Local-storage";
 
-export default function NamePetScreen({ navigation }) {
+export default function NamePetScreen() {
+  const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+  const { petData, setPetData } = useContext(PetContext);
   const [petName, setPetName] = useState("");
 
   const goToPetPage = async () => {
-    const newPetData = {
+    setPetData({
+      ...petData,
       name: petName,
-      happiness: 80,
-      hunger: 20,
-      lastUpdated: Date.now(),
-    };
-    await savePetData(newPetData);
+    });
     navigation.navigate("Pet");
   };
 
@@ -40,7 +40,7 @@ export default function NamePetScreen({ navigation }) {
       />
 
       <TouchableOpacity
-        style={[styles.button, , petName.length < 2 && styles.disabledButton]}
+        style={[styles.button, petName.length < 2 && styles.disabledButton]}
         onPress={goToPetPage}
         disabled={petName.length < 2}
       >
