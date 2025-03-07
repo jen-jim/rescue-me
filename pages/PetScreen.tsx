@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useContext } from "react";
 import {
   View,
   Text,
@@ -7,13 +7,18 @@ import {
   Animated,
   Dimensions,
   Image,
+  Modal,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 import { getPetData, savePetData } from "../utils/Local-storage";
 import { useFocusEffect } from "@react-navigation/native";
+import { InventoryContext } from "../contexts/InventoryContext";
+import { modalStyles } from "./StyleSheets/ModalStyles";
 
 export default function PetScreen({ navigation }) {
+  const { inventory, setInventory } = useContext(InventoryContext);
+  const [foodModalVisible, setFoodModalVisible] = useState(false);
   const [message, setMessage] = useState("");
   const [petData, setPetData] = useState({});
   const fadeAnim = useRef(new Animated.Value(1)).current;
@@ -62,18 +67,45 @@ export default function PetScreen({ navigation }) {
     await savePetData(newData);
   };
 
-  const handleFeed = async () => {
-    // Decrease hunger and increase happiness
-    const hungerValue = Math.max(0, petData.hunger - 10);
-    const happinessValue = petData.happiness + 5;
-    const updatedPet = {
-      ...petData,
-      hunger: hungerValue,
-      happiness: happinessValue,
-    };
+  const showFood = () => {
+    setFoodModalVisible(true);
+  };
 
-    await updatePetData(updatedPet);
-    showMessage("That was tasty!");
+  // Function to handle feeding with a selected food item.
+  // foodType is a key from your inventory.food (e.g. "normal", "vitalityBoost", etc.)
+  const feedFood = async (foodType: string) => {
+    // Ensure there's enough of the food
+    if (inventory.food[foodType] > 0) {
+      // For demonstration, adjust hunger and happiness based on foodType
+      // You can customize these effects as needed
+      const hungerReduction = 10;
+      const happinessIncrease = foodType === "normal" ? 5 : 10;
+
+      const hungerValue = Math.max(0, petData.hunger - hungerReduction);
+      const happinessValue = petData.happiness + happinessIncrease;
+      const updatedPet = {
+        ...petData,
+        hunger: hungerValue,
+        happiness: happinessValue,
+      };
+
+      await updatePetData(updatedPet);
+
+      // Decrement the food quantity in inventory
+      setInventory((prevInventory) => ({
+        ...prevInventory,
+        food: {
+          ...prevInventory.food,
+          [foodType]: prevInventory.food[foodType] - 1,
+        },
+      }));
+
+      showMessage("That was tasty!");
+    } else {
+      showMessage("Out of that food!");
+    }
+    // Close the modal after selection
+    setFoodModalVisible(false);
   };
 
   const handlePet = async () => {
@@ -96,13 +128,17 @@ export default function PetScreen({ navigation }) {
       duration: 2000,
       useNativeDriver: true,
     }).start(({ finished }) => {
-      if (finished) setMessage("");
+      if (finished) {
+        setMessage("");
+      }
     });
     resetIdleTimer();
   };
 
   const resetIdleTimer = () => {
-    if (idleTimer.current) clearTimeout(idleTimer.current);
+    if (idleTimer.current) {
+      clearTimeout(idleTimer.current);
+    }
     idleTimer.current = setTimeout(() => {
       setMessage("Interact with me!");
     }, 4000);
@@ -112,6 +148,45 @@ export default function PetScreen({ navigation }) {
     resetIdleTimer();
     return () => clearTimeout(idleTimer.current);
   }, [message]);
+
+  // Render a modal popup with buttons for each food type in inventory.
+  const renderFoodModal = () => {
+    // We'll iterate over the keys of inventory.food.
+    const foodItems = Object.entries(inventory.food).filter(
+      ([key, quantity]) => quantity > 0
+    );
+    return (
+      <Modal
+        transparent
+        animationType="fade"
+        visible={foodModalVisible}
+        onRequestClose={() => setFoodModalVisible(false)}
+      >
+        <View style={modalStyles.modalContainer}>
+          <View style={modalStyles.modalContent}>
+            <Text style={modalStyles.modalTitle}>Choose Food to Feed</Text>
+            {foodItems.map(([foodType, quantity]) => (
+              <TouchableOpacity
+                key={foodType}
+                style={modalStyles.foodButton}
+                onPress={() => feedFood(foodType)}
+              >
+                <Text style={modalStyles.foodButtonText}>
+                  {foodType} (x{quantity})
+                </Text>
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity
+              style={[modalStyles.foodButton, { backgroundColor: "#ccc" }]}
+              onPress={() => setFoodModalVisible(false)}
+            >
+              <Text style={modalStyles.foodButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -143,7 +218,7 @@ export default function PetScreen({ navigation }) {
           <Icon name="game-controller" size={24} color="white" />
           <Text style={styles.buttonText}>Play</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleFeed}>
+        <TouchableOpacity style={styles.button} onPress={showFood}>
           <Icon name="fast-food" size={24} color="white" />
           <Text style={styles.buttonText}>Feed</Text>
         </TouchableOpacity>
@@ -164,6 +239,7 @@ export default function PetScreen({ navigation }) {
         <Text style={styles.statsText}>Happiness: {petData.happiness}</Text>
         <Text style={styles.statsText}>Hunger: {petData.hunger}</Text>
       </View>
+      {renderFoodModal()}
     </SafeAreaView>
   );
 }
