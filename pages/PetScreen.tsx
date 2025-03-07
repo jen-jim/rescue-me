@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
-    paddingBottom: 10,
+    paddingVertical: 5,
   },
   button: {
     backgroundColor: "#ff6b6b",
