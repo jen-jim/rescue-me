@@ -5,7 +5,6 @@ export const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingHorizontal: 30,
     width: "100%",
-    alignItems: "flex-start",
   },
   row: {
     flexDirection: "row",
@@ -31,5 +30,13 @@ export const styles = StyleSheet.create({
   },
   progressBar: {
     flex: 1,
+    alignSelf: "center",
+  },
+  progressText: {
+    position: "absolute",
+    alignSelf: "center",
+    color: "black",
+    fontSize: 12,
+    fontWeight: "bold",
   },
 });

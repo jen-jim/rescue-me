@@ -22,13 +22,15 @@ export default function PetStats() {
       {progressStats.map((stat, index) => (
         <View key={index} style={styles.row}>
           <Text style={styles.label}>{stat.label}:</Text>
-          <Progress.Bar
-            progress={stat.value / 100}
-            height={14}
-            width={Dimensions.get("window").width * 0.6}
-            color="#ff6b6b"
-            style={styles.progressBar}
-          />
+          <View style={styles.progressBar}>
+            <Progress.Bar
+              progress={stat.value / 100}
+              height={16}
+              width={Dimensions.get("window").width * 0.56}
+              color="#ff6b6b"
+            />
+            <Text style={styles.progressText}>{stat.value}</Text>
+          </View>
         </View>
       ))}
       <View style={styles.row}>
