@@ -5,16 +5,19 @@ import {
   TouchableOpacity,
   Animated,
   StyleSheet,
+  Dimensions,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
 export function InfoPanel() {
-  const slideAnim = useRef(new Animated.Value(250)).current; // Start off-screen on the right
+  const slideAnim = useRef(
+    new Animated.Value(Dimensions.get("window").width * 0.8)
+  ).current;
   const [isOpen, setIsOpen] = useState(false);
 
   const togglePanel = () => {
     Animated.timing(slideAnim, {
-      toValue: isOpen ? 250 : 0, // Slide in or out
+      toValue: isOpen ? Dimensions.get("window").width * 0.8 : 0,
       duration: 300,
       useNativeDriver: true,
     }).start();
@@ -23,19 +26,17 @@ export function InfoPanel() {
 
   return (
     <>
-      {/* Floating Info Icon - Positioned on the right */}
       {!isOpen && (
         <TouchableOpacity style={styles.infoIcon} onPress={togglePanel}>
           <Icon name="information-circle-outline" size={30} color="white" />
         </TouchableOpacity>
       )}
 
-      {/* Sliding Info Panel */}
       <Animated.View
         style={[styles.infoPanel, { transform: [{ translateX: slideAnim }] }]}
       >
-        <Text style={styles.panelTitle}>Welcome!</Text>
-        <Text style={[styles.panelContent, { marginBottom: 5 }]}>
+        <Text style={styles.panelTitle}>Explore & Learn</Text>
+        <Text style={[styles.panelContent, { marginBottom: 15 }]}>
           This app is fully interactive—almost everything can be clicked to
           reveal more details.
         </Text>
@@ -51,9 +52,13 @@ export function InfoPanel() {
           helpful tips.
         </Text>
 
-        {/* Close Button */}
         <TouchableOpacity onPress={togglePanel} style={styles.closeButton}>
-          <Icon name="close" size={24} color="#5a4a42" />
+          <Icon
+            name="close"
+            size={24}
+            //   color="#5a4a42"
+            color="white"
+          />
         </TouchableOpacity>
       </Animated.View>
     </>
@@ -63,23 +68,29 @@ export function InfoPanel() {
 const styles = StyleSheet.create({
   infoIcon: {
     position: "absolute",
-    top: 40,
-    right: 20,
-    backgroundColor: "#ff6b6b",
-    padding: 10,
+    // top: 40,
+    top: 7,
+    right: 7,
+    // right: 20,
+    // backgroundColor: "#ff6b6b",
+    // backgroundColor: "#c44f4f",
+    backgroundColor: "#e35a5a",
+    padding: 5,
     borderRadius: 20,
     zIndex: 10,
   },
   infoPanel: {
     position: "absolute",
-    top: 20, // Appears below the icon
-    right: 0, // Slides in from the right
-    width: 280,
-    //height: 300, // Shorter panel
+    // top: 30,
+    top: 0,
+    right: 0,
+    width: Dimensions.get("window").width * 0.8,
+    height: Dimensions.get("window").height,
     // backgroundColor: "#333",
-    backgroundColor: "white",
+    // backgroundColor: "white",
+    backgroundColor: "#d65252",
     padding: 30,
-    borderRadius: 10,
+    // borderRadius: 10,
     zIndex: 9,
     shadowColor: "#000",
     shadowOffset: { width: -2, height: 2 },
@@ -87,16 +98,17 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   panelTitle: {
-    // color: "white",
-    color: "#5a4a42",
-    fontSize: 16,
+    color: "white",
+    // color: "#5a4a42",
+    fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 10,
+    marginBottom: 15,
   },
   panelContent: {
-    // color: "white",
-    color: "#5a4a42",
-    fontSize: 14,
+    color: "white",
+    // color: "#5a4a42",
+    fontSize: 16,
+    marginBottom: 10,
   },
   closeButton: {
     position: "absolute",
