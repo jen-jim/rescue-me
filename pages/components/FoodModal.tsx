@@ -72,7 +72,7 @@ export const FoodModal: React.FC<FoodModalProps> = ({
     } else {
       showMessage("Out of that food :(");
     }
-    onClose(); // Close the modal after feeding
+    onClose();
   };
 
   const foodItems = Object.entries(inventory.food).filter(
@@ -86,35 +86,46 @@ export const FoodModal: React.FC<FoodModalProps> = ({
       visible={visible}
       onRequestClose={onClose}
     >
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>What should I eat?</Text>
-          {foodItems.map(([foodType, quantity]) => (
-            <TouchableOpacity
-              key={foodType}
-              style={styles.foodButton}
-              onPress={() => feedFood(foodType as keyof FoodInventory)}
-            >
-              <Icon
-                name={getFoodIcon(foodType)}
-                style={styles.foodButtonText}
-              />
-              <Text style={styles.foodButtonText}>
-                {formatFoodName(foodType)}
-              </Text>
-              <Text style={styles.foodButtonText}>(x{quantity})</Text>
-            </TouchableOpacity>
-          ))}
+      <View style={styles.screen}>
+        <View style={styles.container}>
+          <Text style={styles.title}>
+            Food {<Icon name="food" size={24} />}
+          </Text>
+          {foodItems.length ? (
+            foodItems.map(([foodType, quantity]) => (
+              <TouchableOpacity
+                key={foodType}
+                style={styles.foodButton}
+                onPress={() => feedFood(foodType as keyof FoodInventory)}
+              >
+                <Icon name={getFoodIcon(foodType)} style={styles.label} />
+                <Text style={styles.label}>{formatFoodName(foodType)}</Text>
+                <Text style={styles.label}>(x{quantity})</Text>
+              </TouchableOpacity>
+            ))
+          ) : (
+            <View>
+              <Text style={styles.soldOut}>Out of food :(</Text>
+              <TouchableOpacity
+                style={[styles.foodButton]}
+                onPress={() => {
+                  navigation.navigate("Walk");
+                }}
+              >
+                <Text style={styles.label}>Collect food</Text>
+              </TouchableOpacity>
+            </View>
+          )}
           <TouchableOpacity
             style={[styles.inventoryButton]}
             onPress={() => {
               navigation.navigate("Inventory");
             }}
           >
-            <Text style={styles.foodButtonText}>View inventory</Text>
+            <Text style={styles.label}>View inventory</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.cancelButton]} onPress={onClose}>
-            <Text style={styles.foodButtonText}>Cancel</Text>
+            <Text style={styles.label}>Cancel</Text>
           </TouchableOpacity>
         </View>
       </View>
