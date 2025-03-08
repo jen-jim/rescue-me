@@ -20,6 +20,10 @@ export default function PetStats() {
         <Text style={styles.label}>Name:</Text>
         <Text style={styles.value}>{petData.name}</Text>
       </View>
+      <View style={styles.row}>
+        <Text style={styles.label}>Growth:</Text>
+        <Text style={styles.value}>{petData.growth}</Text>
+      </View>
       {progressStats.map((stat, index) => (
         <View key={index} style={styles.row}>
           <Text style={styles.label}>{stat.label}:</Text>

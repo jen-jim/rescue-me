@@ -12,6 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { PetContext } from "../contexts/PetContext";
 import { FoodModal } from "./components/FoodModal";
+import { MedicineModal } from "./components/MedicineModal";
 import PetStats from "./components/PetStats";
 import Icon from "react-native-vector-icons/Ionicons";
 
@@ -19,6 +20,7 @@ export default function PetScreen() {
   const navigation = useNavigation();
   const { petData, setPetData } = useContext(PetContext);
   const [foodModalVisible, setFoodModalVisible] = useState(false);
+  const [medicineModalVisible, setMedicineModalVisible] = useState(false);
   const [message, setMessage] = useState("");
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const idleTimer = useRef<NodeJS.Timeout | null>(null);
@@ -69,10 +71,6 @@ export default function PetScreen() {
     }, 60000);
     return () => clearInterval(interval);
   }, [refreshPetData]);
-
-  const showFood = () => {
-    setFoodModalVisible(true);
-  };
 
   const handlePet = async () => {
     // increase happiness
@@ -146,13 +144,27 @@ export default function PetScreen() {
           <Icon name="game-controller" size={24} color="white" />
           <Text style={styles.buttonText}>Play</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={showFood}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setFoodModalVisible(true);
+          }}
+        >
           <Icon name="fast-food" size={24} color="white" />
           <Text style={styles.buttonText}>Feed</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handlePet}>
           <Icon name="hand-left" size={24} color="white" />
           <Text style={styles.buttonText}>Pet</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setMedicineModalVisible(true);
+          }}
+        >
+          <Icon name="medkit" size={24} color="white" />
+          <Text style={styles.buttonText}>Medicate</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
@@ -165,6 +177,11 @@ export default function PetScreen() {
       <FoodModal
         visible={foodModalVisible}
         onClose={() => setFoodModalVisible(false)}
+        showMessage={showMessage}
+      />
+      <MedicineModal
+        visible={medicineModalVisible}
+        onClose={() => setMedicineModalVisible(false)}
         showMessage={showMessage}
       />
       <PetStats />
