@@ -26,36 +26,29 @@ export const FoodModal: React.FC<FoodModalProps> = ({
     const foodType = food as keyof FoodInventory;
 
     if (inventory.food[foodType] > 0) {
-      let hungerReduction = 0;
+      let hungerReduction = 100;
       let happinessIncrease = 0;
       let energyIncrease = 0;
       let cutenessIncrease = 0;
 
       switch (foodType) {
         case "normal":
-          hungerReduction = 100;
           happinessIncrease = 20;
           break;
         case "vitalityBoost":
-          hungerReduction = 100;
           happinessIncrease = 20;
           energyIncrease = 100;
           break;
         case "happinessBoost":
-          hungerReduction = 100;
           happinessIncrease = 100;
           break;
         case "cutenessBoost":
-          hungerReduction = 100;
           happinessIncrease = 20;
           cutenessIncrease = 10;
           break;
         case "slowRelease":
           // Implement slow release functionality here
-          hungerReduction = 10;
           break;
-        default:
-          hungerReduction = 100;
       }
 
       const updatedHunger = Math.max(0, petData.hunger - hungerReduction);
