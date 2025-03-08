@@ -30,6 +30,7 @@ export const FoodModal: React.FC<FoodModalProps> = ({
       let happinessIncrease = 0;
       let energyIncrease = 0;
       let cutenessIncrease = 0;
+      let remainingSlowReleaseTime = petData.remainingSlowReleaseTime;
 
       switch (foodType) {
         case "normal":
@@ -47,7 +48,7 @@ export const FoodModal: React.FC<FoodModalProps> = ({
           cutenessIncrease = 10;
           break;
         case "slowRelease":
-          // Implement slow release functionality here
+          remainingSlowReleaseTime = 60000 * 720; // 12 hours
           break;
       }
 
@@ -65,6 +66,7 @@ export const FoodModal: React.FC<FoodModalProps> = ({
         happiness: updatedHappiness,
         energy: updatedEnergy,
         cuteness: updatedCuteness,
+        remainingSlowReleaseTime,
       };
 
       setPetData(updatedPet);

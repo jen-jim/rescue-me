@@ -3,6 +3,7 @@ import { Dimensions, Text, View } from "react-native";
 import * as Progress from "react-native-progress";
 import { PetContext } from "../../contexts/PetContext";
 import { styles } from "../StyleSheets/PetStatsStyles";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 export default function PetStats() {
   const { petData } = useContext(PetContext);
@@ -29,7 +30,14 @@ export default function PetStats() {
               width={Dimensions.get("window").width * 0.56}
               color="#ff6b6b"
             />
-            <Text style={styles.progressText}>{stat.value}</Text>
+            {stat.label === "Hunger" && petData.remainingSlowReleaseTime > 0 ? (
+              <Icon
+                name="timer"
+                style={{ ...styles.progressText, paddingTop: 3 }}
+              />
+            ) : (
+              <Text style={styles.progressText}>{stat.value}</Text>
+            )}
           </View>
         </View>
       ))}

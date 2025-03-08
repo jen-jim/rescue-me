@@ -11,6 +11,7 @@ export type PetData = {
   beganIncubation: number | undefined;
   extraTime: number;
   justHatched: boolean;
+  remainingSlowReleaseTime: number;
 };
 
 export const savePetData = async (pet: PetData) => {

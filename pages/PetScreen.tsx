@@ -31,13 +31,26 @@ export default function PetScreen() {
       }
       const now = Date.now();
       const lastUpdated = prevPet.lastUpdated || now;
-      const elapsedMinutes = (now - lastUpdated) / 60000;
+      const elapsedMilliseconds = now - lastUpdated;
+      const elapsedMinutes = elapsedMilliseconds / 60000;
       const decayAmount = Math.floor(elapsedMinutes * 1);
+
+      const hunger =
+        prevPet.remainingSlowReleaseTime > 0
+          ? prevPet.hunger
+          : Math.min(100, prevPet.hunger + decayAmount);
+      const happiness = Math.max(0, prevPet.happiness - decayAmount);
+      const remainingSlowReleaseTime = Math.max(
+        0,
+        prevPet.remainingSlowReleaseTime - elapsedMilliseconds
+      );
+
       return {
         ...prevPet,
-        happiness: Math.max(0, prevPet.happiness - decayAmount),
-        hunger: Math.min(100, prevPet.hunger + decayAmount),
+        hunger,
+        happiness,
         lastUpdated: now,
+        remainingSlowReleaseTime,
       };
     });
   }, [setPetData]);
