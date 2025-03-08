@@ -43,6 +43,17 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
+  medicineButton: {
+    backgroundColor: "#8EB50E",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginVertical: 5,
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
   inventoryButton: {
     backgroundColor: "#ff69b4",
     paddingVertical: 10,
