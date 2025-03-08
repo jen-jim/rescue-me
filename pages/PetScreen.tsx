@@ -12,6 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { PetContext } from "../contexts/PetContext";
 import { FoodModal } from "./components/FoodModal";
+import PetStats from "./components/PetStats";
 import Icon from "react-native-vector-icons/Ionicons";
 
 export default function PetScreen() {
@@ -29,14 +30,27 @@ export default function PetScreen() {
         return prevPet;
       }
       const now = Date.now();
-      const lastUpdated = prevPet.lastUpdated || now;
-      const elapsedMinutes = (now - lastUpdated) / 60000;
+      const lastUpdated = prevPet.lastUpdated;
+      const elapsedMilliseconds = now - lastUpdated;
+      const elapsedMinutes = elapsedMilliseconds / 60000;
       const decayAmount = Math.floor(elapsedMinutes * 1);
+
+      const hunger =
+        prevPet.remainingSlowReleaseTime > 0
+          ? prevPet.hunger
+          : Math.min(100, prevPet.hunger + decayAmount);
+      const happiness = Math.max(0, prevPet.happiness - decayAmount);
+      const remainingSlowReleaseTime = Math.max(
+        0,
+        prevPet.remainingSlowReleaseTime - elapsedMilliseconds
+      );
+
       return {
         ...prevPet,
-        happiness: Math.max(0, prevPet.happiness - decayAmount),
-        hunger: Math.min(100, prevPet.hunger + decayAmount),
+        hunger,
+        happiness,
         lastUpdated: now,
+        remainingSlowReleaseTime,
       };
     });
   }, [setPetData]);
@@ -148,16 +162,12 @@ export default function PetScreen() {
           <Text style={styles.buttonText}>Walk</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.petStats}>
-        <Text style={styles.statsText}>Name: {petData.name}</Text>
-        <Text style={styles.statsText}>Happiness: {petData.happiness}</Text>
-        <Text style={styles.statsText}>Hunger: {petData.hunger}</Text>
-      </View>
       <FoodModal
         visible={foodModalVisible}
         onClose={() => setFoodModalVisible(false)}
         showMessage={showMessage}
       />
+      <PetStats />
     </SafeAreaView>
   );
 }
@@ -202,7 +212,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
-    paddingBottom: 20,
+    paddingVertical: 5,
   },
   button: {
     backgroundColor: "#ff6b6b",
@@ -228,17 +238,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
-  },
-  petStats: {
-    padding: 10,
-    backgroundColor: "#fff",
-    width: "100%",
-    alignItems: "center",
-  },
-  statsText: {
-    color: "black",
-    fontSize: 16,
-    fontWeight: "500",
   },
   petBox: {
     width: 200,

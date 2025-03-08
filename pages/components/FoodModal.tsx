@@ -18,35 +18,53 @@ export const FoodModal: React.FC<FoodModalProps> = ({
   onClose,
   showMessage,
 }) => {
-  const { petData, setPetData } = useContext(PetContext);
+  const { setPetData } = useContext(PetContext);
   const { inventory, setInventory } = useContext(InventoryContext);
   const navigation = useNavigation();
 
-  const feedFood = async (food: string) => {
-    const foodType = food as keyof FoodInventory;
+  const feedFood = async (food: keyof FoodInventory) => {
+    if (inventory.food[food] > 0) {
+      setPetData((prevPetData) => {
+        let happinessIncrease = 0;
+        let energyIncrease = 0;
+        let cutenessIncrease = 0;
+        let remainingSlowReleaseTime = prevPetData.remainingSlowReleaseTime;
 
-    if (inventory.food[foodType] > 0) {
-      // Adjust values based on food type. Customize these as needed.
-      const hungerReduction = 10;
-      const happinessIncrease = foodType === "normal" ? 5 : 10;
+        switch (food) {
+          case "normal":
+            happinessIncrease = 20;
+            break;
+          case "vitalityBoost":
+            happinessIncrease = 20;
+            energyIncrease = 100;
+            break;
+          case "happinessBoost":
+            happinessIncrease = 100;
+            break;
+          case "cutenessBoost":
+            happinessIncrease = 20;
+            cutenessIncrease = 10;
+            break;
+          case "slowRelease":
+            remainingSlowReleaseTime = 60000 * 720; // 12 hours
+            break;
+        }
 
-      const hungerValue = Math.max(0, petData.hunger - hungerReduction);
-      const happinessValue = petData.happiness + happinessIncrease;
-      const updatedPet = {
-        ...petData,
-        hunger: hungerValue,
-        happiness: happinessValue,
-      };
+        return {
+          ...prevPetData,
+          hunger: 0,
+          happiness: Math.min(100, prevPetData.happiness + happinessIncrease),
+          energy: Math.min(100, prevPetData.energy + energyIncrease),
+          cuteness: prevPetData.cuteness + cutenessIncrease,
+          remainingSlowReleaseTime,
+        };
+      });
 
-      // Update pet data
-      setPetData(updatedPet);
-
-      // Decrement inventory
       setInventory((prevInventory) => ({
         ...prevInventory,
         food: {
           ...prevInventory.food,
-          [foodType]: prevInventory.food[foodType] - 1,
+          [food]: prevInventory.food[food] - 1,
         },
       }));
 
@@ -57,7 +75,6 @@ export const FoodModal: React.FC<FoodModalProps> = ({
     onClose(); // Close the modal after feeding
   };
 
-  // Get all food items with quantity > 0
   const foodItems = Object.entries(inventory.food).filter(
     ([, quantity]) => quantity > 0
   );
@@ -76,7 +93,7 @@ export const FoodModal: React.FC<FoodModalProps> = ({
             <TouchableOpacity
               key={foodType}
               style={styles.foodButton}
-              onPress={() => feedFood(foodType)}
+              onPress={() => feedFood(foodType as keyof FoodInventory)}
             >
               <Icon
                 name={getFoodIcon(foodType)}

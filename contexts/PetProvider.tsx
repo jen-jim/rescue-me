@@ -6,7 +6,7 @@ interface PetProviderProps {
   children: ReactNode;
 }
 
-const initialPetData = {
+const initialPetData: PetData = {
   name: undefined,
   hunger: 30,
   happiness: 0,
@@ -17,6 +17,7 @@ const initialPetData = {
   beganIncubation: undefined,
   extraTime: 0,
   justHatched: false,
+  remainingSlowReleaseTime: 0,
 };
 
 export default function PetProvider({ children }: PetProviderProps) {
@@ -35,7 +36,7 @@ export default function PetProvider({ children }: PetProviderProps) {
   }, [petData]);
 
   function resetPetData() {
-    setPetData(initialPetData);
+    setPetData({ ...initialPetData, lastUpdated: Date.now() });
   }
 
   return (
