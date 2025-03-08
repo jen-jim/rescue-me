@@ -36,7 +36,7 @@ export default function PetProvider({ children }: PetProviderProps) {
   }, [petData]);
 
   function resetPetData() {
-    setPetData(initialPetData);
+    setPetData({ ...initialPetData, lastUpdated: Date.now() });
   }
 
   return (

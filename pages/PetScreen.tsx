@@ -30,7 +30,7 @@ export default function PetScreen() {
         return prevPet;
       }
       const now = Date.now();
-      const lastUpdated = prevPet.lastUpdated || now;
+      const lastUpdated = prevPet.lastUpdated;
       const elapsedMilliseconds = now - lastUpdated;
       const elapsedMinutes = elapsedMilliseconds / 60000;
       const decayAmount = Math.floor(elapsedMinutes * 1);
