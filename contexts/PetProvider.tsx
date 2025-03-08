@@ -8,11 +8,11 @@ interface PetProviderProps {
 
 const initialPetData: PetData = {
   name: undefined,
+  growth: 1,
   hunger: 30,
   happiness: 0,
   energy: 100,
   cuteness: 10,
-  growth: 1,
   lastUpdated: Date.now(),
   beganIncubation: undefined,
   extraTime: 0,
