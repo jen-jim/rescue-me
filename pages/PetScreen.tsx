@@ -57,6 +57,16 @@ export default function PetScreen() {
     }, [refreshPetData])
   );
 
+  // Close modals when the screen loses focus.
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setFoodModalVisible(false);
+        setMedicineModalVisible(false);
+      };
+    }, [])
+  );
+
   // Set up an interval to refresh pet data in real time while mounted.
   useEffect(() => {
     const interval = setInterval(() => {

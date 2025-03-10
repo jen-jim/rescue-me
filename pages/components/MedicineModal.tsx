@@ -104,7 +104,10 @@ export const MedicineModal: React.FC<MedicineModalProps> = ({
           )}
           <TouchableOpacity
             style={styles.inventoryButton}
-            onPress={() => navigation.navigate("Inventory")}
+            onPress={() => {
+              onClose();
+              navigation.navigate("Inventory");
+            }}
           >
             <Text style={styles.label}>View Inventory</Text>
           </TouchableOpacity>

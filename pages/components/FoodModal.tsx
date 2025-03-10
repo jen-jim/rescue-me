@@ -119,6 +119,9 @@ export const FoodModal: React.FC<FoodModalProps> = ({
           <TouchableOpacity
             style={[styles.inventoryButton]}
             onPress={() => {
+              () => {
+                onClose();
+              };
               navigation.navigate("Inventory");
             }}
           >
