@@ -11,7 +11,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 
-export default function MiniGames({ navigation }) {
+export default function Connect4({ navigation }) {
   const [message, setMessage] = useState("");
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const idleTimer = useRef(null);
@@ -55,7 +55,7 @@ export default function MiniGames({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("Connect4")}
+          onPress={() => navigation.navigate("Connect-4")}
         >
           <Icon name="game-controller" size={24} color="white" />
           <Text style={styles.buttonText}>Connect-4</Text>

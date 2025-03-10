@@ -10,7 +10,7 @@ interface InventoryProviderProps {
   children: ReactNode;
 }
 
-const initialInventory = {
+const initialInventory: Inventory = {
   food: {
     normal: 20,
     vitalityBoost: 3,

@@ -1,23 +1,36 @@
 import { Dimensions, StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  modalContainer: {
+  screen: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.6)",
     justifyContent: "center",
     alignItems: "center",
   },
-  modalContent: {
+  container: {
     width: Dimensions.get("window").width * 0.8,
     backgroundColor: "#fff",
     borderRadius: 10,
     padding: 20,
     alignItems: "center",
   },
-  modalTitle: {
+  title: {
     fontSize: 20,
-    marginBottom: 20,
+    marginBottom: 10,
     fontWeight: "bold",
+    color: "#ff6b6b",
+  },
+  label: {
+    color: "white",
+    fontSize: 16,
+    alignItems: "center",
+  },
+  soldOut: {
+    color: "black",
+    fontSize: 16,
+    fontWeight: "bold",
+    alignItems: "center",
+    alignSelf: "center",
   },
   foodButton: {
     backgroundColor: "#FF9009",
@@ -30,10 +43,16 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  foodButtonText: {
-    color: "white",
-    fontSize: 16,
+  medicineButton: {
+    backgroundColor: "#8EB50E",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginVertical: 5,
+    width: "100%",
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
   },
   inventoryButton: {
     backgroundColor: "#ff69b4",
