@@ -1,13 +1,5 @@
 import { useState, useRef, useEffect, useCallback, useContext } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Animated,
-  Dimensions,
-  Image,
-} from "react-native";
+import { View, Text, TouchableOpacity, Animated, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { PetContext } from "../contexts/PetContext";
@@ -15,6 +7,7 @@ import { FoodModal } from "./components/FoodModal";
 import { MedicineModal } from "./components/MedicineModal";
 import PetStats from "./components/PetStats";
 import Icon from "react-native-vector-icons/Ionicons";
+import { styles } from "./StyleSheets/PetScreenStyles";
 
 export default function PetScreen() {
   const navigation = useNavigation();
@@ -62,6 +55,16 @@ export default function PetScreen() {
     useCallback(() => {
       refreshPetData();
     }, [refreshPetData])
+  );
+
+  // Close modals when the screen loses focus.
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setFoodModalVisible(false);
+        setMedicineModalVisible(false);
+      };
+    }, [])
   );
 
   // Set up an interval to refresh pet data in real time while mounted.
@@ -191,84 +194,3 @@ export default function PetScreen() {
 
 //interactions happen in AR?
 //pet (3d model) should respond/animate
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f0f0f0",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  petContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  canvas: {
-    width: Dimensions.get("window").width * 0.8,
-    height: Dimensions.get("window").height * 0.5,
-  },
-  speechBubble: {
-    position: "absolute",
-    top: 10,
-    backgroundColor: "white",
-    padding: 10,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 2, height: 2 },
-  },
-  speechText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "black",
-  },
-  buttonsContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    paddingVertical: 5,
-  },
-  button: {
-    backgroundColor: "#ff6b6b",
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    margin: 10,
-    gap: 8,
-  },
-  toggleButton: {
-    backgroundColor: "#4CAF50",
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    margin: 10,
-    gap: 8,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  petBox: {
-    width: 200,
-    height: 200,
-    borderRadius: 20,
-    backgroundColor: "#fff",
-    justifyContent: "center",
-    alignItems: "center",
-    elevation: 5,
-    marginBottom: 20,
-  },
-  petImage: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
-  },
-});
