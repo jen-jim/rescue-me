@@ -48,8 +48,8 @@ export function InfoPanel() {
           how to enable them.
         </Text>
         <Text style={styles.panelContent}>
-          📌 Press on icons, labels, or sections to uncover extra information or
-          helpful tips.
+          📌 Press on icons, labels, or sections, or long press buttons, to
+          uncover extra information or helpful tips.
         </Text>
 
         <TouchableOpacity onPress={togglePanel} style={styles.closeButton}>

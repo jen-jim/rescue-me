@@ -18,6 +18,8 @@ const initialPetData: PetData = {
   extraTime: 0,
   justHatched: false,
   remainingSlowReleaseTime: 0,
+  incubationHealth: 0.5,
+  hibernationBegan: undefined,
 };
 
 export default function PetProvider({ children }: PetProviderProps) {

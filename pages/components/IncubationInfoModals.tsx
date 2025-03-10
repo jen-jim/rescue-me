@@ -230,6 +230,39 @@ export function MainInfoModal({
   );
 }
 
+export function HibernationModal({ handleExit }) {
+  function closeModal() {
+    handleExit();
+  }
+
+  return (
+    <Modal transparent={true} animationType="fade" onRequestClose={closeModal}>
+      <View style={styles.modalBackground}>
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalTitle}>Pet has entered hibernation</Text>
+          <Text style={styles.modalContent}>
+            Due to dangerously low health, your pet has entered hibernation
+          </Text>
+
+          <Text style={styles.modalImportantInfo}>
+            During hibernation, your pet's health remains at 5%. However,
+            recovery is paused and recovery time may even increase if your pet
+            spends a long time in hibernation.
+          </Text>
+          {/* and recovery will pause. Revival pills will be required to exit
+                    hibernation mode. */}
+
+          <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
+            <Text style={styles.modalButtonText}>
+              Medicate to exit hibernation
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
 const styles = StyleSheet.create({
   modalBackground: {
     flex: 1,
