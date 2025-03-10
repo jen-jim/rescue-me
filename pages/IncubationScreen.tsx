@@ -7,6 +7,7 @@ import {
   Animated,
   Dimensions,
   ScrollView,
+  Pressable,
 } from "react-native";
 import * as Progress from "react-native-progress";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -19,6 +20,7 @@ import {
   CleanInfoModal,
   FeedInfoModal,
   HealthInfoModal,
+  HibernationModal,
   MainInfoModal,
   MedicineInfoModal,
   PettingInfoModal,
@@ -30,14 +32,14 @@ export default function PetScreen() {
   const { petData, setPetData } = useContext(PetContext);
   const [message, setMessage] = useState("");
   const [fadeAnim] = useState(new Animated.Value(1));
-  const [progress, setProgress] = useState(0);
-  const [progressColour, setProgressColour] = useState("red");
+  const [progressColour, setProgressColour] = useState("orange");
   // const [disabled, setDisabled] = useState(true);
   // const [progressButtonStyle, setProgressButtonStyle] = useState(
   //   styles.disabledButton
   // );
   const [hatchTime, setHatchTime] = useState(0);
-  const [isMainInfoModalVisible, setMainInfoModalVisible] = useState(true);
+  const [isHibernating, setHibernating] = useState(false);
+  const [isMainInfoModalVisible, setMainInfoModalVisible] = useState(false);
   const [isHealthModalVisible, setHealthModalVisible] = useState(false);
   const [isFeedInfoModalVisible, setFeedInfoModalVisible] = useState(false);
   const [isMedicineInfoModalVisible, setMedicineInfoModalVisible] =
@@ -45,52 +47,138 @@ export default function PetScreen() {
   const [isPettingInfoModalVisible, setPettingInfoModalVisible] =
     useState(false);
   const [isCleanInfoModalVisible, setCleanInfoModalVisible] = useState(false);
+  // const [healthIntervalId, setHealthIntervalId] = useState();
 
+  function checkHibernation(incubationHealth: number) {
+    if (incubationHealth === 0.05) {
+      setHibernating(true);
+    }
+    if (incubationHealth > 0.05) setHibernating(false);
+  }
+
+  function updateProgressColour(value: number) {
+    if (value >= 0.75) {
+      setProgressColour("green");
+    } else if (value >= 0.15) {
+      setProgressColour("orange");
+    } else if (value >= 0) {
+      console.log(value);
+      setProgressColour("red");
+    }
+  }
   useFocusEffect(
     useCallback(() => {
+      console.log("incubationHealth on focus:", petData.incubationHealth);
+
+      if (petData.hibernationBegan) {
+        setHibernating(true);
+        // const elapsedHibernationTime = now - petData.hibernationBegan
+      }
+
       //calculate remaining hatch time on screen focus
       const now = Date.now();
+      // if(!petData.hibernationBegan)
       const beganIncubation = petData.beganIncubation || now;
-      // const storedHatchTime = petData.hatchTime || 86400000;
-      const extraTime = petData.extraTime || 0;
-      const elapsedHatchTime = now - beganIncubation;
-      const remainingHatchTime = 86400000 - elapsedHatchTime + extraTime;
+      const extraTime = petData.extraTime || 0; //extra time is when countdown is paused for some reason
+      const elapsedHatchTime = now - beganIncubation - extraTime;
+      const remainingHatchTime = 86400000 - elapsedHatchTime; // default 24 hours in incubation
 
       setHatchTime(remainingHatchTime);
 
+      //update petData
       if (!petData.beganIncubation || extraTime) {
-        const newPetData = { ...petData, beganIncubation, extraTime };
+        const newPetData = {
+          ...petData,
+          beganIncubation,
+          extraTime,
+          incubationHealthLastChanged: now,
+        };
         setPetData(newPetData);
       }
 
-      //visible countdown
-      const intervalId = setInterval(() => {
-        setHatchTime((currHatchTime) => Math.max(currHatchTime - 1000, 0));
-      }, 1000);
+      //calculate health
+      if (petData.incubationHealthLastChanged) {
+        const incubationHealthLastChanged = petData.incubationHealthLastChanged;
 
-      return () => clearInterval(intervalId);
-    }, [petData, setPetData])
+        const elapsedHealthTime = now - incubationHealthLastChanged;
+        const healthDecay = elapsedHealthTime / 6000000; //60,000 minutes *0.01 - 1 percent per minute //change this to 60000 to view change every second
+        const incubationHealth = Math.max(
+          petData.incubationHealth - healthDecay,
+          0.05
+        );
+        console.log(incubationHealth, "in use focus effect");
+        updateProgressColour(incubationHealth);
+        checkHibernation(incubationHealth);
+        setPetData((petData) => {
+          return { ...petData, incubationHealth };
+        });
+      }
+
+      //visible countdown
+      let hatchIntervalId: any;
+      let healthIntervalId: any;
+      if (!petData.hibernationBegan) {
+        hatchIntervalId = setInterval(() => {
+          setHatchTime((currHatchTime) => Math.max(currHatchTime - 1000, 0));
+        }, 1000);
+
+        healthIntervalId = setInterval(() => {
+          setPetData((petData) => {
+            let hibernationBegan = petData.hibernationBegan;
+            const newIncubationHealth = Math.max(
+              petData.incubationHealth - 0.01,
+              0.05
+            );
+            console.log(newIncubationHealth, "inside interval");
+            updateProgressColour(newIncubationHealth);
+            checkHibernation(newIncubationHealth);
+            if (!hibernationBegan) {
+              hibernationBegan = Date.now();
+            }
+            return {
+              ...petData,
+              incubationHealth: newIncubationHealth,
+              hibernationBegan,
+            };
+          });
+        }, 60000); //change this to 600 to view change every second
+      }
+      console.log("rendered");
+
+      return () => {
+        console.log("cleared");
+        clearInterval(hatchIntervalId);
+        clearInterval(healthIntervalId);
+        setPetData((petData) => {
+          return { ...petData, incubationHealthLastChanged: now };
+        });
+      };
+    }, [isHibernating])
   );
 
   function showMessage(text: string) {
+    const now = Date.now();
+
     setMessage(text);
 
-    if (progress >= 0.9) {
-      setProgress(1);
-    } else {
-      setProgress(progress + 0.1);
+    let newIncubationHealth = petData.incubationHealth + 0.1;
+
+    if (petData.incubationHealth >= 0.9) {
+      newIncubationHealth = 1;
     }
-    if (progress >= 0.75) {
-      setProgressColour("green");
-      // setDisabled(false);
-    } else if (progress >= 0.15) {
-      setProgressColour("orange");
-    } else {
-      setProgressColour("red");
-    }
-    // if (disabled === false) {
-    //   setProgressButtonStyle(styles.buttonProgress);
-    // }
+
+    setPetData((petData) => {
+      return {
+        ...petData,
+        incubationHealth: newIncubationHealth,
+        incubationHealthLastChanged: now,
+      };
+    });
+
+    updateProgressColour(newIncubationHealth);
+
+    console.log(newIncubationHealth, "in btn");
+
     fadeAnim.setValue(1);
     Animated.timing(fadeAnim, {
       toValue: 0,
@@ -104,9 +192,12 @@ export default function PetScreen() {
   }
 
   function handleHatch() {
-    setPetData({
-      ...petData,
-      justHatched: true,
+    setPetData((petData) => {
+      return {
+        ...petData,
+        justHatched: true,
+        incubationHealth: 0.5, //reset
+      };
     });
     navigation.navigate("Pet");
     //some logic on pet page to show a congratulations message
@@ -126,7 +217,7 @@ export default function PetScreen() {
         setFeedInfoModalVisible(true);
         break;
 
-      case "Medicine":
+      case "Medicate":
         setMedicineInfoModalVisible(true);
         break;
 
@@ -167,7 +258,7 @@ export default function PetScreen() {
           </View>
           {hatchTime > 0 && (
             <PrematureHatchButton
-              progress={progress}
+              progress={petData.incubationHealth}
               handleHatch={handleHatch}
             />
           )}
@@ -183,7 +274,7 @@ export default function PetScreen() {
             // style={styles.progressBarContainer}💜
             >
               <Progress.Bar
-                progress={progress}
+                progress={petData.incubationHealth}
                 color={progressColour}
                 width={Dimensions.get("window").width * 0.64}
                 height={25}
@@ -194,7 +285,7 @@ export default function PetScreen() {
                 borderRadius={10}
               />
               <Text style={styles.progressText}>
-                {Math.round(progress * 100)}%
+                {Math.round(petData.incubationHealth * 100)}%
               </Text>
             </View>
           </TouchableOpacity>
@@ -213,25 +304,28 @@ export default function PetScreen() {
           >
             {[
               { text: "Feed", icon: "fast-food", msg: "That was tasty!" },
-              { text: "Medicine", icon: "eyedrop-outline", msg: "Yuck!" },
+              { text: "Medicate", icon: "eyedrop-outline", msg: "Yuck!" },
               { text: "Pet", icon: "hand-left", msg: "*Wags tail*" },
               { text: "Clean", icon: "water-outline", msg: "*wet dog shake*" },
             ].map((btn) => {
               return (
                 <View key={btn.text} style={styles.interactionButtonWrapper}>
-                  <TouchableOpacity
+                  <Pressable
                     key={btn.text}
-                    disabled={progress === 1}
+                    disabled={petData.incubationHealth === 1}
                     style={[
                       styles.button,
-                      progress !== 1
+                      petData.incubationHealth !== 1
                         ? styles.buttonEnabled
                         : styles.buttonDisabled,
                     ]}
                     onPress={() => showMessage(btn.msg)}
+                    onLongPress={() => {
+                      handleInteractionInfo(btn.text);
+                    }}
                   >
                     <Icon name={btn.icon} size={30} color="white" />
-                  </TouchableOpacity>
+                  </Pressable>
                   <TouchableOpacity
                     activeOpacity={1}
                     onPress={() => {
@@ -246,6 +340,27 @@ export default function PetScreen() {
           </View>
         </View>
       </ScrollView>
+
+      {isHibernating && (
+        <HibernationModal
+          handleExit={() => {
+            setHibernating(false);
+            showMessage("You saved me!");
+            setPetData((petData) => {
+              const now = Date.now();
+              const prevExtraTime = petData.extraTime || 0;
+              const extraTime = now - petData.hibernationBegan + prevExtraTime;
+
+              return {
+                ...petData,
+                hibernationBegan: undefined,
+                extraTime,
+                // incubationHealthLastChanged: now,
+              };
+            });
+          }}
+        />
+      )}
 
       <InfoPanel />
 
