@@ -4,16 +4,16 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
+  Dimensions,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import auth from "@react-native-firebase/auth";
 import { useState } from "react";
-import { Dimensions } from "react-native";
+import CreateNewUser from "./components/CreateNewUser";
 
 export default function LoginScreen() {
   const [username, onSubmitEditingUsername] = useState("");
   const [password, onSubmitEditingPassword] = useState("");
-  const [passwordAgain, onSubmitEditingPasswordAgain] = useState("");
   const [onNewUserPage, setOnNewUserPage] = useState(false);
 
   const createAccount = () => {
@@ -22,36 +22,10 @@ export default function LoginScreen() {
     setOnNewUserPage(true);
   };
 
-  const createAccountInFirbase = () => {
-    auth()
-      .createUserWithEmailAndPassword(username, password)
-      .then((res) => {
-        console.log("User account created & signed in!");
-        console.log("====================================");
-        console.log(res, "Created Res");
-        console.log("====================================");
-      })
-      .catch((error) => {
-        if (error.code === "auth/email-already-in-use") {
-          console.log("That email address is already in use!");
-        }
-
-        if (error.code === "auth/invalid-email") {
-          console.log("That email address is invalid!");
-        }
-
-        console.error(error);
-      });
-  };
-
   const loginWithEmailAndPassword = () => {
     auth()
       .signInWithEmailAndPassword(username, password)
-      .then((res) => {
-        console.log("====================================");
-        console.log(res, "Login Res");
-        console.log("====================================");
-      })
+      .then((res) => {})
       .catch((error) => {
         console.log("====================================");
         console.log(error, "Error Res");
@@ -81,52 +55,7 @@ export default function LoginScreen() {
   ===================================================== */
 
   if (onNewUserPage === true) {
-    return (
-      <SafeAreaProvider>
-        <SafeAreaView style={styles.container}>
-          <View style={styles.loginDetails}>
-            <Text style={styles.title}>Create Page</Text>
-            <TextInput
-              style={styles.input}
-              onSubmitEditing={(newText) =>
-                onSubmitEditingUsername(String(newText))
-              }
-              placeholder="Username/Email"
-              defaultValue={username}
-              inputMode="email"
-            />
-
-            <TextInput
-              style={styles.input}
-              onSubmitEditing={(newText) =>
-                onSubmitEditingPassword(String(newText))
-              }
-              placeholder="Password"
-              defaultValue={password}
-              secureTextEntry={true}
-            />
-            <TextInput
-              style={styles.input}
-              onSubmitEditing={(newText) =>
-                onSubmitEditingPasswordAgain(String(newText))
-              }
-              placeholder="Repeat Password"
-              defaultValue={passwordAgain}
-              secureTextEntry={true}
-            />
-
-            <View style={styles.buttonsContainer}>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => createAccountInFirbase()}
-              >
-                <Text style={{ color: "white" }}>Create</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </SafeAreaView>
-      </SafeAreaProvider>
-    );
+    return <CreateNewUser />;
   }
 
   return (
