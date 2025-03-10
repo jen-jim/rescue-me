@@ -74,9 +74,9 @@ const CollectFoodSceneAR = (): JSX.Element => {
         />
         {!isCollected && (
           <ViroImage
-            source={require("../pages/assets/icons/food_icon.png")}
+            source={require("../pages/assets/food-icons/normal_food.png")}
             position={foodMarker ? [0, -0.5, -1] : undefined}
-            scale={[0.5, 0.5, 0.5]}
+            scale={[0.2, 0.2, 0.2]}
             onClick={() => {
               console.log(`${foodType} food clicked!`);
               const foodInventory = addFood(inventory.food, foodType);
