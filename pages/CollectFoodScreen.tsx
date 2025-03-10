@@ -4,16 +4,15 @@ import {
   ViroAmbientLight,
   ViroARScene,
   ViroARSceneNavigator,
-  ViroImage,
   ViroText,
   ViroTrackingReason,
   ViroTrackingStateConstants,
 } from "@reactvision/react-viro";
-import React, { useContext, useState } from "react";
-import { InventoryContext } from "../contexts/InventoryContext";
+import React, { useState } from "react";
 import { FoodInventory } from "../utils/Local-storage";
 import { Button, StyleSheet } from "react-native";
 import { Region } from "./WalkScreen";
+import { FoodIcon } from "./components/FoodIcon";
 
 type RootStackParamList = {
   CollectFood: {
@@ -22,18 +21,8 @@ type RootStackParamList = {
   };
 };
 
-function addFood(foodInventory: FoodInventory, food: keyof FoodInventory) {
-  return {
-    ...foodInventory,
-    [food]: foodInventory[food] + 1,
-  };
-}
-
 const CollectFoodSceneAR = (): JSX.Element => {
-  const navigation = useNavigation();
   const [text, setText] = useState("Initializing AR...");
-  const { inventory, setInventory } = useContext(InventoryContext);
-  const [isCollected, setIsCollected] = useState(false);
 
   const route = useRoute<RouteProp<RootStackParamList, "CollectFood">>();
   const { foodMarker, foodType } = route.params;
@@ -72,23 +61,7 @@ const CollectFoodSceneAR = (): JSX.Element => {
             delay: 1000,
           }}
         />
-        {!isCollected && (
-          <ViroImage
-            source={require("../pages/assets/food-icons/normal_food.png")}
-            position={foodMarker ? [0, -0.5, -1] : undefined}
-            scale={[0.2, 0.2, 0.2]}
-            onClick={() => {
-              console.log(`${foodType} food clicked!`);
-              const foodInventory = addFood(inventory.food, foodType);
-              setInventory((prevInventory) => ({
-                ...prevInventory,
-                food: foodInventory,
-              }));
-              setIsCollected(true);
-              navigation.navigate("Walk", { collectedFood: foodMarker });
-            }}
-          />
-        )}
+        <FoodIcon foodMarker={foodMarker} foodType={foodType} />
       </ViroARScene>
     );
   } else {
