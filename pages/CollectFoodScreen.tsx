@@ -42,20 +42,18 @@ const CollectFoodSceneAR = (): JSX.Element => {
         <ViroText
           text={text}
           scale={[0.5, 0.5, 0.5]}
-          position={[0, 0, -1]}
+          position={[0, -0.2, -1.5]}
           style={styles.text}
         />
         <ViroAmbientLight color={"#aaaaaa"} />
         <Viro3DObject
-          source={require("../pages/assets/models/pug/pug_animated.vrx")}
-          type="VRX"
-          position={[0, -2, -5]}
-          scale={[1, 1, 1]}
-          rotation={[0, 0, 0]}
-          dragType="FixedToWorld"
-          onDrag={() => {}}
+          source={require("./assets/models/toon_cat_free.glb")}
+          type="GLB"
+          scale={[0.002, 0.002, 0.002]}
+          position={[-0.35, -0.5, -1.5]}
+          rotation={[0, 45, 0]}
           animation={{
-            name: "Take 001",
+            name: "Scene",
             run: true,
             loop: true,
             delay: 1000,
@@ -97,12 +95,12 @@ export default function CollectFoodScreen() {
   );
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   f1: { flex: 1 },
   text: {
     fontFamily: "Arial",
     fontSize: 16,
-    color: "#ffffff",
+    color: "#ff6b6b",
     textAlignVertical: "center",
     textAlign: "center",
   },
