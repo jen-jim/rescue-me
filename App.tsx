@@ -15,6 +15,8 @@ import TestNavScreen from "./pages/TestNavScreen";
 import LoadingScreen from "./pages/components/LoadingScreen";
 import MiniGames from "./pages/MiniGames";
 import PetProvider from "./contexts/PetProvider";
+import TicTakToe from "./pages/TicTakToe";
+import Connect4 from "./pages/Connect4";
 
 export type StackParamList = {
   TestNav: undefined;
@@ -29,6 +31,8 @@ export type StackParamList = {
   ARWalk: undefined;
   Loading: undefined;
   MiniGames: undefined;
+  Connect4: undefined;
+  TicTakToe: undefined;
 };
 const Stack = createNativeStackNavigator<StackParamList>();
 
@@ -88,6 +92,16 @@ export default function App() {
               <Stack.Screen
                 name="MiniGames"
                 component={MiniGames}
+                options={{ title: "Rescue Me" }}
+              />
+              <Stack.Screen
+                name="TicTakToe"
+                component={TicTakToe}
+                options={{ title: "Rescue Me" }}
+              />
+              <Stack.Screen
+                name="Connect4"
+                component={Connect4}
                 options={{ title: "Rescue Me" }}
               />
               <Stack.Screen
