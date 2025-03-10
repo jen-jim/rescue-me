@@ -25,6 +25,8 @@ import {
   PettingInfoModal,
 } from "./components/IncubationInfoModals";
 import { InfoPanel } from "./components/InfoPanel";
+import { FeedButton } from "./components/FeedButton";
+import { MedicateButton } from "./components/MedicateButton";
 import { styles } from "./StyleSheets/IncubationScreenStyles";
 
 export default function IncubationScreen() {
@@ -111,8 +113,8 @@ export default function IncubationScreen() {
         console.log(incubationHealth, "in use focus effect");
         updateProgressColour(incubationHealth);
         checkHibernation(incubationHealth);
-        setPetData((petData) => {
-          return { ...petData, incubationHealth };
+        setPetData((prevPetData) => {
+          return { ...prevPetData, incubationHealth };
         });
       }
 
@@ -125,10 +127,10 @@ export default function IncubationScreen() {
         }, 1000);
 
         healthIntervalId = setInterval(() => {
-          setPetData((petData) => {
-            let hibernationBegan = petData.hibernationBegan;
+          setPetData((prevPetData) => {
+            let hibernationBegan = prevPetData.hibernationBegan;
             const newIncubationHealth = Math.max(
-              petData.incubationHealth - 0.01,
+              prevPetData.incubationHealth - 0.01,
               0.05
             );
             console.log(newIncubationHealth, "inside interval");
@@ -138,7 +140,7 @@ export default function IncubationScreen() {
               hibernationBegan = Date.now();
             }
             return {
-              ...petData,
+              ...prevPetData,
               incubationHealth: newIncubationHealth,
               hibernationBegan,
             };
@@ -151,8 +153,8 @@ export default function IncubationScreen() {
         console.log("cleared");
         clearInterval(hatchIntervalId);
         clearInterval(healthIntervalId);
-        setPetData((petData) => {
-          return { ...petData, incubationHealthLastChanged: now };
+        setPetData((prevPetData) => {
+          return { ...prevPetData, incubationHealthLastChanged: now };
         });
       };
     }, [isHibernating])
@@ -169,9 +171,9 @@ export default function IncubationScreen() {
       newIncubationHealth = 1;
     }
 
-    setPetData((petData) => {
+    setPetData((prevPetData) => {
       return {
-        ...petData,
+        ...prevPetData,
         incubationHealth: newIncubationHealth,
         incubationHealthLastChanged: now,
       };
@@ -194,9 +196,9 @@ export default function IncubationScreen() {
   }
 
   function handleHatch() {
-    setPetData((petData) => {
+    setPetData((prevPetData) => {
       return {
-        ...petData,
+        ...prevPetData,
         justHatched: true,
         incubationHealth: 0.5, //reset
       };
@@ -215,14 +217,6 @@ export default function IncubationScreen() {
   }
   function handleInteractionInfo(interaction: string) {
     switch (interaction) {
-      case "Feed":
-        setFeedInfoModalVisible(true);
-        break;
-
-      case "Medicate":
-        setMedicineInfoModalVisible(true);
-        break;
-
       case "Pet":
         setPettingInfoModalVisible(true);
         break;
@@ -304,9 +298,15 @@ export default function IncubationScreen() {
             style={styles.interactionButtonsContainer}
             // style={styles.section}
           >
+            <FeedButton
+              handleFeed={showMessage}
+              setFeedInfoModalVisible={setFeedInfoModalVisible}
+            />
+            <MedicateButton
+              handleMedicate={showMessage}
+              setMedicineInfoModalVisible={setMedicineInfoModalVisible}
+            />
             {[
-              { text: "Feed", icon: "fast-food", msg: "That was tasty!" },
-              { text: "Medicate", icon: "eyedrop-outline", msg: "Yuck!" },
               { text: "Pet", icon: "hand-left", msg: "*Wags tail*" },
               { text: "Clean", icon: "water-outline", msg: "*wet dog shake*" },
             ].map((btn) => {
@@ -348,13 +348,14 @@ export default function IncubationScreen() {
           handleExit={() => {
             setHibernating(false);
             showMessage("You saved me!");
-            setPetData((petData) => {
+            setPetData((prevPetData) => {
               const now = Date.now();
-              const prevExtraTime = petData.extraTime || 0;
-              const extraTime = now - petData.hibernationBegan + prevExtraTime;
+              const prevExtraTime = prevPetData.extraTime || 0;
+              const extraTime =
+                now - prevPetData.hibernationBegan + prevExtraTime;
 
               return {
-                ...petData,
+                ...prevPetData,
                 hibernationBegan: undefined,
                 extraTime,
                 // incubationHealthLastChanged: now,
