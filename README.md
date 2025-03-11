@@ -71,14 +71,15 @@ A lot of minor issues can be resolved by reloading the app.
 
 However, if your phone disconnects from the Development Server, commands given in the terminal on your computer will not reach your phone. You will need to complete the following steps in order to reconnect your phone to the Development Server.
 
-### 1. Ensure the Development Server is running in a terminal on your computer.
+### Step 1: Ensure the Development Server is running in a terminal on your computer.
 >You can start it using:  
 >   ```bash
 >  npm start
 >   ```
-### 2. Ensure the app is open on your phone. If not, go to `All Apps` and tap on `RescueMe` to launch.
-### 3. Open the Developer Menu on the app by shaking your phone.
-### 4. Tap the 'Reload' option to reload the app.
+### Step 2: Ensure the app is open on your phone. 
+>If not, go to `All Apps` and tap on `RescueMe` to launch.
+### Step 3: Open the Developer Menu on the app by shaking your phone.
+### Step 4: Tap the 'Reload' option to reload the app.
 
 You should see a `bundling` message at the top of the app, and on the console ```BUNDLE ./index.js``` will appear. Once it has been bundled, the ```Running "RescueMe" ``` log should appear on the console.  
 The app has now successfully connected to the Development Server and any changes made should appear in real-time. 
