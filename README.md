@@ -39,7 +39,7 @@ Follow the [React Native - Running On Device](https://reactnative.dev/docs/runni
 
 ## Step 4: Connect to the Development Server over WiFi
 
-> **Note**: In order to freely experience the AR components of our project, we recommend you connect your device to the Development Server over WiFi.
+> **Note**: In order to freely experience the AR feautures of our project, we recommend you connect your device to the Development Server over WiFi rather than via USB.
 
 First, you will need to start the Development Server using **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
 
