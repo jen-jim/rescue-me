@@ -72,10 +72,10 @@ A lot of minor issues can be resolved by reloading the app.
 However, if your phone disconnects from the Development Server, commands given in the terminal on your computer will not reach your phone. You will need to complete the following steps in order to reconnect your phone to the Development Server.
 
 ### Step 1: Ensure the Development Server is running in a terminal on your computer.
-You can start it using:  
-   ```bash
-  npm start
-  ```
+>You can start it using:  
+>   ```bash
+>  npm start
+>  ```
 ### Step 2: Ensure the app is open on your phone. 
 If not, go to `All Apps` and tap on `RescueMe` to launch.
 ### Step 3: Open the Developer Menu on the app by shaking your phone while the app is open.
