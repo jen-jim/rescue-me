@@ -5,12 +5,12 @@ import { styles } from "../StyleSheets/IncubationScreenStyles";
 import Icon from "react-native-vector-icons/Ionicons";
 
 interface FeedButtonProps {
-  handleFeed: (message: string) => void;
+  setFoodModalVisible: (visible: boolean) => void;
   setFeedInfoModalVisible: (visible: boolean) => void;
 }
 
 export const FeedButton: React.FC<FeedButtonProps> = ({
-  handleFeed,
+  setFoodModalVisible,
   setFeedInfoModalVisible,
 }) => {
   const { petData } = useContext(PetContext);
@@ -26,7 +26,7 @@ export const FeedButton: React.FC<FeedButtonProps> = ({
             : styles.buttonDisabled,
         ]}
         onPress={() => {
-          handleFeed("That was tasty!");
+          setFoodModalVisible(true);
         }}
         onLongPress={() => {
           setFeedInfoModalVisible(true);

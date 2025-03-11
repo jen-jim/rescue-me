@@ -5,12 +5,12 @@ import { styles } from "../StyleSheets/IncubationScreenStyles";
 import Icon from "react-native-vector-icons/Ionicons";
 
 interface MedicateButtonProps {
-  handleMedicate: (message: string) => void;
+  setMedicineModalVisible: (visible: boolean) => void;
   setMedicineInfoModalVisible: (visible: boolean) => void;
 }
 
 export const MedicateButton: React.FC<MedicateButtonProps> = ({
-  handleMedicate,
+  setMedicineModalVisible,
   setMedicineInfoModalVisible,
 }) => {
   const { petData } = useContext(PetContext);
@@ -26,7 +26,7 @@ export const MedicateButton: React.FC<MedicateButtonProps> = ({
             : styles.buttonDisabled,
         ]}
         onPress={() => {
-          handleMedicate("Yuck!");
+          setMedicineModalVisible(true);
         }}
         onLongPress={() => {
           setMedicineInfoModalVisible(true);

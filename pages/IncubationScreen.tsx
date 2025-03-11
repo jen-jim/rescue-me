@@ -28,6 +28,8 @@ import { InfoPanel } from "./components/InfoPanel";
 import { FeedButton } from "./components/FeedButton";
 import { MedicateButton } from "./components/MedicateButton";
 import { styles } from "./StyleSheets/IncubationScreenStyles";
+import { IncubationFoodModal } from "./components/IncubationFoodModal";
+import { IncubationMedicineModal } from "./components/IncubationMedicineModal";
 
 export default function IncubationScreen() {
   const navigation = useNavigation();
@@ -50,6 +52,18 @@ export default function IncubationScreen() {
     useState(false);
   const [isCleanInfoModalVisible, setCleanInfoModalVisible] = useState(false);
   // const [healthIntervalId, setHealthIntervalId] = useState();
+  const [foodModalVisible, setFoodModalVisible] = useState(false);
+  const [medicineModalVisible, setMedicineModalVisible] = useState(false);
+
+  // Close modals when the screen loses focus.
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setFoodModalVisible(false);
+        setMedicineModalVisible(false);
+      };
+    }, [])
+  );
 
   function checkHibernation(incubationHealth: number) {
     if (incubationHealth === 0.05) {
@@ -299,11 +313,11 @@ export default function IncubationScreen() {
             // style={styles.section}
           >
             <FeedButton
-              handleFeed={showMessage}
+              setFoodModalVisible={setFoodModalVisible}
               setFeedInfoModalVisible={setFeedInfoModalVisible}
             />
             <MedicateButton
-              handleMedicate={showMessage}
+              setMedicineModalVisible={setMedicineModalVisible}
               setMedicineInfoModalVisible={setMedicineInfoModalVisible}
             />
             {[
@@ -364,19 +378,15 @@ export default function IncubationScreen() {
           }}
         />
       )}
-
       <InfoPanel />
-
       <MainInfoModal
         isMainInfoModalVisible={isMainInfoModalVisible}
         setMainInfoModalVisible={setMainInfoModalVisible}
       />
-
       <HealthInfoModal
         isHealthModalVisible={isHealthModalVisible}
         setHealthModalVisible={setHealthModalVisible}
       />
-
       <FeedInfoModal
         isFeedInfoModalVisible={isFeedInfoModalVisible}
         setFeedInfoModalVisible={setFeedInfoModalVisible}
@@ -392,6 +402,16 @@ export default function IncubationScreen() {
       <CleanInfoModal
         isCleanInfoModalVisible={isCleanInfoModalVisible}
         setCleanInfoModalVisible={setCleanInfoModalVisible}
+      />
+      <IncubationFoodModal
+        visible={foodModalVisible}
+        onClose={() => setFoodModalVisible(false)}
+        showMessage={showMessage}
+      />
+      <IncubationMedicineModal
+        visible={medicineModalVisible}
+        onClose={() => setMedicineModalVisible(false)}
+        showMessage={showMessage}
       />
     </SafeAreaView>
   );
