@@ -65,7 +65,9 @@ Now that you have successfully run the app and seen how it works, let's modify i
 1. Open one of the files in the `pages` folder in your text editor of choice and edit some lines.
 2. Your changes should appear immediately. If not, for **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
 
-## Troubleshooting: Unable to View Changes or Grey Screen on Opening the App (Cannot connect to Metro)
+## Troubleshooting: Unable to View Changes or Grey Screen on Opening Application (Cannot connect to Metro)
+
+You may find that a code change is not being displayed in the app running on your phone, or the app seems to be unresponsive.  
 
 A lot of minor issues can be resolved by reloading the app.  
 
