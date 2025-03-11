@@ -1,28 +1,37 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
+import { Button, StyleSheet } from "react-native";
 import {
   ViroARScene,
   ViroARSceneNavigator,
   Viro3DObject,
   ViroAmbientLight,
-  ViroText,
   ViroNode,
 } from "@reactvision/react-viro";
-import { StyleSheet } from "react-native";
+
+export const MapButton = () => {
+  const navigation = useNavigation();
+  return (
+    <Button title="Map View" onPress={() => navigation.navigate("Walk")} />
+  );
+};
 
 const WalkSceneAR = () => {
-  const [userPosition, setUserPosition] = useState([0, 0, -1]);
-  const [userRotation, setUserRotation] = useState([0, 0, 0]);
+  const [userPosition, setUserPosition] = useState<[number, number, number]>([
+    0, 0, -1,
+  ]);
+  const [userRotation, setUserRotation] = useState<[number, number, number]>([
+    0, 0, 0,
+  ]);
 
-  const onCameraTransformUpdate = (camera) => {
+  const onCameraTransformUpdate = (camera: any) => {
     const { position, rotation } = camera;
-
 
     const distance = 1;
     const radianAngle = (rotation[1] * Math.PI) / 180;
 
     const newX = position[0] - distance * Math.sin(radianAngle);
     const newZ = position[2] - distance * Math.cos(radianAngle);
-
 
     setUserPosition([newX, -1, newZ]);
 
@@ -43,10 +52,9 @@ const WalkSceneAR = () => {
             name: "Scene",
             run: true,
             loop: true,
-            delay: 1000,
+            delay: 10,
           }}
         />
-
       </ViroNode>
     </ViroARScene>
   );
