@@ -46,7 +46,7 @@ export const FoodModal: React.FC<FoodModalProps> = ({
             break;
           case "cutenessBoost":
             happinessIncrease = 20;
-            cutenessIncrease = 10;
+            cutenessIncrease = 1;
             break;
           case "slowRelease":
             remainingSlowReleaseTime = 60000 * 720; // 12 hours
