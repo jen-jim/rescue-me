@@ -21,7 +21,7 @@ export const SpecialFoodMarker: React.FC<FoodMarkerProps> = ({
       title={specialFood.data.title}
       description={specialFood.data.description}
     >
-      <Icon name={specialFood.data.icon} size={32} color="#FF0000" />
+      <Icon name={specialFood.data.icon} size={32} color="#ff6b6b" />
     </Marker>
   );
 };
