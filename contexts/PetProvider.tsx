@@ -20,6 +20,9 @@ const initialPetData: PetData = {
   remainingSlowReleaseTime: 0,
   incubationHealth: 0.5,
   hibernationBegan: undefined,
+  weeklyDistance: [0, 0, 0, 0, 0, 0, 0],
+  totalDistanceWalked: 0,
+  lastUpdatedWeek: 0,
 };
 
 export default function PetProvider({ children }: PetProviderProps) {
@@ -36,6 +39,24 @@ export default function PetProvider({ children }: PetProviderProps) {
   useEffect(() => {
     savePetData(petData);
   }, [petData]);
+
+  useEffect(() => {
+    const today = new Date();
+    const currentWeek = getWeek(today);
+    if (petData.lastUpdatedWeek !== currentWeek) {
+      setPetData((prev) => ({
+        ...prev,
+        weeklyDistance: Array(7).fill(0),
+        lastUpdatedWeek: currentWeek,
+      }));
+    }
+  }, [petData.lastUpdatedWeek]);
+
+  const getWeek = (date: Date): number => {
+    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+    const pastDays = (date.getTime() - firstDayOfYear.getTime()) / 86400000; // milliseconds per day
+    return Math.ceil((pastDays + firstDayOfYear.getDay() + 1) / 7);
+  };
 
   function resetPetData() {
     setPetData({ ...initialPetData, lastUpdated: Date.now() });

@@ -15,6 +15,9 @@ export type PetData = {
   incubationHealth: number;
   incubationHealthLastChanged: number;
   hibernationBegan: number | undefined;
+  weeklyDistance: number[];
+  totalDistanceWalked: number;
+  lastUpdatedWeek: number;
 };
 
 export const savePetData = async (pet: PetData) => {

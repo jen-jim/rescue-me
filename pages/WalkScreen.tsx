@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   PermissionsAndroid,
@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Text,
+  Button,
 } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import {
@@ -20,7 +21,7 @@ import { SpecialFoodMarker } from "./components/SpecialFoodMarker";
 import { generateFoodCoords } from "../utils/generateFoodCoords";
 import { FoodProximityButton } from "./components/FoodProximityButton";
 import { foodTypes, specialFoodData } from "../utils/foodTypes";
-import { calculateDistance } from "../utils/calculateDistance";
+import { PetContext } from "../contexts/PetContext";
 
 export type Region = {
   latitude: number;
@@ -57,6 +58,7 @@ const requestLocationPermission = async () => {
 };
 
 export default function WalkScreen() {
+  const { petData, setPetData } = useContext(PetContext);
   const navigation = useNavigation();
   const [userLocation, setUserLocation] = useState<Region | null>(null);
   const [foodCoords, setFoodCoords] = useState<Region[]>([]);
@@ -64,8 +66,7 @@ export default function WalkScreen() {
     coords: Region;
     data: specialFoodData;
   }>();
-  const [distanceWalked, setDistanceWalked] = useState(0);
-  const [prevCoords, setPrevCoords] = useState<Region | null>(null);
+  const [prevLocation, setPrevLocation] = useState<Region | null>(null);
 
   const route = useRoute();
 
@@ -77,7 +78,7 @@ export default function WalkScreen() {
             const { latitude, longitude } = position.coords;
             const initialCoords = { latitude, longitude };
             setUserLocation(initialCoords);
-            setPrevCoords(initialCoords);
+            setPrevLocation(initialCoords);
           },
           (error) => {
             console.error("Geolocation error:", error);
@@ -90,31 +91,21 @@ export default function WalkScreen() {
     });
   }, []);
 
-  useEffect(() => {
-    let watchId: number | null = null;
-    if (userLocation) {
-      watchId = Geolocation.watchPosition(
-        (position) => {
-          const newCoords = {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          };
-          if (prevCoords) {
-            const dist = calculateDistance(prevCoords, newCoords);
-            setDistanceWalked((prev) => prev + dist);
-          }
-          setPrevCoords(newCoords);
-        },
-        (error) => console.error("Error watching position", error),
-        { enableHighAccuracy: true, distanceFilter: 1 }
-      );
-    }
-    return () => {
-      if (watchId !== null) {
-        Geolocation.clearWatch(watchId);
-      }
-    };
-  }, [userLocation, prevCoords]);
+  const todayIndex = new Date().getDay() - 1; // Monday is 0, Sunday is 6
+  const todaysDistance = petData.weeklyDistance[todayIndex] || 0;
+
+  const addDistance = (distance) => {
+    setPetData((prev) => {
+      const updatedWeeklyDistance = [...prev.weeklyDistance];
+      updatedWeeklyDistance[todayIndex] += distance;
+
+      return {
+        ...prev,
+        weeklyDistance: updatedWeeklyDistance,
+        totalDistanceWalked: prev.totalDistanceWalked + distance,
+      };
+    });
+  };
 
   const deltas = {
     latitudeDelta: 0.008,
@@ -211,9 +202,10 @@ export default function WalkScreen() {
       </View>
       <View style={styles.infoContainer}>
         <Text style={styles.infoText}>
-          Distance Walked: {Math.round(distanceWalked)} m
+          Distance Walked: {Math.round(todaysDistance)}m
         </Text>
       </View>
+      <Button title="Walk 500m" onPress={() => addDistance(500)} />
     </SafeAreaView>
   );
 }
