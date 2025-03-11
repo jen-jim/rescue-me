@@ -29,9 +29,9 @@ export const styles = StyleSheet.create({
   },
   infoContainer: {
     position: "absolute",
-    top: 12,
+    top: 11,
     left: 10,
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    backgroundColor: "rgba(255, 255, 255, 0.6)",
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 2,

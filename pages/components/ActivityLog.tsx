@@ -36,6 +36,7 @@ export default function ActivityLog() {
         height={220}
         chartConfig={chartConfig}
         style={styles.chart}
+        yAxisLabel=""
         yAxisSuffix="m"
       />
       <Text style={styles.text}>
