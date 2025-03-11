@@ -1,5 +1,13 @@
 import { useState, useRef, useEffect, useCallback, useContext } from "react";
-import { View, Text, TouchableOpacity, Animated, Image } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Animated,
+  Image,
+  ScrollView,
+  Pressable,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { PetContext } from "../contexts/PetContext";
@@ -8,12 +16,43 @@ import { MedicineModal } from "./components/MedicineModal";
 import PetStats from "./components/PetStats";
 import Icon from "react-native-vector-icons/Ionicons";
 import { styles } from "./StyleSheets/PetScreenStyles";
+import { InfoPanel } from "./components/InfoPanel";
+import {
+  CutenessInfoModal,
+  EnergyInfoModal,
+  FeedInfoModal,
+  GrowthInfoModal,
+  HappinessInfoModal,
+  HungerInfoModal,
+  MainInfoModal,
+  MedicineInfoModal,
+  PettingInfoModal,
+  PlayInfoModal,
+  WalkInfoModal,
+} from "./components/PetPageInfoModals";
 
 export default function PetScreen() {
   const navigation = useNavigation();
   const { petData, setPetData } = useContext(PetContext);
   const [foodModalVisible, setFoodModalVisible] = useState(false);
   const [medicineModalVisible, setMedicineModalVisible] = useState(false);
+
+  const [isMainInfoModalVisible, setMainInfoModalVisible] = useState(false);
+  const [isPlayModalVisible, setPlayModalVisible] = useState(false);
+  const [isFeedInfoModalVisible, setFeedInfoModalVisible] = useState(false);
+  const [isMedicineInfoModalVisible, setMedicineInfoModalVisible] =
+    useState(false);
+  const [isPettingInfoModalVisible, setPettingInfoModalVisible] =
+    useState(false);
+  const [isWalkInfoModalVisible, setWalkInfoModalVisible] = useState(false);
+  const [isGrowthInfoModalVisible, setGrowthInfoModalVisible] = useState(false);
+  const [isHungerInfoModalVisible, setHungerInfoModalVisible] = useState(false);
+  const [isHappinessInfoModalVisible, setHappinessInfoModalVisible] =
+    useState(false);
+  const [isEnergyInfoModalVisible, setEnergyInfoModalVisible] = useState(false);
+  const [isCutenessInfoModalVisible, setCutenessInfoModalVisible] =
+    useState(false);
+
   const [message, setMessage] = useState("");
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const idleTimer = useRef<NodeJS.Timeout | null>(null);
@@ -117,77 +156,157 @@ export default function PetScreen() {
     };
   }, [message]);
 
+  function handleTitle() {
+    setMainInfoModalVisible(true);
+  }
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.petContainer}>
-        <View style={styles.petBox}>
-          <Image
-            source={require("./assets/video/placeholder_img.png")}
-            style={styles.petImage}
-          />
+      <TouchableOpacity activeOpacity={1} onPress={handleTitle}>
+        <Text style={styles.title}>{petData.name || "Pet Name"}</Text>
+      </TouchableOpacity>
+      <ScrollView>
+        <View style={styles.petContainer}>
+          <View style={styles.petBox}>
+            <Image
+              source={require("./assets/video/placeholder_img.png")}
+              style={styles.petImage}
+            />
+          </View>
+
+          {message !== "" && (
+            <Animated.View style={[styles.speechBubble, { opacity: fadeAnim }]}>
+              <Text style={styles.speechText}>{message}</Text>
+            </Animated.View>
+          )}
+          {message === "Interact with me!" && (
+            <View style={[styles.speechBubble]}>
+              <Text style={styles.speechText}>{message}</Text>
+            </View>
+          )}
         </View>
 
-        {message !== "" && (
-          <Animated.View style={[styles.speechBubble, { opacity: fadeAnim }]}>
-            <Text style={styles.speechText}>{message}</Text>
-          </Animated.View>
-        )}
-        {message === "Interact with me!" && (
-          <View style={[styles.speechBubble]}>
-            <Text style={styles.speechText}>{message}</Text>
-          </View>
-        )}
-      </View>
+        <View style={styles.buttonsContainer}>
+          <Pressable
+            style={styles.button}
+            onPress={() => navigation.navigate("MiniGames")}
+            onLongPress={() => {
+              setPlayModalVisible(true);
+            }}
+          >
+            <Icon name="game-controller" size={24} color="white" />
+            <Text style={styles.buttonText}>Play</Text>
+          </Pressable>
+          <Pressable
+            style={styles.button}
+            onPress={() => {
+              setFoodModalVisible(true);
+            }}
+            onLongPress={() => {
+              setFeedInfoModalVisible(true);
+            }}
+          >
+            <Icon name="fast-food" size={24} color="white" />
+            <Text style={styles.buttonText}>Feed</Text>
+          </Pressable>
+          <Pressable
+            style={styles.button}
+            onPress={handlePet}
+            onLongPress={() => {
+              setPettingInfoModalVisible(true);
+            }}
+          >
+            <Icon name="hand-left" size={24} color="white" />
+            <Text style={styles.buttonText}>Pet</Text>
+          </Pressable>
+          <Pressable
+            style={styles.button}
+            onPress={() => {
+              setMedicineModalVisible(true);
+            }}
+            onLongPress={() => {
+              setMedicineInfoModalVisible(true);
+            }}
+          >
+            <Icon name="medkit" size={24} color="white" />
+            <Text style={styles.buttonText}>Medicate</Text>
+          </Pressable>
+          <Pressable
+            style={styles.button}
+            onPress={() => navigation.navigate("Walk")}
+            onLongPress={() => {
+              setWalkInfoModalVisible(true);
+            }}
+          >
+            <Icon name="walk" size={24} color="white" />
+            <Text style={styles.buttonText}>Walk</Text>
+          </Pressable>
+        </View>
+        <FoodModal
+          visible={foodModalVisible}
+          onClose={() => setFoodModalVisible(false)}
+          showMessage={showMessage}
+        />
+        <MedicineModal
+          visible={medicineModalVisible}
+          onClose={() => setMedicineModalVisible(false)}
+          showMessage={showMessage}
+        />
+        <PetStats
+          setGrowthInfoModalVisible={setGrowthInfoModalVisible}
+          setHungerInfoModalVisible={setHungerInfoModalVisible}
+          setHappinessInfoModalVisible={setHappinessInfoModalVisible}
+          setEnergyInfoModalVisible={setGrowthInfoModalVisible}
+          setCutenessInfoModalVisible={setCutenessInfoModalVisible}
+        />
+      </ScrollView>
+      <InfoPanel />
+      <MainInfoModal
+        isMainInfoModalVisible={isMainInfoModalVisible}
+        setMainInfoModalVisible={setMainInfoModalVisible}
+      />
 
-      <View style={styles.buttonsContainer}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("MiniGames")}
-        >
-          <Icon name="game-controller" size={24} color="white" />
-          <Text style={styles.buttonText}>Play</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            setFoodModalVisible(true);
-          }}
-        >
-          <Icon name="fast-food" size={24} color="white" />
-          <Text style={styles.buttonText}>Feed</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handlePet}>
-          <Icon name="hand-left" size={24} color="white" />
-          <Text style={styles.buttonText}>Pet</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            setMedicineModalVisible(true);
-          }}
-        >
-          <Icon name="medkit" size={24} color="white" />
-          <Text style={styles.buttonText}>Medicate</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("Walk")}
-        >
-          <Icon name="walk" size={24} color="white" />
-          <Text style={styles.buttonText}>Walk</Text>
-        </TouchableOpacity>
-      </View>
-      <FoodModal
-        visible={foodModalVisible}
-        onClose={() => setFoodModalVisible(false)}
-        showMessage={showMessage}
+      <PlayInfoModal
+        isPlayModalVisible={isPlayModalVisible}
+        setPlayModalVisible={setPlayModalVisible}
       />
-      <MedicineModal
-        visible={medicineModalVisible}
-        onClose={() => setMedicineModalVisible(false)}
-        showMessage={showMessage}
+
+      <FeedInfoModal
+        isFeedInfoModalVisible={isFeedInfoModalVisible}
+        setFeedInfoModalVisible={setFeedInfoModalVisible}
       />
-      <PetStats />
+      <MedicineInfoModal
+        isMedicineInfoModalVisible={isMedicineInfoModalVisible}
+        setMedicineInfoModalVisible={setMedicineInfoModalVisible}
+      />
+      <PettingInfoModal
+        isPettingInfoModalVisible={isPettingInfoModalVisible}
+        setPettingInfoModalVisible={setPettingInfoModalVisible}
+      />
+      <WalkInfoModal
+        isWalkInfoModalVisible={isWalkInfoModalVisible}
+        setWalkInfoModalVisible={setWalkInfoModalVisible}
+      />
+      <GrowthInfoModal
+        isGrowthInfoModalVisible={isGrowthInfoModalVisible}
+        setGrowthInfoModalVisible={setGrowthInfoModalVisible}
+      />
+      <HungerInfoModal
+        isHungerInfoModalVisible={isHungerInfoModalVisible}
+        setHungerInfoModalVisible={setHungerInfoModalVisible}
+      />
+      <HappinessInfoModal
+        isHappinessInfoModalVisible={isHappinessInfoModalVisible}
+        setHappinessInfoModalVisible={setHappinessInfoModalVisible}
+      />
+      <EnergyInfoModal
+        isEnergyInfoModalVisible={isEnergyInfoModalVisible}
+        setEnergyInfoModalVisible={setEnergyInfoModalVisible}
+      />
+      <CutenessInfoModal
+        isCutenessInfoModalVisible={isCutenessInfoModalVisible}
+        setCutenessInfoModalVisible={setCutenessInfoModalVisible}
+      />
     </SafeAreaView>
   );
 }

@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet,
   Animated,
   Dimensions,
   ScrollView,
@@ -26,8 +25,13 @@ import {
   PettingInfoModal,
 } from "./components/IncubationInfoModals";
 import { InfoPanel } from "./components/InfoPanel";
+import { FeedButton } from "./components/FeedButton";
+import { MedicateButton } from "./components/MedicateButton";
+import { styles } from "./StyleSheets/IncubationScreenStyles";
+import { IncubationFoodModal } from "./components/IncubationFoodModal";
+import { IncubationMedicineModal } from "./components/IncubationMedicineModal";
 
-export default function PetScreen() {
+export default function IncubationScreen() {
   const navigation = useNavigation();
   const { petData, setPetData } = useContext(PetContext);
   const [message, setMessage] = useState("");
@@ -48,12 +52,26 @@ export default function PetScreen() {
     useState(false);
   const [isCleanInfoModalVisible, setCleanInfoModalVisible] = useState(false);
   // const [healthIntervalId, setHealthIntervalId] = useState();
+  const [foodModalVisible, setFoodModalVisible] = useState(false);
+  const [medicineModalVisible, setMedicineModalVisible] = useState(false);
+
+  // Close modals when the screen loses focus.
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setFoodModalVisible(false);
+        setMedicineModalVisible(false);
+      };
+    }, [])
+  );
 
   function checkHibernation(incubationHealth: number) {
     if (incubationHealth === 0.05) {
       setHibernating(true);
     }
-    if (incubationHealth > 0.05) setHibernating(false);
+    if (incubationHealth > 0.05) {
+      setHibernating(false);
+    }
   }
 
   function updateProgressColour(value: number) {
@@ -109,8 +127,8 @@ export default function PetScreen() {
         console.log(incubationHealth, "in use focus effect");
         updateProgressColour(incubationHealth);
         checkHibernation(incubationHealth);
-        setPetData((petData) => {
-          return { ...petData, incubationHealth };
+        setPetData((prevPetData) => {
+          return { ...prevPetData, incubationHealth };
         });
       }
 
@@ -123,10 +141,10 @@ export default function PetScreen() {
         }, 1000);
 
         healthIntervalId = setInterval(() => {
-          setPetData((petData) => {
-            let hibernationBegan = petData.hibernationBegan;
+          setPetData((prevPetData) => {
+            let hibernationBegan = prevPetData.hibernationBegan;
             const newIncubationHealth = Math.max(
-              petData.incubationHealth - 0.01,
+              prevPetData.incubationHealth - 0.01,
               0.05
             );
             console.log(newIncubationHealth, "inside interval");
@@ -136,7 +154,7 @@ export default function PetScreen() {
               hibernationBegan = Date.now();
             }
             return {
-              ...petData,
+              ...prevPetData,
               incubationHealth: newIncubationHealth,
               hibernationBegan,
             };
@@ -149,8 +167,8 @@ export default function PetScreen() {
         console.log("cleared");
         clearInterval(hatchIntervalId);
         clearInterval(healthIntervalId);
-        setPetData((petData) => {
-          return { ...petData, incubationHealthLastChanged: now };
+        setPetData((prevPetData) => {
+          return { ...prevPetData, incubationHealthLastChanged: now };
         });
       };
     }, [isHibernating])
@@ -167,9 +185,9 @@ export default function PetScreen() {
       newIncubationHealth = 1;
     }
 
-    setPetData((petData) => {
+    setPetData((prevPetData) => {
       return {
-        ...petData,
+        ...prevPetData,
         incubationHealth: newIncubationHealth,
         incubationHealthLastChanged: now,
       };
@@ -192,9 +210,9 @@ export default function PetScreen() {
   }
 
   function handleHatch() {
-    setPetData((petData) => {
+    setPetData((prevPetData) => {
       return {
-        ...petData,
+        ...prevPetData,
         justHatched: true,
         incubationHealth: 0.5, //reset
       };
@@ -213,14 +231,6 @@ export default function PetScreen() {
   }
   function handleInteractionInfo(interaction: string) {
     switch (interaction) {
-      case "Feed":
-        setFeedInfoModalVisible(true);
-        break;
-
-      case "Medicate":
-        setMedicineInfoModalVisible(true);
-        break;
-
       case "Pet":
         setPettingInfoModalVisible(true);
         break;
@@ -302,9 +312,15 @@ export default function PetScreen() {
             style={styles.interactionButtonsContainer}
             // style={styles.section}
           >
+            <FeedButton
+              setFoodModalVisible={setFoodModalVisible}
+              setFeedInfoModalVisible={setFeedInfoModalVisible}
+            />
+            <MedicateButton
+              setMedicineModalVisible={setMedicineModalVisible}
+              setMedicineInfoModalVisible={setMedicineInfoModalVisible}
+            />
             {[
-              { text: "Feed", icon: "fast-food", msg: "That was tasty!" },
-              { text: "Medicate", icon: "eyedrop-outline", msg: "Yuck!" },
               { text: "Pet", icon: "hand-left", msg: "*Wags tail*" },
               { text: "Clean", icon: "water-outline", msg: "*wet dog shake*" },
             ].map((btn) => {
@@ -346,13 +362,14 @@ export default function PetScreen() {
           handleExit={() => {
             setHibernating(false);
             showMessage("You saved me!");
-            setPetData((petData) => {
+            setPetData((prevPetData) => {
               const now = Date.now();
-              const prevExtraTime = petData.extraTime || 0;
-              const extraTime = now - petData.hibernationBegan + prevExtraTime;
+              const prevExtraTime = prevPetData.extraTime || 0;
+              const extraTime =
+                now - prevPetData.hibernationBegan + prevExtraTime;
 
               return {
-                ...petData,
+                ...prevPetData,
                 hibernationBegan: undefined,
                 extraTime,
                 // incubationHealthLastChanged: now,
@@ -361,19 +378,15 @@ export default function PetScreen() {
           }}
         />
       )}
-
       <InfoPanel />
-
       <MainInfoModal
         isMainInfoModalVisible={isMainInfoModalVisible}
         setMainInfoModalVisible={setMainInfoModalVisible}
       />
-
       <HealthInfoModal
         isHealthModalVisible={isHealthModalVisible}
         setHealthModalVisible={setHealthModalVisible}
       />
-
       <FeedInfoModal
         isFeedInfoModalVisible={isFeedInfoModalVisible}
         setFeedInfoModalVisible={setFeedInfoModalVisible}
@@ -390,257 +403,16 @@ export default function PetScreen() {
         isCleanInfoModalVisible={isCleanInfoModalVisible}
         setCleanInfoModalVisible={setCleanInfoModalVisible}
       />
+      <IncubationFoodModal
+        visible={foodModalVisible}
+        onClose={() => setFoodModalVisible(false)}
+        showMessage={showMessage}
+      />
+      <IncubationMedicineModal
+        visible={medicineModalVisible}
+        onClose={() => setMedicineModalVisible(false)}
+        showMessage={showMessage}
+      />
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    // backgroundColor: "#faf5ff", //purple theme
-    // backgroundColor: "#f7d6d0",
-    // backgroundColor: "#e3d6c6",
-    backgroundColor: "#f9f4f0",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 20,
-  },
-  // title2: {
-  //   // color: "#4a148c",
-  //   color: "#c785a5",
-  //   fontSize: 28,
-  //   fontWeight: "bold",
-  //   textAlign: "center",
-  //   textShadowColor: "#d1c4e9",
-  //   textShadowOffset: { width: 2, height: 2 },
-  //   textShadowRadius: 5,
-  // },
-  // title3: {
-  //   fontSize: 28,
-  //   fontWeight: "bold",
-  //   color: "#ffffff",
-  //   textAlign: "center",
-  //   textShadowColor: "rgba(0, 0, 0, 0.7)",
-  //   textShadowOffset: { width: 2, height: 2 },
-  //   textShadowRadius: 5,
-  // },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#5a4a42",
-    textAlign: "center",
-  },
-  petContainer: {
-    flex: 1,
-    paddingTop: 20,
-    alignItems: "center",
-  },
-  petModel: {
-    width: Dimensions.get("window").width * 0.8,
-    height: Dimensions.get("window").height * 0.4,
-    backgroundColor: "#ccc",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-  },
-  // section1: {
-  //   backgroundColor: "#fff",
-  //   padding: 15,
-  //   borderRadius: 10,
-  //   // marginBottom: 15,
-  //   marginVertical: 15,
-  //   shadowColor: "#000",
-  //   shadowOffset: { width: 0, height: 2 },
-  //   shadowOpacity: 0.1,
-  //   shadowRadius: 4,
-  //   elevation: 3,
-  //   width: "96%",
-  // },
-  section: {
-    backgroundColor: "#fff",
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 15,
-    // shadowColor: "#000",
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 0.1,
-    // shadowRadius: 4,
-    // elevation: 3,
-    width: "96%",
-  },
-  speechBubble: {
-    position: "absolute",
-    bottom: 300,
-    backgroundColor: "white",
-    padding: 10,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 2, height: 2 },
-  },
-  message: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "black",
-  },
-  buttonsContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    paddingBottom: 20,
-  },
-  interactionButtonsContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
-    paddingBottom: 20,
-    marginHorizontal: 20,
-  },
-  recoveryTimeContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  healthContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    // justifyContent: "space-around",
-    justifyContent: "space-between",
-    // width: "90%",
-    // paddingHorizontal: 15,
-    // marginVertical: 30,
-  }, //
-  healthText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    // color: "#d81b60",
-    // color: "#7b1fa2",
-    // color: "#5a2a2a",
-    // color: "#3d3d3d",
-    color: "#5a4a42",
-    marginEnd: 5,
-  },
-  progressText: {
-    // color: "#4a148c", //purple
-    color: "#3d3d3d",
-    // color: "#5a4a42",
-    position: "absolute",
-    alignSelf: "center",
-    fontWeight: "bold",
-    top: 2,
-  },
-  button: {
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    margin: 10,
-    gap: 8,
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 2, height: 2 },
-  },
-  interactionButtonWrapper: {
-    alignItems: "center",
-    marginHorizontal: 5,
-    // marginHorizontal: 20,
-    marginBottom: 30,
-    // width: "40%",
-  },
-  interactionText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#5a4a42",
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-  buttonEnabled: {
-    //backgroundColor: "#ba68c8"
-    backgroundColor: "#ff6b6b",
-  },
-  buttonDisabled: {
-    // backgroundColor: "#d1a3e0",
-    backgroundColor: "#ffb3b3",
-    opacity: 0.6,
-  },
-  // hatchCountdownText2: {
-  //   fontSize: 18,
-  //   fontWeight: "bold",
-  //   color: "#7b1fa2",
-  //   backgroundColor: "#f3e5f5",
-  //   paddingVertical: 8,
-  //   paddingHorizontal: 15,
-  //   borderRadius: 15,
-  //   borderWidth: 2,
-  //   borderColor: "#ce93d8",
-  //   textAlign: "center",
-  //   marginTop: 10,
-  //   shadowColor: "#000",
-  //   shadowOpacity: 0.2,
-  //   shadowOffset: { width: 2, height: 2 },
-  // },
-  hatchCountdownText: {
-    fontSize: 38,
-    fontWeight: "bold",
-    color: "#ff6b6b",
-    // backgroundColor: "#ffd6d6",
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    borderRadius: 10,
-    borderWidth: 3,
-    borderColor: "#ff6b6b",
-    textAlign: "center",
-    marginTop: 20,
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 2, height: 2 },
-  },
-  hatchButton: {
-    // backgroundColor: "#ffd6d6",
-    backgroundColor: "#ff6b6b",
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: "#ff6b6b",
-    shadowColor: "#000",
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 2, height: 2 },
-    marginVertical: 20,
-  },
-  hatchButtonText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    // color: "#ff6b6b",
-    color: "white",
-    // textShadowColor: "white",
-    // textShadowOffset: { width: 1, height: 1 },
-    // textShadowRadius: 5,
-  },
-  // hatchButton2: {
-  //   backgroundColor: "#f8bbd0",
-  //   paddingVertical: 15,
-  //   paddingHorizontal: 30,
-  //   borderRadius: 20,
-  //   borderWidth: 2,
-  //   borderColor: "#e91e63",
-  //   shadowColor: "#000",
-  //   shadowOpacity: 0.3,
-  //   shadowOffset: { width: 2, height: 2 },
-  //   marginTop: 20,
-  // },
-  // hatchButtonText2: {
-  //   fontSize: 20,
-  //   fontWeight: "bold",
-  //   color: "#880e4f",
-  //   textShadowColor: "white",
-  //   textShadowOffset: { width: 1, height: 1 },
-  //   textShadowRadius: 5,
-  // },
-});

@@ -1,11 +1,20 @@
 import { Dimensions, StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#5a4a42",
+    textAlign: "center",
+    marginBottom: 20,
+  },
   container: {
     flex: 1,
-    backgroundColor: "#f0f0f0",
+    // backgroundColor: "#f0f0f0",
+    backgroundColor: "#f9f4f0",
     alignItems: "center",
     justifyContent: "center",
+    paddingVertical: 20,
   },
   petContainer: {
     flex: 1,
@@ -31,7 +40,7 @@ export const styles = StyleSheet.create({
   speechText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "black",
+    color: "#5a4a42",
   },
   buttonsContainer: {
     flexDirection: "row",

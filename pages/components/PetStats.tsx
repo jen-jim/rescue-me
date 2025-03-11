@@ -5,7 +5,13 @@ import { PetContext } from "../../contexts/PetContext";
 import { styles } from "../StyleSheets/PetStatsStyles";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-export default function PetStats() {
+export default function PetStats({
+  setGrowthInfoModalVisible,
+  setHungerInfoModalVisible,
+  setHappinessInfoModalVisible,
+  setEnergyInfoModalVisible,
+  setCutenessInfoModalVisible,
+}) {
   const { petData } = useContext(PetContext);
 
   const progressStats = [
