@@ -34,10 +34,7 @@ import {
 import Video from "react-native-video";
 
 const idle = require("./assets/video/idle.mp4");
-const play = require("./assets/video/play.mp4");
-const feed = require("./assets/video/feed.mp4");
 const pet = require("./assets/video/pet.mp4");
-const medicate = require("./assets/video/medicate.mp4");
 
 export default function PetScreen() {
   const navigation = useNavigation();
@@ -68,6 +65,7 @@ export default function PetScreen() {
   const idleTimer = useRef<NodeJS.Timeout | null>(null);
 
   const [petVideo, setPetVideo] = useState(idle);
+
   const playVideoForAction = (video) => {
     setPetVideo(video);
     setTimeout(() => {
@@ -132,13 +130,17 @@ export default function PetScreen() {
     return () => clearInterval(interval);
   }, [refreshPetData]);
 
-  const handlePet = async () => {
+  const handlePet = () => {
     // increase happiness
     setPetData({
       ...petData,
       happiness: petData.happiness + 10,
     });
-    showMessage("That was nice!");
+    playVideoForAction(pet);
+    showMessage("");
+    setTimeout(() => {
+      showMessage("That was nice!");
+    }, 3000);
   };
 
   const showMessage = (text: string) => {
@@ -221,7 +223,9 @@ export default function PetScreen() {
           <Pressable
             style={styles.button}
             onPress={() => {
-              playVideoForAction(feed);
+              setMessage("");
+              resetIdleTimer();
+              // playVideoForAction(feed);
               setFoodModalVisible(true);
             }}
             onLongPress={() => {
@@ -234,7 +238,7 @@ export default function PetScreen() {
           <Pressable
             style={styles.button}
             onPress={() => {
-              playVideoForAction(pet);
+              // playVideoForAction(pet);
               handlePet();
             }}
             onLongPress={() => {
@@ -247,7 +251,8 @@ export default function PetScreen() {
           <Pressable
             style={styles.button}
             onPress={() => {
-              playVideoForAction(medicate);
+              setMessage("");
+              resetIdleTimer();
               setMedicineModalVisible(true);
             }}
             onLongPress={() => {
@@ -272,11 +277,13 @@ export default function PetScreen() {
           visible={foodModalVisible}
           onClose={() => setFoodModalVisible(false)}
           showMessage={showMessage}
+          playVideoForAction={playVideoForAction}
         />
         <MedicineModal
           visible={medicineModalVisible}
           onClose={() => setMedicineModalVisible(false)}
           showMessage={showMessage}
+          playVideoForAction={playVideoForAction}
         />
         <PetStats
           setGrowthInfoModalVisible={setGrowthInfoModalVisible}
