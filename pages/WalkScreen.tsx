@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
-  Button,
   PermissionsAndroid,
   View,
   ActivityIndicator,
+  TouchableOpacity,
+  Text,
 } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import {
@@ -28,7 +29,12 @@ export type Region = {
 export const ArButton = () => {
   const navigation = useNavigation();
   return (
-    <Button title="AR View" onPress={() => navigation.navigate("ARWalk")} />
+    <TouchableOpacity
+      style={styles.button}
+      onPress={() => navigation.navigate("ARWalk")}
+    >
+      <Text style={styles.buttonText}>AR View</Text>
+    </TouchableOpacity>
   );
 };
 

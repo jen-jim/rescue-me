@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { Button, StyleSheet } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import {
   ViroARScene,
   ViroARSceneNavigator,
@@ -8,11 +8,17 @@ import {
   ViroAmbientLight,
   ViroNode,
 } from "@reactvision/react-viro";
+import { styles } from "./StyleSheets/WalkScreenStyles";
 
 export const MapButton = () => {
   const navigation = useNavigation();
   return (
-    <Button title="Map View" onPress={() => navigation.navigate("Walk")} />
+    <TouchableOpacity
+      style={styles.button}
+      onPress={() => navigation.navigate("Walk")}
+    >
+      <Text style={styles.buttonText}>Map View</Text>
+    </TouchableOpacity>
   );
 };
 
@@ -65,18 +71,6 @@ export default function ArWalkScreen() {
     <ViroARSceneNavigator
       autofocus={true}
       initialScene={{ scene: WalkSceneAR }}
-      style={styles.f1}
     />
   );
 }
-
-const styles = StyleSheet.create({
-  f1: { flex: 1 },
-  text: {
-    fontFamily: "Arial",
-    fontSize: 30,
-    color: "#ffffff",
-    textAlignVertical: "center",
-    textAlign: "center",
-  },
-});
