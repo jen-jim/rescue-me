@@ -12,7 +12,7 @@ const initialPetData: PetData = {
   hunger: 30,
   happiness: 0,
   energy: 100,
-  cuteness: 10,
+  cuteness: 1,
   lastUpdated: Date.now(),
   beganIncubation: undefined,
   extraTime: 0,
