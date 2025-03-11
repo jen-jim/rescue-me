@@ -11,16 +11,19 @@ interface FoodModalProps {
   visible: boolean;
   onClose: () => void;
   showMessage: (message: string) => void;
+  playVideoForAction: (video: number) => void;
 }
 
 export const FoodModal: React.FC<FoodModalProps> = ({
   visible,
   onClose,
   showMessage,
+  playVideoForAction,
 }) => {
   const { setPetData } = useContext(PetContext);
   const { inventory, setInventory } = useContext(InventoryContext);
   const navigation = useNavigation();
+  const feed = require("../assets/video/feed.mp4");
 
   const feedFood = async (food: keyof FoodInventory) => {
     if (inventory.food[food] > 0) {
@@ -68,7 +71,11 @@ export const FoodModal: React.FC<FoodModalProps> = ({
         },
       }));
 
-      showMessage("That was tasty!");
+      playVideoForAction(feed);
+      showMessage("");
+      setTimeout(() => {
+        showMessage("That was tasty!");
+      }, 3000);
     } else {
       showMessage("Out of that food :(");
     }

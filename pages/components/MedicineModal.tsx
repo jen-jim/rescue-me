@@ -11,16 +11,19 @@ interface MedicineModalProps {
   visible: boolean;
   onClose: () => void;
   showMessage: (message: string) => void;
+  playVideoForAction: (video: number) => void;
 }
 
 export const MedicineModal: React.FC<MedicineModalProps> = ({
   visible,
   onClose,
   showMessage,
+  playVideoForAction,
 }) => {
   const { setPetData } = useContext(PetContext);
   const { inventory, setInventory } = useContext(InventoryContext);
   const navigation = useNavigation();
+  const medicate = require("../assets/video/medicate.mp4");
 
   const feedMedicine = async (medicine: keyof MedicineInventory) => {
     if (inventory.medicines[medicine] > 0) {
@@ -52,7 +55,17 @@ export const MedicineModal: React.FC<MedicineModalProps> = ({
         },
       }));
 
-      showMessage("Yuck!");
+      playVideoForAction(medicate);
+      showMessage("");
+      setTimeout(() => {
+        showMessage("Yuck!");
+      }, 1700);
+      setTimeout(() => {
+        showMessage("");
+      }, 2700);
+      setTimeout(() => {
+        showMessage("I feel much better, thanks!");
+      }, 4000);
     } else {
       showMessage("Out of that medicine :(");
     }

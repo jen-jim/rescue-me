@@ -2,13 +2,9 @@
 
 This is a new [**React Native**](https://reactnative.dev) project, set up with `@reactvision/react-viro`.
 
-## How to Install Viro in an existing project?
-
-If you are integrating ViroReact into an existing project, have a look at our [Installation instructions](https://viro-community.readme.io/docs/installation-instructions).
-
 ## Getting Started
 
-> **Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions. Stop before you get to the `Creating a new application` section; we have done that for you!
+> **Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/set-up-your-environment) instructions.
 
 ## Step 1: Install Dependencies
 
@@ -47,7 +43,7 @@ npx react-native run-ios
 npx react-native run-android
 ```
 
-If everything is set up _correctly_, you should see your new app running on you device.
+If everything is set up _correctly_, you should see your new app running on your device.
 
 #### Install CocoaPods
 
