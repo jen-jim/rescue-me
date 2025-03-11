@@ -30,6 +30,15 @@ import {
   PlayInfoModal,
   WalkInfoModal,
 } from "./components/PetPageInfoModals";
+import Video from "react-native-video";
+
+
+
+const idle = require("./assets/video/idle.mp4");
+const play = require("./assets/video/play.mp4");
+const feed = require("./assets/video/feed.mp4");
+const pet = require("./assets/video/pet.mp4");
+const medicate = require("./assets/video/medicate.mp4");
 
 export default function PetScreen() {
   const navigation = useNavigation();
@@ -56,6 +65,14 @@ export default function PetScreen() {
   const [message, setMessage] = useState("");
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const idleTimer = useRef<NodeJS.Timeout | null>(null);
+
+  const [petVideo, setPetVideo] = useState(idle);
+  const playVideoForAction = (video) => {
+    setPetVideo(video);
+    setTimeout(() => {
+      setPetVideo(idle);
+    }, 5000);
+  };
 
   // Combined refresh function that applies decay based on elapsed time.
   const refreshPetData = useCallback(async () => {
@@ -168,9 +185,12 @@ export default function PetScreen() {
       <ScrollView>
         <View style={styles.petContainer}>
           <View style={styles.petBox}>
-            <Image
-              source={require("./assets/video/placeholder_img.png")}
+            <Video
+              source={petVideo}
               style={styles.petImage}
+              resizeMode="contain"
+              repeat
+              muted
             />
           </View>
 
@@ -200,6 +220,7 @@ export default function PetScreen() {
           <Pressable
             style={styles.button}
             onPress={() => {
+              playVideoForAction(feed)
               setFoodModalVisible(true);
             }}
             onLongPress={() => {
@@ -211,7 +232,10 @@ export default function PetScreen() {
           </Pressable>
           <Pressable
             style={styles.button}
-            onPress={handlePet}
+            onPress={() => {
+              playVideoForAction(pet)
+              handlePet();
+            }}
             onLongPress={() => {
               setPettingInfoModalVisible(true);
             }}
@@ -222,6 +246,7 @@ export default function PetScreen() {
           <Pressable
             style={styles.button}
             onPress={() => {
+              playVideoForAction(medicate)
               setMedicineModalVisible(true);
             }}
             onLongPress={() => {
@@ -310,6 +335,3 @@ export default function PetScreen() {
     </SafeAreaView>
   );
 }
-
-//interactions happen in AR?
-//pet (3d model) should respond/animate

@@ -27,7 +27,7 @@ export default function NamePetScreen() {
 
       <View style={styles.petBox}>
         <Image
-          source={require("./assets/images/kitten_sad.png")}
+          source={require("./assets/images/sad_kitten.png")}
           style={styles.petImage}
         />
       </View>
