@@ -16,14 +16,14 @@ export const styles = StyleSheet.create({
   },
   label: {
     width: 120,
-    color: "black",
+    color: "#5a4a42",
     textAlign: "left",
     fontSize: 16,
     fontWeight: "500",
   },
   value: {
     flex: 1,
-    color: "black",
+    color: "#5a4a42",
     fontSize: 16,
     fontWeight: "500",
     textAlign: "left",
@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
   progressText: {
     position: "absolute",
     alignSelf: "center",
-    color: "black",
+    color: "#3d3d3d",
     fontSize: 12,
     fontWeight: "bold",
   },
