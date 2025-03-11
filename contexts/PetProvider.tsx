@@ -20,6 +20,10 @@ const initialPetData: PetData = {
   remainingSlowReleaseTime: 0,
   incubationHealth: 0.5,
   hibernationBegan: undefined,
+  weeklyDistance: [0, 0, 0, 0, 0, 0, 0],
+  totalDistanceWalked: 0,
+  lastUpdatedWeek: 0,
+  lastDistanceUpdate: new Date().toISOString(),
 };
 
 export default function PetProvider({ children }: PetProviderProps) {
@@ -37,12 +41,57 @@ export default function PetProvider({ children }: PetProviderProps) {
     savePetData(petData);
   }, [petData]);
 
+  useEffect(() => {
+    const today = new Date();
+    const currentWeek = getWeek(today);
+    if (petData.lastUpdatedWeek !== currentWeek) {
+      setPetData((prev) => ({
+        ...prev,
+        weeklyDistance: Array(7).fill(0),
+        lastUpdatedWeek: currentWeek,
+      }));
+    }
+  }, [petData.lastUpdatedWeek]);
+
+  const getWeek = (date: Date): number => {
+    const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+    const pastDays = (date.getTime() - firstDayOfYear.getTime()) / 86400000; // milliseconds per day
+    return Math.ceil((pastDays + firstDayOfYear.getDay() + 1) / 7);
+  };
+
+  const updateDistance = (distance: number) => {
+    setPetData((prev) => {
+      const currentDate = new Date();
+      const lastUpdate = new Date(prev.lastDistanceUpdate);
+      const currentDay = currentDate.getDay() - 1; // Monday is 0, Sunday is 6
+
+      let updatedWeekly = [...prev.weeklyDistance];
+      if (
+        currentDate.getFullYear() !== lastUpdate.getFullYear() ||
+        currentDate.getMonth() !== lastUpdate.getMonth() ||
+        currentDate.getDate() !== lastUpdate.getDate()
+      ) {
+        updatedWeekly[currentDay] = 0;
+      }
+      updatedWeekly[currentDay] += distance;
+
+      return {
+        ...prev,
+        totalDistanceWalked: prev.totalDistanceWalked + distance,
+        weeklyDistance: updatedWeekly,
+        lastDistanceUpdate: currentDate.toISOString(),
+      };
+    });
+  };
+
   function resetPetData() {
     setPetData({ ...initialPetData, lastUpdated: Date.now() });
   }
 
   return (
-    <PetContext.Provider value={{ petData, setPetData, resetPetData }}>
+    <PetContext.Provider
+      value={{ petData, setPetData, updateDistance, resetPetData }}
+    >
       {children}
     </PetContext.Provider>
   );

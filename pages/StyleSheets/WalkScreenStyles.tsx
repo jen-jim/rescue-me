@@ -27,6 +27,23 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+  infoContainer: {
+    position: "absolute",
+    top: 11,
+    left: 10,
+    backgroundColor: "rgba(255, 255, 255, 0.6)",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 2,
+    alignItems: "flex-start",
+    borderWidth: 1,
+    borderColor: "rgba(0, 0, 0, 0.1)",
+  },
+  infoText: {
+    color: "#555555",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
   mapStyle: {
     position: "absolute",
     top: 0,

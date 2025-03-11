@@ -13,8 +13,11 @@ export type PetData = {
   justHatched: boolean;
   remainingSlowReleaseTime: number;
   incubationHealth: number;
-  incubationHealthLastChanged: number;
   hibernationBegan: number | undefined;
+  weeklyDistance: number[];
+  totalDistanceWalked: number;
+  lastUpdatedWeek: number;
+  lastDistanceUpdate: string;
 };
 
 export const savePetData = async (pet: PetData) => {

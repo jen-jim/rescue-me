@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   PermissionsAndroid,
@@ -20,6 +20,8 @@ import { SpecialFoodMarker } from "./components/SpecialFoodMarker";
 import { generateFoodCoords } from "../utils/generateFoodCoords";
 import { FoodProximityButton } from "./components/FoodProximityButton";
 import { foodTypes, specialFoodData } from "../utils/foodTypes";
+import { calculateDistance } from "../utils/calculateDistance";
+import { PetContext } from "../contexts/PetContext";
 
 export type Region = {
   latitude: number;
@@ -56,8 +58,10 @@ const requestLocationPermission = async () => {
 };
 
 export default function WalkScreen() {
+  const { petData, updateDistance } = useContext(PetContext);
   const navigation = useNavigation();
   const [userLocation, setUserLocation] = useState<Region | null>(null);
+  const [prevLocation, setPrevLocation] = useState<Region | null>(null);
   const [foodCoords, setFoodCoords] = useState<Region[]>([]);
   const [specialFood, setSpecialFood] = useState<{
     coords: Region;
@@ -72,10 +76,9 @@ export default function WalkScreen() {
         Geolocation.getCurrentPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
-            setUserLocation({
-              latitude,
-              longitude,
-            });
+            const initialCoords = { latitude, longitude };
+            setUserLocation(initialCoords);
+            setPrevLocation(initialCoords);
           },
           (error) => {
             console.error("Geolocation error:", error);
@@ -87,6 +90,34 @@ export default function WalkScreen() {
       }
     });
   }, []);
+
+  const todayIndex = new Date().getDay() - 1; // Monday is 0, Sunday is 6
+  const todaysDistance = petData.weeklyDistance[todayIndex] || 0;
+
+  useEffect(() => {
+    let watchId: number | null = null;
+    if (userLocation) {
+      watchId = Geolocation.watchPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          const newPos = { latitude, longitude };
+          if (prevLocation) {
+            const distance = calculateDistance(prevLocation, newPos);
+            updateDistance(distance);
+          }
+          setPrevLocation(newPos);
+          setUserLocation(newPos);
+        },
+        (error) => console.error("Error watching position", error),
+        { enableHighAccuracy: true, distanceFilter: 1 }
+      );
+    }
+    return () => {
+      if (watchId !== null) {
+        Geolocation.clearWatch(watchId);
+      }
+    };
+  }, [userLocation, prevLocation, updateDistance]);
 
   const deltas = {
     latitudeDelta: 0.008,
@@ -180,6 +211,11 @@ export default function WalkScreen() {
             specialFood={specialFood}
           />
         </View>
+      </View>
+      <View style={styles.infoContainer}>
+        <Text style={styles.infoText}>
+          Distance Walked Today: {Math.round(todaysDistance)}m
+        </Text>
       </View>
     </SafeAreaView>
   );
