@@ -77,7 +77,7 @@ However, if your phone disconnects from the Development Server, commands given i
 >  npm start
 >   ```
 ### Step 2: Ensure the app is open on your phone. 
->If not, go to `All Apps` and tap on `RescueMe` to launch.
+If not, go to `All Apps` and tap on `RescueMe` to launch.
 ### Step 3: Open the Developer Menu on the app by shaking your phone.
 ### Step 4: Tap the 'Reload' option to reload the app.
 
