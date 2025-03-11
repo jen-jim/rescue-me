@@ -4,11 +4,11 @@ This is a [**React Native**](https://reactnative.dev) project, set up with `@rea
 
 ## Install the application
 
-here is an apk file of the application which you cn download and install on you phone...
+...here is an apk file of the application which you can download and install on your phone...
 
-## Getting Started - Creating and Running a Development Server for the Application
+## Creating and Running a Development Server for the Application
 
-> **Note**: This project was built without the use of a React Native Framework.
+> **Note**: This project was built without the use of a React Native Framework such as Expo.
 
 If you would like to modify the app, follow these instrucions to create and install an app-debug.apk file on your phone which is then connected to a Development Server to run the app on your phone with live updates (Hot Reloading).
  
@@ -82,9 +82,9 @@ However, if your phone disconnects from the Development Server, commands given i
 
 You should see a `bundling` message at the top of the app, and on the console ```BUNDLE ./index.js``` will appear. Once it has been bundled, the ```Running "RescueMe" ``` log should appear on the console. The app has now successfully connected to the Development Server and any changes made should appear in real-time. 
 
+-------
 
-
-
+## Getting Started
 
 ## Step 2: Start the Metro Server
 
