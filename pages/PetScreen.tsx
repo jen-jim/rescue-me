@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   Animated,
-  Image,
   ScrollView,
   Pressable,
 } from "react-native";
@@ -31,6 +30,7 @@ import {
   StaminaInfoModal,
   WalkInfoModal,
 } from "./components/PetPageInfoModals";
+import ActivityLog from "./components/ActivityLog";
 import Video from "react-native-video";
 
 const idle = require("./assets/video/idle.mp4");
@@ -66,7 +66,7 @@ export default function PetScreen() {
 
   const [petVideo, setPetVideo] = useState(idle);
 
-  const playVideoForAction = (video) => {
+  const playVideoForAction = (video: any) => {
     setPetVideo(video);
     setTimeout(() => {
       setPetVideo(idle);
@@ -293,6 +293,7 @@ export default function PetScreen() {
           setCutenessInfoModalVisible={setCutenessInfoModalVisible}
           setStaminaInfoModalVisible={setStaminaInfoModalVisible}
         />
+        <ActivityLog />
       </ScrollView>
       <InfoPanel />
       <MainInfoModal
