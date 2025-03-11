@@ -76,11 +76,11 @@ However, if your phone disconnects from the Development Server, commands given i
 >   ```bash
 >  npm start
 >   ```
-2. Ensure the app is open on your phone. If not, go to `All Apps` and tap on RescueMe to launch.
+2. Ensure the app is open on your phone. If not, go to `All Apps` and tap on `RescueMe` to launch.
 3. Open the Developer Menu on the app by shaking your phone.
 4. Tap the 'Reload' option to reload the app.
 
-You should see a `bundling` message at the top of the app, and on the console ```BUNDLE ./index.js``` will appear with a bar to show percentage progress. Once it has been bundled, the ```Running "RescueMe" ``` log should appear on the console. The app has now successfully connected to the Development Server and any changes made should appear in real-time. 
+You should see a `bundling` message at the top of the app, and on the console ```BUNDLE ./index.js``` will appear. Once it has been bundled, the ```Running "RescueMe" ``` log should appear on the console. The app has now successfully connected to the Development Server and any changes made should appear in real-time. 
 
 
 
