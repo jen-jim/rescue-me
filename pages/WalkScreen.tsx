@@ -20,6 +20,7 @@ import { SpecialFoodMarker } from "./components/SpecialFoodMarker";
 import { generateFoodCoords } from "../utils/generateFoodCoords";
 import { FoodProximityButton } from "./components/FoodProximityButton";
 import { foodTypes, specialFoodData } from "../utils/foodTypes";
+import { calculateDistance } from "../utils/calculateDistance";
 
 export type Region = {
   latitude: number;
@@ -63,6 +64,8 @@ export default function WalkScreen() {
     coords: Region;
     data: specialFoodData;
   }>();
+  const [distanceWalked, setDistanceWalked] = useState(0);
+  const [prevCoords, setPrevCoords] = useState<Region | null>(null);
 
   const route = useRoute();
 
@@ -72,10 +75,9 @@ export default function WalkScreen() {
         Geolocation.getCurrentPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
-            setUserLocation({
-              latitude,
-              longitude,
-            });
+            const initialCoords = { latitude, longitude };
+            setUserLocation(initialCoords);
+            setPrevCoords(initialCoords);
           },
           (error) => {
             console.error("Geolocation error:", error);
@@ -87,6 +89,32 @@ export default function WalkScreen() {
       }
     });
   }, []);
+
+  useEffect(() => {
+    let watchId: number | null = null;
+    if (userLocation) {
+      watchId = Geolocation.watchPosition(
+        (position) => {
+          const newCoords = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          };
+          if (prevCoords) {
+            const dist = calculateDistance(prevCoords, newCoords);
+            setDistanceWalked((prev) => prev + dist);
+          }
+          setPrevCoords(newCoords);
+        },
+        (error) => console.error("Error watching position", error),
+        { enableHighAccuracy: true, distanceFilter: 1 }
+      );
+    }
+    return () => {
+      if (watchId !== null) {
+        Geolocation.clearWatch(watchId);
+      }
+    };
+  }, [userLocation, prevCoords]);
 
   const deltas = {
     latitudeDelta: 0.008,
@@ -180,6 +208,11 @@ export default function WalkScreen() {
             specialFood={specialFood}
           />
         </View>
+      </View>
+      <View style={styles.infoContainer}>
+        <Text style={styles.infoText}>
+          Distance Walked: {Math.round(distanceWalked)} m
+        </Text>
       </View>
     </SafeAreaView>
   );
