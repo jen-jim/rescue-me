@@ -1,8 +1,9 @@
 import React from "react";
-import { Button } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Region } from "../WalkScreen";
 import { specialFoodData } from "../../utils/foodTypes";
+import { styles } from "../StyleSheets/WalkScreenStyles";
 
 interface FoodProximityButtonProps {
   userLocation: Region;
@@ -35,15 +36,16 @@ export const FoodProximityButton: React.FC<FoodProximityButtonProps> = ({
     nearFood.latitude === specialFood.coords.latitude &&
     nearFood.longitude === specialFood.coords.longitude;
 
+  const handlePress = () => {
+    navigation.navigate("CollectFood", {
+      foodMarker: nearFood,
+      foodType: isSpecialFood ? specialFood.data.type : "normal",
+    });
+  };
+
   return (
-    <Button
-      title="Collect food"
-      onPress={() =>
-        navigation.navigate("CollectFood", {
-          foodMarker: nearFood,
-          foodType: isSpecialFood ? specialFood.data.type : "normal",
-        })
-      }
-    />
+    <TouchableOpacity style={styles.button} onPress={handlePress}>
+      <Text style={styles.buttonText}>COLLECT FOOD</Text>
+    </TouchableOpacity>
   );
 };

@@ -10,6 +10,23 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-end",
   },
+  buttonContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: "#ff6b6b",
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
   mapStyle: {
     position: "absolute",
     top: 0,
