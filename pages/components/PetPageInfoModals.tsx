@@ -1,6 +1,36 @@
 import { Text, Modal, View, TouchableOpacity, StyleSheet } from "react-native";
 
-export function PlayInfoModal({ isPlayModalVisible, setPlayModalVisible }) {
+type InfoModalProps = {
+  isPlayModalVisible: boolean;
+  setPlayModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isFeedInfoModalVisible: boolean;
+  setFeedInfoModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isMedicineInfoModalVisible: boolean;
+  setMedicineInfoModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isPettingInfoModalVisible: boolean;
+  setPettingInfoModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isWalkInfoModalVisible: boolean;
+  setWalkInfoModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isMainInfoModalVisible: boolean;
+  setMainInfoModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isGrowthInfoModalVisible: boolean;
+  setGrowthInfoModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isHungerInfoModalVisible: boolean;
+  setHungerInfoModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isHappinessInfoModalVisible: boolean;
+  setHappinessInfoModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isEnergyInfoModalVisible: boolean;
+  setEnergyInfoModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isCutenessInfoModalVisible: boolean;
+  setCutenessInfoModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isStaminaInfoModalVisible: boolean;
+  setStaminaInfoModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export function PlayInfoModal({
+  isPlayModalVisible,
+  setPlayModalVisible,
+}: InfoModalProps) {
   function closeModal() {
     setPlayModalVisible(false);
   }
@@ -14,19 +44,24 @@ export function PlayInfoModal({ isPlayModalVisible, setPlayModalVisible }) {
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Pet's Health</Text>
+          <Text style={styles.modalTitle}>Play with your companion</Text>
           <Text style={styles.modalContent}>
-            This represents your pet's health status. You need to ensure it
-            stays healthy by feeding, giving medicine, and providing care.
+            Engage with your pet by playing fun games like Connect 4 and
+            Tic-Tac-Toe. Playing with your pet not only strengthens your bond
+            but also earns you rewards.
           </Text>
 
           <Text style={styles.modalImportantInfo}>
-            The health of your pet will decrease by 1% every minute if no
-            interaction is made. If health drops below 5%, the pet will enter
-            hibernation.
+            As you play, your pet learns and improves, making games
+            progressively harder. Playing boosts your pet’s happiness but also
+            increases hunger and energy loss, so make sure to keep them
+            nourished with a variety of food.
           </Text>
-          {/* and recovery will pause. Revival pills will be required to exit
-                    hibernation mode. */}
+
+          <Text style={styles.modalImportantInfo}>
+            Earn rewards to unlock even more exciting games to enjoy with your
+            pet.
+          </Text>
 
           <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
             <Text style={styles.modalButtonText}>Got it!</Text>
@@ -40,7 +75,7 @@ export function PlayInfoModal({ isPlayModalVisible, setPlayModalVisible }) {
 export function FeedInfoModal({
   isFeedInfoModalVisible,
   setFeedInfoModalVisible,
-}) {
+}: InfoModalProps) {
   function closeModal() {
     setFeedInfoModalVisible(false);
   }
@@ -78,7 +113,7 @@ export function FeedInfoModal({
 export function MedicineInfoModal({
   isMedicineInfoModalVisible,
   setMedicineInfoModalVisible,
-}) {
+}: InfoModalProps) {
   function closeModal() {
     setMedicineInfoModalVisible(false);
   }
@@ -101,8 +136,6 @@ export function MedicineInfoModal({
             Medicine is beneficial for a smooth recovery. However, overdosing
             will reduce pet health and may result in death.
           </Text>
-          {/* and recovery will pause. Revival pills will be required to exit
-                      hibernation mode. */}
 
           <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
             <Text style={styles.modalButtonText}>Got it!</Text>
@@ -115,7 +148,7 @@ export function MedicineInfoModal({
 export function PettingInfoModal({
   isPettingInfoModalVisible,
   setPettingInfoModalVisible,
-}) {
+}: InfoModalProps) {
   function closeModal() {
     setPettingInfoModalVisible(false);
   }
@@ -139,8 +172,6 @@ export function PettingInfoModal({
             Petting your companion boosts their emotional well-being, leading to
             improved health.
           </Text>
-          {/* and recovery will pause. Revival pills will be required to exit
-                      hibernation mode. */}
 
           <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
             <Text style={styles.modalButtonText}>Got it!</Text>
@@ -153,7 +184,7 @@ export function PettingInfoModal({
 export function WalkInfoModal({
   isWalkInfoModalVisible,
   setWalkInfoModalVisible,
-}) {
+}: InfoModalProps) {
   function closeModal() {
     setWalkInfoModalVisible(false);
   }
@@ -167,18 +198,19 @@ export function WalkInfoModal({
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Clean your companion</Text>
+          <Text style={styles.modalTitle}>Take your companion for a walk</Text>
           <Text style={styles.modalContent}>
-            Keep your pet clean not only refreshed to ensure their comfort
-            during recovery.
+            Taking your pet for a walk helps them stay active and boosts their
+            well-being. It's also a great opportunity to find food, including
+            special foods to give your pet the boost it needs!
           </Text>
 
           <Text style={styles.modalImportantInfo}>
-            Regular cleaning contributes to your pet's overall health, keeping
-            them happy and healthy.
+            Walking decreases your pet's energy and increase their hunger.
+            However, consistent walking helps build stamina, allowing you to
+            take them on longer walks and improving their overall energy levels.
+            Make sure to take them out regularly to keep their strength up.
           </Text>
-          {/* and recovery will pause. Revival pills will be required to exit
-                      hibernation mode. */}
 
           <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
             <Text style={styles.modalButtonText}>Got it!</Text>
@@ -192,7 +224,7 @@ export function WalkInfoModal({
 export function MainInfoModal({
   isMainInfoModalVisible,
   setMainInfoModalVisible,
-}) {
+}: InfoModalProps) {
   function closeModal() {
     setMainInfoModalVisible(false);
   }
@@ -206,17 +238,26 @@ export function MainInfoModal({
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Nurture Chamber</Text>
+          <Text style={styles.modalTitle}>Welcome</Text>
           <Text style={styles.modalContent}>
-            This is where your pet recovers after rescue.
+            This is where your pet lives until you take them out for a walk.
+            Here, you can monitor your pet’s well-being and interact with them.
+            You can feed, pet, medicate, and more to keep them healthy and
+            happy.
           </Text>
 
           <Text style={styles.modalImportantInfo}>
-            While your pet is here, it is vital to keep its health up to aid
-            recovery.
+            All actions here contribute to your pet’s overall well-being.
           </Text>
-          {/* and recovery will pause. Revival pills will be required to exit
-                      hibernation mode. */}
+
+          <Text style={styles.modalImportantInfo}>
+            Remember to check on your pet regularly to ensure they don't enter a
+            depressed state. This can occur when happiness and energy are
+            critically low for an extended period. Entering depression will
+            reduce stamina and cuteness, and growth will be hindered and may
+            begin to reverse. All actions here contribute to your pet’s overall
+            well-being.
+          </Text>
 
           <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
             <Text style={styles.modalButtonText}>Got it!</Text>
@@ -263,7 +304,7 @@ export function MainInfoModal({
 export function GrowthInfoModal({
   isGrowthInfoModalVisible,
   setGrowthInfoModalVisible,
-}) {
+}: InfoModalProps) {
   function closeModal() {
     setGrowthInfoModalVisible(false);
   }
@@ -277,17 +318,15 @@ export function GrowthInfoModal({
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Nurture Chamber</Text>
+          <Text style={styles.modalTitle}>Your pet's growth</Text>
           <Text style={styles.modalContent}>
-            This is where your pet recovers after rescue.
+            This section helps you monitor your pet's growth. Make sure to keep
+            your pet healthy for optimal development.
           </Text>
 
           <Text style={styles.modalImportantInfo}>
-            While your pet is here, it is vital to keep its health up to aid
-            recovery.
+            A healthy pet grows faster and reaches new milestones more quickly.
           </Text>
-          {/* and recovery will pause. Revival pills will be required to exit
-                        hibernation mode. */}
 
           <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
             <Text style={styles.modalButtonText}>Got it!</Text>
@@ -297,10 +336,50 @@ export function GrowthInfoModal({
     </Modal>
   );
 }
+
+export function StaminaInfoModal({
+  isStaminaInfoModalVisible,
+  setStaminaInfoModalVisible,
+}: InfoModalProps) {
+  function closeModal() {
+    setStaminaInfoModalVisible(false);
+  }
+
+  return (
+    <Modal
+      visible={isStaminaInfoModalVisible}
+      transparent={true}
+      animationType="fade"
+      onRequestClose={closeModal}
+    >
+      <View style={styles.modalBackground}>
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalTitle}>Your companion's stamina</Text>
+          <Text style={styles.modalContent}>
+            Regular walks are key to building your pet’s stamina. As your pet
+            becomes more accustomed to exercise, their energy levels stay higher
+            for longer, allowing them to go on longer walks and play more games
+            before tiring out.
+          </Text>
+
+          <Text style={styles.modalImportantInfo}>
+            With increased stamina, your pet will be able to enjoy more
+            activities, improving their overall well-being and happiness.
+          </Text>
+
+          <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
+            <Text style={styles.modalButtonText}>Got it!</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
 export function HungerInfoModal({
   isHungerInfoModalVisible,
   setHungerInfoModalVisible,
-}) {
+}: InfoModalProps) {
   function closeModal() {
     setHungerInfoModalVisible(false);
   }
@@ -314,17 +393,15 @@ export function HungerInfoModal({
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Nurture Chamber</Text>
+          <Text style={styles.modalTitle}>Hunger Levels</Text>
           <Text style={styles.modalContent}>
-            This is where your pet recovers after rescue.
+            Make sure to feed your pet regularly to keep their energy up.
           </Text>
 
           <Text style={styles.modalImportantInfo}>
-            While your pet is here, it is vital to keep its health up to aid
-            recovery.
+            If your pet's hunger reaches critical levels, they may become weak,
+            affecting their health.
           </Text>
-          {/* and recovery will pause. Revival pills will be required to exit
-                        hibernation mode. */}
 
           <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
             <Text style={styles.modalButtonText}>Got it!</Text>
@@ -337,7 +414,7 @@ export function HungerInfoModal({
 export function HappinessInfoModal({
   isHappinessInfoModalVisible,
   setHappinessInfoModalVisible,
-}) {
+}: InfoModalProps) {
   function closeModal() {
     setHappinessInfoModalVisible(false);
   }
@@ -351,18 +428,20 @@ export function HappinessInfoModal({
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Nurture Chamber</Text>
+          <Text style={styles.modalTitle}>Happiness Level</Text>
           <Text style={styles.modalContent}>
-            This is where your pet recovers after rescue.
+            Keep your pet happy by interacting with them and providing care.
           </Text>
-
           <Text style={styles.modalImportantInfo}>
-            While your pet is here, it is vital to keep its health up to aid
-            recovery.
+            A happy pet is a healthy pet! Make sure to pet, feed, and walk your
+            companion to maintain their happiness.
           </Text>
-          {/* and recovery will pause. Revival pills will be required to exit
-                        hibernation mode. */}
-
+          <Text style={styles.modalImportantInfo}>
+            If happiness levels remain low for an extended period, your pet may
+            enter a depressed state wherein stamina, growth, energy and cuteness
+            will be negatively affected. Special medication will be required to
+            exit the depressed state.
+          </Text>
           <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
             <Text style={styles.modalButtonText}>Got it!</Text>
           </TouchableOpacity>
@@ -374,7 +453,7 @@ export function HappinessInfoModal({
 export function EnergyInfoModal({
   isEnergyInfoModalVisible,
   setEnergyInfoModalVisible,
-}) {
+}: InfoModalProps) {
   function closeModal() {
     setEnergyInfoModalVisible(false);
   }
@@ -388,18 +467,21 @@ export function EnergyInfoModal({
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Nurture Chamber</Text>
+          <Text style={styles.modalTitle}>Energy Levels</Text>
           <Text style={styles.modalContent}>
-            This is where your pet recovers after rescue.
+            Ensure your pet has enough energy by feeding and playing with them.
           </Text>
 
           <Text style={styles.modalImportantInfo}>
-            While your pet is here, it is vital to keep its health up to aid
-            recovery.
+            Low energy may hinder your pet's ability to interact. Keep them
+            energised!
           </Text>
-          {/* and recovery will pause. Revival pills will be required to exit
-                        hibernation mode. */}
-
+          <Text style={styles.modalImportantInfo}>
+            Energy decreases faster while your pet is interacting with you.
+            However, higher stamina levels help keep your pet's energy stable
+            for longer periods. Very high happiness levels also pause energy
+            loss.
+          </Text>
           <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
             <Text style={styles.modalButtonText}>Got it!</Text>
           </TouchableOpacity>
@@ -411,7 +493,7 @@ export function EnergyInfoModal({
 export function CutenessInfoModal({
   isCutenessInfoModalVisible,
   setCutenessInfoModalVisible,
-}) {
+}: InfoModalProps) {
   function closeModal() {
     setCutenessInfoModalVisible(false);
   }
@@ -425,17 +507,16 @@ export function CutenessInfoModal({
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Nurture Chamber</Text>
+          <Text style={styles.modalTitle}>Cuteness Level</Text>
           <Text style={styles.modalContent}>
-            This is where your pet recovers after rescue.
+            Keep an eye on your pet’s cuteness! The more you care for them, the
+            cuter they become.
           </Text>
 
           <Text style={styles.modalImportantInfo}>
-            While your pet is here, it is vital to keep its health up to aid
-            recovery.
+            Higher cuteness levels increase your pet's popularity and boost
+            their happiness.
           </Text>
-          {/* and recovery will pause. Revival pills will be required to exit
-                        hibernation mode. */}
 
           <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
             <Text style={styles.modalButtonText}>Got it!</Text>
