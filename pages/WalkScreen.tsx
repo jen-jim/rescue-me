@@ -170,14 +170,16 @@ export default function WalkScreen() {
           <FoodMarkers foodCoords={foodCoords} />
           <SpecialFoodMarker specialFood={specialFood} />
         </MapView>
-        <FoodProximityButton
-          userLocation={userLocation}
-          allFoodCoords={[
-            ...foodCoords,
-            ...(specialFood ? [specialFood.coords] : []),
-          ]}
-          specialFood={specialFood}
-        />
+        <View style={styles.buttonContainer}>
+          <FoodProximityButton
+            userLocation={userLocation}
+            allFoodCoords={[
+              ...foodCoords,
+              ...(specialFood ? [specialFood.coords] : []),
+            ]}
+            specialFood={specialFood}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
