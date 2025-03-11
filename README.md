@@ -1,16 +1,28 @@
 # Viro Starter Kit
 
-This is a new [**React Native**](https://reactnative.dev) project, set up with `@reactvision/react-viro`.
+This is a [**React Native**](https://reactnative.dev) project, set up with `@reactvision/react-viro`.
 
-## Getting Started
+## Install the application
 
-> **Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/set-up-your-environment) instructions.
+here is an apk file of the application which you cn download and install on you phone...
 
-## Step 1: Install Dependencies
+## Getting Started - Creating and Running a Development Server for the Application
+
+> **Note**: This project was built without the use of a React Native Framework.
+
+If you would like to modify the app, follow these instrucions to create and install an app-debug.apk file on your phone which is then connected to a Development Server to run the app on your phone with live updates (Hot Reloading).
+ 
+## Step 1: Set up your Environment
+
+Follow the [React Native - Environment Setup](https://reactnative.dev/docs/set-up-your-environment) instructions to enable you to run this project via Android Studio. 
+
+## Step 2: Install Dependencies
 
 ```bash
 npm install
 ```
+
+> **Note**: This project was built for android, however if you would like to configure it to run on ios you will need to do the following:
 
 ### iOS only:
 
@@ -19,6 +31,60 @@ cd ios
 pod install
 cd ..
 ```
+## Step 3: Connect your Device to a Development Server for the Application.
+
+> **Warning**: Due to limitations of the Apple Simulator and the Android Emulator, you must run this project on a physical device.
+
+Follow the [React Native - Running On Device](https://reactnative.dev/docs/running-on-device) instructions to run the app on your device.
+
+## Step 4: Connect to the Development Server over WiFi
+
+> **Note**: In order to freely experience the AR components of our project, we recommend you connect your device to the Development Server over WiFi.
+
+First, you will need to start the Development Server using **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+
+To start Metro, run the following command from the _root_ of the project:
+
+```bash
+npm start
+```
+Next, follow the instructions at the bottom of the [React Native - Running On Device](https://reactnative.dev/docs/running-on-device) page to connect your device to the Development Server over WiFi.
+
+If everything is set up _correctly_, you should see the app running on your device.
+
+This is one way to run the app — you can also run it directly from within Android Studio and Xcode respectively.
+
+## Step 5: Explore the Application
+
+Now that the app is running on your device, take some time to explore its features. Interact with different components, test its functionality, and experience how it works in practice. Experiment with various elements to get a feel for the user experience and ensure everything is functioning as expected.
+
+## Step 6: Modifying the Application
+
+Now that you have successfully run the app and seen how it works, let's modify it.
+
+1. Open one of the files in the `pages` folder in your text editor of choice and edit some lines.
+2. Your changes should appear immediately. If not, for **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+
+## Troubleshooting: Unable to View Changes or Grey Screen on Opening the App (Cannot connect to Metro)
+
+A lot of minor issues can be resolved by reloading the app.  
+
+However, if your phone disconnects from the Development Server, commands given in the terminal on your computer will not reach your phone.
+
+1. Ensure the Development Server is running in a terminal on your computer.
+>You can start it using:  
+>   ```bash
+>  npm start
+>   ```
+2. Ensure the app is open on your phone. If not, go to `All Apps` and tap on RescueMe to launch.
+3. Open the Developer Menu on the app by shaking your phone.
+4. Tap the 'Reload' option to reload the app.
+
+You should see a `bundling` message at the top of the app, and on the console ```BUNDLE ./index.js``` will appear with a bar to show percentage progress. Once it has been bundled, the ```Running "RescueMe" ``` log should appear on the console. The app has now successfully connected to the Development Server and any changes made should appear in real-time. 
+
+
+
+
 
 ## Step 2: Start the Metro Server
 
