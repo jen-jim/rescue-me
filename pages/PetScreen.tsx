@@ -28,11 +28,10 @@ import {
   MedicineInfoModal,
   PettingInfoModal,
   PlayInfoModal,
+  StaminaInfoModal,
   WalkInfoModal,
 } from "./components/PetPageInfoModals";
 import Video from "react-native-video";
-
-
 
 const idle = require("./assets/video/idle.mp4");
 const play = require("./assets/video/play.mp4");
@@ -55,6 +54,8 @@ export default function PetScreen() {
     useState(false);
   const [isWalkInfoModalVisible, setWalkInfoModalVisible] = useState(false);
   const [isGrowthInfoModalVisible, setGrowthInfoModalVisible] = useState(false);
+  const [isStaminaInfoModalVisible, setStaminaInfoModalVisible] =
+    useState(false);
   const [isHungerInfoModalVisible, setHungerInfoModalVisible] = useState(false);
   const [isHappinessInfoModalVisible, setHappinessInfoModalVisible] =
     useState(false);
@@ -220,7 +221,7 @@ export default function PetScreen() {
           <Pressable
             style={styles.button}
             onPress={() => {
-              playVideoForAction(feed)
+              playVideoForAction(feed);
               setFoodModalVisible(true);
             }}
             onLongPress={() => {
@@ -233,7 +234,7 @@ export default function PetScreen() {
           <Pressable
             style={styles.button}
             onPress={() => {
-              playVideoForAction(pet)
+              playVideoForAction(pet);
               handlePet();
             }}
             onLongPress={() => {
@@ -246,7 +247,7 @@ export default function PetScreen() {
           <Pressable
             style={styles.button}
             onPress={() => {
-              playVideoForAction(medicate)
+              playVideoForAction(medicate);
               setMedicineModalVisible(true);
             }}
             onLongPress={() => {
@@ -281,8 +282,9 @@ export default function PetScreen() {
           setGrowthInfoModalVisible={setGrowthInfoModalVisible}
           setHungerInfoModalVisible={setHungerInfoModalVisible}
           setHappinessInfoModalVisible={setHappinessInfoModalVisible}
-          setEnergyInfoModalVisible={setGrowthInfoModalVisible}
+          setEnergyInfoModalVisible={setEnergyInfoModalVisible}
           setCutenessInfoModalVisible={setCutenessInfoModalVisible}
+          setStaminaInfoModalVisible={setStaminaInfoModalVisible}
         />
       </ScrollView>
       <InfoPanel />
@@ -315,6 +317,10 @@ export default function PetScreen() {
       <GrowthInfoModal
         isGrowthInfoModalVisible={isGrowthInfoModalVisible}
         setGrowthInfoModalVisible={setGrowthInfoModalVisible}
+      />
+      <StaminaInfoModal
+        isStaminaInfoModalVisible={isStaminaInfoModalVisible}
+        setStaminaInfoModalVisible={setStaminaInfoModalVisible}
       />
       <HungerInfoModal
         isHungerInfoModalVisible={isHungerInfoModalVisible}
