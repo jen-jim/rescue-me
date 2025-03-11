@@ -253,10 +253,8 @@ export function MainInfoModal({
           <Text style={styles.modalImportantInfo}>
             Remember to check on your pet regularly to ensure they don't enter a
             depressed state. This can occur when happiness and energy are
-            critically low for an extended period. Entering depression will
-            reduce stamina and cuteness, and growth will be hindered and may
-            begin to reverse. All actions here contribute to your pet’s overall
-            well-being.
+            critically low for an extended period. Whilst your pet in this state growth, stamina and cuteness will be
+            negatively affected, and a special medication will be required to exit this state. 
           </Text>
 
           <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
