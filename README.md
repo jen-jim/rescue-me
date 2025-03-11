@@ -22,7 +22,7 @@ Follow the [React Native - Environment Setup](https://reactnative.dev/docs/set-u
 npm install
 ```
 
-> **Note**: This project was built for android, however if you would like to configure it to run on ios you will need to do the following:
+> **Note**: This project was built for android, however, if you would like to configure it to run on iOS you will need to do the following:
 
 ### iOS only:
 
