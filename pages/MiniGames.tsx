@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
+import Video from "react-native-video";
+const play = require("./assets/video/play.mp4");
 
 export default function MiniGames({ navigation }) {
   const [message, setMessage] = useState("");
@@ -32,9 +34,12 @@ export default function MiniGames({ navigation }) {
     <SafeAreaView style={styles.container}>
       <View style={styles.petContainer}>
         <View style={styles.petBox}>
-          <Image
-            source={require("./assets/video/placeholder_img.png")}
+          <Video
+            source={play}
             style={styles.petImage}
+            resizeMode="contain"
+            repeat
+            muted
           />
         </View>
 
