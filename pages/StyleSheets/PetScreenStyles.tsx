@@ -1,13 +1,6 @@
 import { Dimensions, StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#5a4a42",
-    textAlign: "center",
-    marginBottom: 20,
-  },
   container: {
     flex: 1,
     // backgroundColor: "#f0f0f0",
@@ -16,14 +9,32 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 20,
   },
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#5a4a42",
+    textAlign: "center",
+    marginBottom: 20,
+  },
   petContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  canvas: {
-    width: Dimensions.get("window").width * 0.8,
-    height: Dimensions.get("window").height * 0.5,
+  petBox: {
+    width: 200,
+    height: 200,
+    borderRadius: 20,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+    marginBottom: 20,
+  },
+  petImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
   },
   speechBubble: {
     position: "absolute",
@@ -58,34 +69,9 @@ export const styles = StyleSheet.create({
     margin: 10,
     gap: 8,
   },
-  toggleButton: {
-    backgroundColor: "#4CAF50",
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    margin: 10,
-    gap: 8,
-  },
   buttonText: {
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
-  },
-  petBox: {
-    width: 200,
-    height: 200,
-    borderRadius: 20,
-    backgroundColor: "#fff",
-    justifyContent: "center",
-    alignItems: "center",
-    elevation: 5,
-    marginBottom: 20,
-  },
-  petImage: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
   },
 });
