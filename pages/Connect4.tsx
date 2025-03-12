@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
+import Video from "react-native-video";
+const jump = require("./assets/video/jump.mp4");
 
 export default function Connect4({ navigation }) {
   const [message, setMessage] = useState("");
@@ -32,9 +34,12 @@ export default function Connect4({ navigation }) {
     <SafeAreaView style={styles.container}>
       <View style={styles.petContainer}>
         <View style={styles.petBox}>
-          <Image
-            source={require("./assets/video/placeholder_img.png")}
+          <Video
+            source={jump}
             style={styles.petImage}
+            resizeMode="contain"
+            repeat
+            muted
           />
         </View>
 
