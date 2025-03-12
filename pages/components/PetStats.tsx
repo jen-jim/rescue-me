@@ -58,7 +58,7 @@ export default function PetStats({
           setGrowthInfoModalVisible(true);
         }}
       >
-        <Text style={styles.label}>Growth Lvl:</Text>
+        <Text style={styles.label}>Growth:</Text>
         <Text style={styles.value}>{petData.growth}</Text>
       </Pressable>
       <Pressable
@@ -67,7 +67,7 @@ export default function PetStats({
           setStaminaInfoModalVisible(true);
         }}
       >
-        <Text style={styles.label}>Stamina Lvl:</Text>
+        <Text style={styles.label}>Stamina:</Text>
         <Text style={styles.value}>{petData.growth}</Text>
         {/* add stamina to petData and some logic for stamina to increase based on activity levels */}
       </Pressable>
@@ -77,7 +77,7 @@ export default function PetStats({
           setIntelligenceInfoModalVisible(true);
         }}
       >
-        <Text style={styles.label}>Intelligence Lvl:</Text>
+        <Text style={styles.label}>Intelligence:</Text>
         <Text style={styles.value}>{petData.growth}</Text>
         {/* add intelligence to petData and some logic for intelligence to increase based on no. of games played */}
       </Pressable>
@@ -87,7 +87,7 @@ export default function PetStats({
           setCutenessInfoModalVisible(true);
         }}
       >
-        <Text style={styles.label}>Cuteness Lvl:</Text>
+        <Text style={styles.label}>Cuteness:</Text>
         <Text style={styles.value}>{petData.cuteness}</Text>
       </Pressable>
       {progressStats.map((stat, index) => (
