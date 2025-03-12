@@ -32,7 +32,7 @@ import { IncubationFoodModal } from "./components/IncubationFoodModal";
 import { IncubationMedicineModal } from "./components/IncubationMedicineModal";
 import Video from "react-native-video";
 
-const idle = require("./assets/video/idle.mp4");
+const idle = require("./assets/video/sick.mp4");
 const pet = require("./assets/video/pet.mp4");
 const clean = require("./assets/video/clean.mp4");
 
@@ -333,7 +333,7 @@ export default function IncubationScreen() {
         <View style={styles.buttonsContainer}>
           <View
             style={styles.interactionButtonsContainer}
-            // style={styles.section}
+          // style={styles.section}
           >
             <MedicateButton
               setMedicineModalVisible={setMedicineModalVisible}
