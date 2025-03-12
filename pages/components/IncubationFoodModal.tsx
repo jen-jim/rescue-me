@@ -23,8 +23,10 @@ export const IncubationFoodModal: React.FC<IncubationFoodModalProps> = ({
   const navigation = useNavigation();
 
   const feedFood = async (food: keyof FoodInventory) => {
-    const feed = require("../assets/video/feed.mp4")
-    showMessage("That was tasty!");
+    const feed = require("../assets/video/feed.mp4");
+    setTimeout(() => {
+      showMessage("That was tasty!");
+    }, 3000);
     playVideoForAction(feed);
 
     setInventory((prevInventory) => ({

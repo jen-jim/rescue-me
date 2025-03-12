@@ -32,7 +32,7 @@ import { IncubationFoodModal } from "./components/IncubationFoodModal";
 import { IncubationMedicineModal } from "./components/IncubationMedicineModal";
 import Video from "react-native-video";
 
-const idle = require("./assets/video/idle.mp4");
+const idle = require("./assets/video/sick.mp4");
 const pet = require("./assets/video/pet.mp4");
 const clean = require("./assets/video/clean.mp4");
 
@@ -305,15 +305,17 @@ export default function IncubationScreen() {
             activeOpacity={1}
             onPress={handleHealth}
           >
-            <Icon name={"heart"} size={24} color="#5a4a42" />
-            <Text style={styles.healthText}> Health:</Text>
+            <View style={styles.healthContainer}>
+              <Icon name={"heart"} size={24} color="#5a4a42" />
+              <Text style={styles.healthText}> Health:</Text>
+            </View>
             <View
-            // style={styles.progressBarContainer}💜
+            //💜
             >
               <Progress.Bar
                 progress={petData.incubationHealth}
                 color={progressColour}
-                width={Dimensions.get("window").width * 0.64}
+                width={Dimensions.get("window").width * 0.65}
                 height={25}
                 // borderColor={"#ba68c8"}
                 // borderColor={"#3d3d3d"}
@@ -331,27 +333,27 @@ export default function IncubationScreen() {
         <View style={styles.buttonsContainer}>
           <View
             style={styles.interactionButtonsContainer}
-            // style={styles.section}
+          // style={styles.section}
           >
-            <FeedButton
-              setFoodModalVisible={setFoodModalVisible}
-              setFeedInfoModalVisible={setFeedInfoModalVisible}
-            />
             <MedicateButton
               setMedicineModalVisible={setMedicineModalVisible}
               setMedicineInfoModalVisible={setMedicineInfoModalVisible}
             />
+            <FeedButton
+              setFoodModalVisible={setFoodModalVisible}
+              setFeedInfoModalVisible={setFeedInfoModalVisible}
+            />
             {[
-              // {
-              //   text: "Pet",
-              //   icon: "hand-left",
-              //   msg: "That was nice!",
-              //   video: pet,
-              // },
+              {
+                text: "Pet",
+                icon: "hand-left",
+                msg: "That was nice!",
+                video: pet,
+              },
               {
                 text: "Clean",
                 icon: "water-outline",
-                msg: "*wet cat shake*",
+                msg: "I feel great!",
                 video: clean,
               },
             ].map((btn) => {
@@ -399,7 +401,9 @@ export default function IncubationScreen() {
         <HibernationModal
           handleExit={() => {
             setHibernating(false);
-            showMessage("You saved me!");
+            setTimeout(() => {
+              showMessage("You saved me!");
+            }, 2000);
             setPetData((prevPetData) => {
               const now = Date.now();
               const prevExtraTime = prevPetData.extraTime || 0;

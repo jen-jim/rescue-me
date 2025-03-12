@@ -7,10 +7,12 @@ import {
   Animated,
   Dimensions,
   Image,
+  ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 import Video from "react-native-video";
+import { InfoPanel } from "./components/InfoPanel";
 const play = require("./assets/video/play.mp4");
 
 export default function MiniGames({ navigation }) {
@@ -32,40 +34,45 @@ export default function MiniGames({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.petContainer}>
-        <View style={styles.petBox}>
-          <Video
-            source={play}
-            style={styles.petImage}
-            resizeMode="contain"
-            repeat
-            muted
-          />
+      <Text style={styles.title}>🏆 Games Room 🏆</Text>
+      <ScrollView>
+        {/* remove scroll view so it spaces out on page again, but then you will have to edit positioning of speech bubble specific to every phone size!!! */}
+        <View style={styles.petContainer}>
+          <View style={styles.petBox}>
+            <Video
+              source={play}
+              style={styles.petImage}
+              resizeMode="contain"
+              repeat
+              muted
+            />
+          </View>
+
+          {message !== "" && (
+            <Animated.View style={[styles.speechBubble, { opacity: fadeAnim }]}>
+              <Text style={styles.speechText}>{message}</Text>
+            </Animated.View>
+          )}
         </View>
 
-        {message !== "" && (
-          <Animated.View style={[styles.speechBubble, { opacity: fadeAnim }]}>
-            <Text style={styles.speechText}>{message}</Text>
-          </Animated.View>
-        )}
-      </View>
-
-      <View style={styles.buttonsContainer}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("TicTakToe")}
-        >
-          <Icon name="game-controller" size={24} color="white" />
-          <Text style={styles.buttonText}>Tic Tak Toe</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("Connect4")}
-        >
-          <Icon name="game-controller" size={24} color="white" />
-          <Text style={styles.buttonText}>Connect-4</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate("TicTakToe")}
+          >
+            <Icon name="game-controller" size={24} color="white" />
+            <Text style={styles.buttonText}>Tic Tak Toe</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate("Connect4")}
+          >
+            <Icon name="game-controller" size={24} color="white" />
+            <Text style={styles.buttonText}>Connect-4</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+      <InfoPanel />
     </SafeAreaView>
   );
 }
@@ -76,9 +83,17 @@ export default function MiniGames({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#f9f4f0",
     alignItems: "center",
     justifyContent: "center",
+    paddingVertical: 20,
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#5a4a42",
+    textAlign: "center",
+    marginBottom: 20,
   },
   petContainer: {
     flex: 1,
@@ -91,6 +106,7 @@ const styles = StyleSheet.create({
   },
   speechBubble: {
     position: "absolute",
+    // top: Dimensions.get("window").height * 0.25, //this will have to be changed for every phone size if we remove scrollview
     top: 10,
     backgroundColor: "white",
     padding: 10,
@@ -104,7 +120,7 @@ const styles = StyleSheet.create({
   speechText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "black",
+    color: "#5a4a42",
   },
   buttonsContainer: {
     flexDirection: "row",

@@ -20,8 +20,17 @@ export const IncubationMedicineModal: React.FC<
   const navigation = useNavigation();
 
   const feedMedicine = async (medicine: keyof MedicineInventory) => {
-    const medicate = require("../assets/video/medicate.mp4")
-    showMessage("Yuck!");
+    const medicate = require("../assets/video/medicate.mp4");
+    showMessage("");
+    setTimeout(() => {
+      showMessage("Yuck!");
+    }, 1700);
+    setTimeout(() => {
+      showMessage("");
+    }, 2700);
+    setTimeout(() => {
+      showMessage("I feel much better, thanks!");
+    }, 4000);
     playVideoForAction(medicate);
 
     setInventory((prevInventory) => ({
