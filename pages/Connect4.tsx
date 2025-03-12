@@ -7,10 +7,12 @@ import {
   Animated,
   Dimensions,
   Image,
+  ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 import Video from "react-native-video";
+import { InfoPanel } from "./components/InfoPanel";
 const jump = require("./assets/video/jump.mp4");
 
 export default function Connect4({ navigation }) {
@@ -34,24 +36,30 @@ export default function Connect4({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.petContainer}>
-        <View style={styles.petBox}>
-          <Video
-            source={jump}
-            style={styles.petImage}
-            resizeMode="contain"
-            repeat
-            muted
-          />
+      <Text style={styles.title}>🔴🟡 Connect 4 🟡🔴 </Text>
+      <ScrollView>
+        <View style={styles.container}>
+          <View style={styles.petContainer}>
+            <View style={styles.petBox}>
+              <Video
+                source={jump}
+                style={styles.petImage}
+                resizeMode="contain"
+                repeat
+                muted
+              />
+            </View>
+
+            {message !== "" && (
+              <Animated.View
+                style={[styles.speechBubble, { opacity: fadeAnim }]}
+              >
+                <Text style={styles.speechText}>{message}</Text>
+              </Animated.View>
+            )}
+          </View>
         </View>
-
-        {message !== "" && (
-          <Animated.View style={[styles.speechBubble, { opacity: fadeAnim }]}>
-            <Text style={styles.speechText}>{message}</Text>
-          </Animated.View>
-        )}
-      </View>
-
+      </ScrollView>
       <View style={styles.buttonsContainer}>
         <TouchableOpacity
           style={styles.button}
@@ -68,6 +76,7 @@ export default function Connect4({ navigation }) {
           <Text style={styles.buttonText}>Connect-4</Text>
         </TouchableOpacity>
       </View>
+      <InfoPanel />
     </SafeAreaView>
   );
 }
@@ -78,9 +87,16 @@ export default function Connect4({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#f9f4f0",
     alignItems: "center",
     justifyContent: "center",
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#5a4a42",
+    textAlign: "center",
+    marginVertical: 20,
   },
   petContainer: {
     flex: 1,
