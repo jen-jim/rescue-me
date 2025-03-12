@@ -72,18 +72,7 @@ export const styles = StyleSheet.create({
   //   elevation: 3,
   //   width: "96%",
   // },
-  section: {
-    backgroundColor: "#fff",
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 15,
-    // shadowColor: "#000",
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 0.1,
-    // shadowRadius: 4,
-    // elevation: 3,
-    width: "96%",
-  },
+
   speechBubble: {
     position: "absolute",
     top: 10,
@@ -99,7 +88,7 @@ export const styles = StyleSheet.create({
   message: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "black",
+    color: "#5a4a42",
   },
   buttonsContainer: {
     flexDirection: "row",
@@ -110,14 +99,28 @@ export const styles = StyleSheet.create({
   interactionButtonsContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-around",
+    justifyContent: "center",
     paddingBottom: 20,
     marginHorizontal: 20,
+    width: 400,
   },
   recoveryTimeContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+  },
+  section: {
+    backgroundColor: "#fff",
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 15,
+    // marginHorizontal: 40,
+    // shadowColor: "#000",
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
+    // elevation: 3,
+    width: "95%",
   },
   healthContainer: {
     flexDirection: "row",
@@ -153,7 +156,7 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: "row",
     alignItems: "center",
-    margin: 5,
+    margin: 10,
     gap: 8,
     shadowColor: "#000",
     shadowOpacity: 0.2,
