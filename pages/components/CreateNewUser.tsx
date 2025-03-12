@@ -8,72 +8,103 @@ import {
   View,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import auth from "@react-native-firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+} from "@react-native-firebase/auth";
 import Icon from "react-native-vector-icons/AntDesign";
 
-export default function CreateNewUser() {
+export default function CreateNewUser({ changeStateHandeler }) {
   const [username, onSubmitEditingUsername] = useState("");
   const [password, onSubmitEditingPassword] = useState("");
   const [passwordAgain, onSubmitEditingPasswordAgain] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [passwordLength, setPasswordLength] = useState(false);
+  const [passwordIncludesSymbol, setPasswordIncludesSymbol] = useState(false);
+  const [passwordIncludesNumber, setPasswordIncludesNumber] = useState(false);
+  const [passwordIncludesUppercase, setPasswordIncludesUppercase] =
+    useState(false);
+  const [passwordIncludesLowercase, setPasswordIncludesLowercase] =
+    useState(false);
+  const [passwordsMatch, setPasswordsMatch] = useState(false);
   const correctIcon = <Icon name="check" size={15} color="green" />;
   const wrongIcon = <Icon name="close" size={15} color="red" />;
 
+  const auth = getAuth();
+
+  const passwordCheck = () => {
+    if (
+      passwordLength &&
+      passwordIncludesLowercase &&
+      passwordIncludesNumber &&
+      passwordIncludesSymbol &&
+      passwordIncludesUppercase &&
+      passwordsMatch
+    ) {
+      return createAccountInFirbase();
+    } else {
+      return setErrorMessage("somthing is wrong with the password");
+    }
+  };
+
   const createAccountInFirbase = () => {
-    auth()
-      .createUserWithEmailAndPassword(username, password)
+    createUserWithEmailAndPassword(auth, username, password)
       .then((res) => {
         console.log("User account created & signed in!");
-        console.log("====================================");
-        console.log(res, "Created Res");
-        console.log("====================================");
+        changeStateHandeler(false);
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {
           console.log("That email address is already in use!");
+          return setErrorMessage("That email address is already in use!");
         }
 
         if (error.code === "auth/invalid-email") {
           console.log("That email address is invalid!");
+          return setErrorMessage("That email address is invalid!");
         }
 
-        console.error(error);
+        return console.error(error);
       });
   };
 
   const PasswordChecker = () => {
-    const [passwordLength, setPasswordLength] = useState(false);
-    const [passwordIncludesSymbol, setPasswordIncludesSymbol] = useState(false);
-    const [passwordIncludesNumber, setPasswordIncludesNumber] = useState(false);
-    const [passwordIncludesUppercase, setPasswordIncludesUppercase] =
-      useState(false);
-    const [passwordIncludesLowercase, setPasswordIncludesLowercase] =
-      useState(false);
-    const [passwordsMatch, setPasswordsMatch] = useState(false);
-
     useEffect(() => {
+      const specialChars = /[`!@#$%^&*()_\-+=\[\]{};':"\\|,.<>\/?~ ]/;
       if (password.length >= 8) {
         setPasswordLength(true);
+      } else {
+        setPasswordLength(false);
       }
-      if (password.length >= 8) {
+      if (specialChars.test(password)) {
         setPasswordIncludesSymbol(true);
+      } else {
+        setPasswordIncludesSymbol(false);
       }
       if (/\d/.test(password)) {
         setPasswordIncludesNumber(true);
+      } else {
+        setPasswordIncludesNumber(false);
       }
-      if (password.length >= 8) {
+      if (/[A-Z]/.test(password)) {
         setPasswordIncludesUppercase(true);
+      } else {
+        setPasswordIncludesUppercase(false);
       }
-      if (password.length >= 8) {
+      if (/[a-z]/.test(password)) {
         setPasswordIncludesLowercase(true);
+      } else {
+        setPasswordIncludesLowercase(false);
       }
       if (password === passwordAgain) {
         setPasswordsMatch(true);
+      } else {
+        setPasswordsMatch(false);
       }
     }, []);
 
     const iconSelector = (bool: boolean) => {
       if (bool) {
-        console.log(bool, password);
         return correctIcon;
       } else {
         return wrongIcon;
@@ -137,11 +168,11 @@ export default function CreateNewUser() {
           />
 
           <PasswordChecker />
-
+          <Text style={{ color: "red" }}>{errorMessage}</Text>
           <View style={styles.buttonsContainer}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => createAccountInFirbase()}
+              onPress={() => passwordCheck()}
             >
               <Text style={{ color: "white" }}>Create</Text>
             </TouchableOpacity>

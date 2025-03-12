@@ -7,14 +7,20 @@ import {
   Dimensions,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import auth from "@react-native-firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+} from "@react-native-firebase/auth";
 import { useState } from "react";
 import CreateNewUser from "./components/CreateNewUser";
+import { useNavigation } from "@react-navigation/native";
 
 export default function LoginScreen() {
+  const navigation = useNavigation();
   const [username, onSubmitEditingUsername] = useState("");
   const [password, onSubmitEditingPassword] = useState("");
   const [onNewUserPage, setOnNewUserPage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const createAccount = () => {
     onSubmitEditingPassword("");
@@ -22,11 +28,18 @@ export default function LoginScreen() {
     setOnNewUserPage(true);
   };
 
+  const auth = getAuth();
+
   const loginWithEmailAndPassword = () => {
-    auth()
-      .signInWithEmailAndPassword(username, password)
-      .then((res) => {})
+    signInWithEmailAndPassword(auth, username, password)
+      .then((res) => {
+        setErrorMessage("Succsefull login");
+        return navigation.navigate("Title");
+      })
       .catch((error) => {
+        if (error.code === "auth/invalid-email") {
+          setErrorMessage("Email or Password are incorrect");
+        }
         console.log("====================================");
         console.log(error, "Error Res");
         console.log("====================================");
@@ -54,8 +67,12 @@ export default function LoginScreen() {
 
   ===================================================== */
 
+  const changeStateHandeler = (bool) => {
+    return setOnNewUserPage(bool);
+  };
+
   if (onNewUserPage === true) {
-    return <CreateNewUser />;
+    return <CreateNewUser changeStateHandeler={setOnNewUserPage} />;
   }
 
   return (
@@ -65,22 +82,19 @@ export default function LoginScreen() {
           <Text style={styles.title}>Login Page</Text>
           <TextInput
             style={styles.input}
-            onSubmitEditing={(newText) =>
-              onSubmitEditingUsername(String(newText))
-            }
+            onChangeText={(newText) => onSubmitEditingUsername(String(newText))}
             placeholder="Username/Email"
             defaultValue={username}
             inputMode="email"
           />
           <TextInput
             style={styles.input}
-            onSubmitEditing={(newText) =>
-              onSubmitEditingPassword(String(newText))
-            }
+            onChangeText={(newText) => onSubmitEditingPassword(String(newText))}
             placeholder="Password"
             defaultValue={password}
             secureTextEntry={true}
           />
+          <Text style={{ color: "red" }}>{errorMessage}</Text>
           <View style={styles.buttonsContainer}>
             <TouchableOpacity
               style={styles.button}
