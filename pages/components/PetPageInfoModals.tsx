@@ -25,6 +25,10 @@ type InfoModalProps = {
   setCutenessInfoModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   isStaminaInfoModalVisible: boolean;
   setStaminaInfoModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  isIntelligenceInfoModalVisible: boolean;
+  setIntelligenceInfoModalVisible: React.Dispatch<
+    React.SetStateAction<boolean>
+  >;
 };
 
 export function PlayInfoModal({
@@ -253,8 +257,9 @@ export function MainInfoModal({
           <Text style={styles.modalImportantInfo}>
             Remember to check on your pet regularly to ensure they don't enter a
             depressed state. This can occur when happiness and energy are
-            critically low for an extended period. Whilst your pet in this state growth, stamina and cuteness will be
-            negatively affected, and a special medication will be required to exit this state. 
+            critically low for an extended period. Whilst your pet in this state
+            growth, stamina and cuteness will be negatively affected, and a
+            special medication will be required to exit this state.
           </Text>
 
           <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
@@ -316,7 +321,7 @@ export function GrowthInfoModal({
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Your pet's growth</Text>
+          <Text style={styles.modalTitle}>Growth Level</Text>
           <Text style={styles.modalContent}>
             This section helps you monitor your pet's growth. Make sure to keep
             your pet healthy for optimal development.
@@ -352,7 +357,7 @@ export function StaminaInfoModal({
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Your companion's stamina</Text>
+          <Text style={styles.modalTitle}>Stamina Level</Text>
           <Text style={styles.modalContent}>
             Regular walks are key to building your pet’s stamina. As your pet
             becomes more accustomed to exercise, their energy levels stay higher
@@ -363,6 +368,44 @@ export function StaminaInfoModal({
           <Text style={styles.modalImportantInfo}>
             With increased stamina, your pet will be able to enjoy more
             activities, improving their overall well-being and happiness.
+          </Text>
+
+          <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
+            <Text style={styles.modalButtonText}>Got it!</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+  );
+}
+export function IntelligenceInfoModal({
+  isIntelligenceInfoModalVisible,
+  setIntelligenceInfoModalVisible,
+}: InfoModalProps) {
+  function closeModal() {
+    setIntelligenceInfoModalVisible(false);
+  }
+
+  return (
+    <Modal
+      visible={isIntelligenceInfoModalVisible}
+      transparent={true}
+      animationType="fade"
+      onRequestClose={closeModal}
+    >
+      <View style={styles.modalBackground}>
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalTitle}>Intelligence Level</Text>
+          <Text style={styles.modalContent}>
+            Regular games are key to building your pet’s intelligence. As your
+            pet becomes more intelligent, games will become harder to win. Your
+            pet won't go easy on you!
+          </Text>
+
+          <Text style={styles.modalImportantInfo}>
+            As your pet's intelligence increases, new games will be unlocked for
+            you to enjoy with your pet. This will improve their overall
+            well-being and happiness.
           </Text>
 
           <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
@@ -391,7 +434,7 @@ export function HungerInfoModal({
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Hunger Levels</Text>
+          <Text style={styles.modalTitle}>Hunger Level</Text>
           <Text style={styles.modalContent}>
             Make sure to feed your pet regularly to keep their energy up.
           </Text>
@@ -465,7 +508,7 @@ export function EnergyInfoModal({
     >
       <View style={styles.modalBackground}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Energy Levels</Text>
+          <Text style={styles.modalTitle}>Energy Level</Text>
           <Text style={styles.modalContent}>
             Ensure your pet has enough energy by feeding and playing with them.
           </Text>

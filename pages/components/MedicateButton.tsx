@@ -32,16 +32,17 @@ export const MedicateButton: React.FC<MedicateButtonProps> = ({
           setMedicineInfoModalVisible(true);
         }}
       >
-        <Icon name="eyedrop-outline" size={30} color="white" />
+        <Icon name="medkit" size={24} color="white" />
+        <Text style={styles.buttonText}>Medicate</Text>
       </Pressable>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         activeOpacity={1}
         onPress={() => {
           setMedicineInfoModalVisible(true);
         }}
       >
-        <Text style={styles.interactionText}>Medicate</Text>
-      </TouchableOpacity>
+        
+      </TouchableOpacity> */}
     </View>
   );
 };

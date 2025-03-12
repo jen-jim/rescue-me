@@ -238,19 +238,19 @@ export function HibernationModal({ handleExit }) {
   return (
     <Modal transparent={true} animationType="fade" onRequestClose={closeModal}>
       <View style={styles.modalBackground}>
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Pet has entered hibernation</Text>
-          <Text style={styles.modalContent}>
+        <View style={styles.warningModalContainer}>
+          <Text style={styles.warningTitle}>
+            ⚠️ Pet has entered hibernation
+          </Text>
+          <Text style={styles.warningText}>
             Due to dangerously low health, your pet has entered hibernation
           </Text>
 
-          <Text style={styles.modalImportantInfo}>
+          <Text style={styles.warningImportantInfo}>
             During hibernation, your pet's health remains at 5%. However,
             recovery is paused and recovery time may even increase if your pet
             spends a long time in hibernation.
           </Text>
-          {/* and recovery will pause. Revival pills will be required to exit
-                    hibernation mode. */}
 
           <TouchableOpacity style={styles.modalButton} onPress={closeModal}>
             <Text style={styles.modalButtonText}>
@@ -311,5 +311,32 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     fontSize: 16,
+  },
+  warningModalContainer: {
+    backgroundColor: "#2e2e2e",
+    padding: 20,
+    borderRadius: 15,
+    width: "80%",
+    alignItems: "center",
+  },
+  warningTitle: {
+    color: "#ffcc00",
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  warningText: {
+    color: "white",
+    fontSize: 16,
+    textAlign: "justify",
+    marginBottom: 20,
+  },
+  warningImportantInfo: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#ffcc00",
+    textAlign: "justify",
+    marginBottom: 20,
+    // paddingHorizontal: 20,
   },
 });
