@@ -22,7 +22,7 @@ export default function NamePetScreen() {
   return (
     <View style={styles.container}>
       <Text style={[styles.title, { top: insets.top + 20 }]}>
-        Name Your Pet
+        💖 Name Your Pet 💖
       </Text>
 
       <View style={styles.petBox}>
