@@ -32,16 +32,17 @@ export const FeedButton: React.FC<FeedButtonProps> = ({
           setFeedInfoModalVisible(true);
         }}
       >
-        <Icon name="fast-food" size={30} color="white" />
+        <Icon name="fast-food" size={24} color="white" />
+        <Text style={styles.buttonText}>Feed</Text>
       </Pressable>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         activeOpacity={1}
         onPress={() => {
           setFeedInfoModalVisible(true);
         }}
       >
         <Text style={styles.interactionText}>Feed</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };

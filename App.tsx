@@ -17,6 +17,7 @@ import MiniGames from "./pages/MiniGames";
 import PetProvider from "./contexts/PetProvider";
 import TicTakToe from "./pages/TicTakToe";
 import Connect4 from "./pages/Connect4";
+import LoginScreen from "./pages/LoginScreen";
 
 export type StackParamList = {
   TestNav: undefined;
@@ -108,6 +109,11 @@ export default function App() {
                 name="Loading"
                 component={LoadingScreen}
                 options={{ title: "Loding Screen" }}
+              />
+              <Stack.Screen
+                name="Login"
+                component={LoginScreen}
+                options={{ title: "Login Screen" }}
               />
             </Stack.Navigator>
           </NavigationContainer>

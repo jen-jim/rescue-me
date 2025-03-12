@@ -35,8 +35,6 @@ import Video from "react-native-video";
 const idle = require("./assets/video/idle.mp4");
 const pet = require("./assets/video/pet.mp4");
 const clean = require("./assets/video/clean.mp4");
-const feed = require("./assets/video/feed.mp4");
-const medicate = require("./assets/video/medicate.mp4");
 
 export default function IncubationScreen() {
   const navigation = useNavigation();
@@ -64,13 +62,12 @@ export default function IncubationScreen() {
 
   const [petVideo, setPetVideo] = useState(idle);
 
-  const playVideoForAction = (video) => {
+  const playVideoForAction = (video: number) => {
     setPetVideo(video);
     setTimeout(() => {
       setPetVideo(idle);
     }, 5000);
   };
-
 
   // Close modals when the screen loses focus.
   useFocusEffect(
@@ -103,7 +100,7 @@ export default function IncubationScreen() {
   }
   useFocusEffect(
     useCallback(() => {
-      console.log("incubationHealth on focus:", petData.incubationHealth);
+      // console.log("incubationHealth on focus:", petData.incubationHealth);
 
       if (petData.hibernationBegan) {
         setHibernating(true);
@@ -141,7 +138,7 @@ export default function IncubationScreen() {
           petData.incubationHealth - healthDecay,
           0.05
         );
-        console.log(incubationHealth, "in use focus effect");
+        // console.log(incubationHealth, "in use focus effect");
         updateProgressColour(incubationHealth);
         checkHibernation(incubationHealth);
         setPetData((prevPetData) => {
@@ -164,7 +161,7 @@ export default function IncubationScreen() {
               prevPetData.incubationHealth - 0.01,
               0.05
             );
-            console.log(newIncubationHealth, "inside interval");
+            // console.log(newIncubationHealth, "inside interval");
             updateProgressColour(newIncubationHealth);
             checkHibernation(newIncubationHealth);
             if (!hibernationBegan) {
@@ -178,10 +175,10 @@ export default function IncubationScreen() {
           });
         }, 60000); //change this to 600 to view change every second
       }
-      console.log("rendered");
+      // console.log("rendered");
 
       return () => {
-        console.log("cleared");
+        // console.log("cleared");
         clearInterval(hatchIntervalId);
         clearInterval(healthIntervalId);
         setPetData((prevPetData) => {
@@ -265,7 +262,7 @@ export default function IncubationScreen() {
       </TouchableOpacity>
       <ScrollView>
         <View style={styles.petContainer}>
-          <View style={styles.petModel}>
+          <View style={styles.petBox}>
             <Video
               source={petVideo}
               style={{ width: "100%", height: "100%", borderRadius: 10 }}
@@ -273,6 +270,13 @@ export default function IncubationScreen() {
               repeat
               muted
             />
+            {message !== "" && (
+              <Animated.View
+                style={[styles.speechBubble, { opacity: fadeAnim }]}
+              >
+                <Text style={styles.message}>{message}</Text>
+              </Animated.View>
+            )}
           </View>
 
           <View>
@@ -301,7 +305,7 @@ export default function IncubationScreen() {
             activeOpacity={1}
             onPress={handleHealth}
           >
-            <Icon name={"heart"} size={24} color="#3d3d3d" />
+            <Icon name={"heart"} size={24} color="#5a4a42" />
             <Text style={styles.healthText}> Health:</Text>
             <View
             // style={styles.progressBarContainer}💜
@@ -325,15 +329,9 @@ export default function IncubationScreen() {
         </View>
 
         <View style={styles.buttonsContainer}>
-          {message !== "" && (
-            <Animated.View style={[styles.speechBubble, { opacity: fadeAnim }]}>
-              <Text style={styles.message}>{message}</Text>
-            </Animated.View>
-          )}
-
           <View
             style={styles.interactionButtonsContainer}
-          // style={styles.section}
+            // style={styles.section}
           >
             <FeedButton
               setFoodModalVisible={setFoodModalVisible}
@@ -344,8 +342,18 @@ export default function IncubationScreen() {
               setMedicineInfoModalVisible={setMedicineInfoModalVisible}
             />
             {[
-              { text: "Pet", icon: "hand-left", msg: "*Wags tail*", video: pet },
-              { text: "Clean", icon: "water-outline", msg: "*wet dog shake*", video: clean },
+              // {
+              //   text: "Pet",
+              //   icon: "hand-left",
+              //   msg: "That was nice!",
+              //   video: pet,
+              // },
+              {
+                text: "Clean",
+                icon: "water-outline",
+                msg: "*wet cat shake*",
+                video: clean,
+              },
             ].map((btn) => {
               return (
                 <View key={btn.text} style={styles.interactionButtonWrapper}>
@@ -359,23 +367,27 @@ export default function IncubationScreen() {
                         : styles.buttonDisabled,
                     ]}
                     onPress={() => {
-                      showMessage(btn.msg)
+                      setMessage("");
+                      setTimeout(() => {
+                        showMessage(btn.msg);
+                      }, 3000);
                       playVideoForAction(btn.video);
                     }}
                     onLongPress={() => {
                       handleInteractionInfo(btn.text);
                     }}
                   >
-                    <Icon name={btn.icon} size={30} color="white" />
+                    <Icon name={btn.icon} size={24} color="white" />
+                    <Text style={styles.buttonText}>{btn.text}</Text>
                   </Pressable>
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     activeOpacity={1}
                     onPress={() => {
                       handleInteractionInfo(btn.text);
                     }}
                   >
                     <Text style={styles.interactionText}>{btn.text}</Text>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </View>
               );
             })}

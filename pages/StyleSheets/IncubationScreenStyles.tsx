@@ -49,6 +49,16 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
   },
+  petBox: {
+    width: 200,
+    height: 200,
+    borderRadius: 20,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+    marginBottom: 20,
+  },
   // section1: {
   //   backgroundColor: "#fff",
   //   padding: 15,
@@ -76,7 +86,7 @@ export const styles = StyleSheet.create({
   },
   speechBubble: {
     position: "absolute",
-    bottom: 300,
+    top: 10,
     backgroundColor: "white",
     padding: 10,
     borderRadius: 10,
@@ -143,7 +153,7 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: "row",
     alignItems: "center",
-    margin: 10,
+    margin: 5,
     gap: 8,
     shadowColor: "#000",
     shadowOpacity: 0.2,
@@ -151,19 +161,19 @@ export const styles = StyleSheet.create({
   },
   interactionButtonWrapper: {
     alignItems: "center",
-    marginHorizontal: 5,
+    // marginHorizontal: 5,
     // marginHorizontal: 20,
-    marginBottom: 30,
+    // marginBottom: 30,
     // width: "40%",
   },
   interactionText: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#5a4a42",
   },
   buttonText: {
     color: "white",
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "bold",
   },
   buttonEnabled: {
