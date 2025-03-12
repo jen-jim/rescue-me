@@ -135,10 +135,10 @@ export default function PetScreen() {
 
   const handlePet = () => {
     // increase happiness
-    setPetData({
-      ...petData,
-      happiness: petData.happiness + 10,
-    });
+    setPetData((prevPetData) => ({
+      ...prevPetData,
+      happiness: Math.min(100, prevPetData.happiness + 10),
+    }));
     playVideoForAction(pet);
     showMessage("");
     setTimeout(() => {
