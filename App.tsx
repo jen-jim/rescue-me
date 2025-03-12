@@ -34,6 +34,7 @@ export type StackParamList = {
   MiniGames: undefined;
   Connect4: undefined;
   TicTacToe: undefined;
+  Login: undefined;
 };
 const Stack = createNativeStackNavigator<StackParamList>();
 
@@ -108,7 +109,7 @@ export default function App() {
               <Stack.Screen
                 name="Loading"
                 component={LoadingScreen}
-                options={{ title: "Loding Screen" }}
+                options={{ title: "Loading Screen" }}
               />
               <Stack.Screen
                 name="Login"
