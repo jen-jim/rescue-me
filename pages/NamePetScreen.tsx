@@ -16,7 +16,7 @@ export default function NamePetScreen() {
       ...petData,
       name: petName,
     });
-    navigation.navigate("Pet");
+    navigation.navigate("Incubation");
   };
 
   return (
