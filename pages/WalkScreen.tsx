@@ -85,6 +85,60 @@ export default function WalkScreen() {
           },
           { enableHighAccuracy: true, timeout: 15000 }
         );
+
+        // const testVitality = {
+        //   coords: { latitude: 51.497791, longitude: -0.048095 },
+        //   data: {
+        //     type: "vitalityBoost",
+        //     title: "Vitality Boost Food",
+        //     description: "Increases energy levels",
+        //     icon: "flash",
+        //   },
+        // };
+        // const testHappiness = {
+        //   coords: { latitude: 51.50198, longitude: -0.042994 },
+        //   data: {
+        //     type: "happinessBoost",
+        //     title: "Happiness Boost Food",
+        //     description: "Improves your mood",
+        //     icon: "happy",
+        //   },
+        // };
+        // const testCuteness = {
+        //   coords: { latitude: 51.501918, longitude: -0.04656 },
+        //   data: {
+        //     type: "cutenessBoost",
+        //     title: "Cuteness Boost Food",
+        //     description: "Adds an extra dose of cuteness",
+        //     icon: "heart",
+        //   },
+        // };
+        // const testSlowRelease = {
+        //   coords: { latitude: 51.501106, longitude: -0.040454 },
+        //   data: {
+        //     type: "slowRelease",
+        //     title: "Slow Release Food",
+        //     description: "Provides long-lasting energy",
+        //     icon: "timer",
+        //   },
+        // };
+
+        // const testFoodCoords = [
+        //   { latitude: 51.498465, longitude: -0.047416 },
+        //   { latitude: 51.499326, longitude: -0.046344 },
+        //   { latitude: 51.500694, longitude: -0.044825 },
+        //   { latitude: 51.496956, longitude: -0.049466 },
+        //   { latitude: 51.497256, longitude: -0.04564 },
+        //   { latitude: 51.499346, longitude: -0.044124 },
+        //   { latitude: 51.500317, longitude: -0.049594 },
+        //   { latitude: 51.501913, longitude: -0.048885 },
+        //   { latitude: 51.500511, longitude: -0.046986 },
+        //   { latitude: 51.496435, longitude: -0.047496 },
+        // ];
+        // const testSpecialFood = testCuteness;
+
+        // setFoodCoords(testFoodCoords);
+        // setSpecialFood(testSpecialFood);
       } else {
         console.log("Location permission denied");
       }
@@ -193,11 +247,11 @@ export default function WalkScreen() {
           showsUserLocation={true}
           showsMyLocationButton={true}
         >
-          <Marker
+          {/* <Marker
             coordinate={userLocation}
             title="Test marker"
             description="to test food proximity mechanics"
-          />
+          /> */}
           <FoodMarkers foodCoords={foodCoords} />
           <SpecialFoodMarker specialFood={specialFood} />
         </MapView>
