@@ -11,6 +11,7 @@ import {
   ToyInventory,
 } from "../utils/Local-storage";
 import { styles } from "./StyleSheets/InventoryScreenStyles";
+import { InfoPanel } from "./components/InfoPanel";
 
 export default function InventoryScreen() {
   const { inventory } = useContext(InventoryContext);
@@ -22,7 +23,7 @@ export default function InventoryScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>🎒 Your Inventory</Text>
+      <Text style={styles.title}>🎒 Inventory 🎒</Text>
       <ScrollView>
         {inventoryEntries.map(([category, items]) => {
           const itemsEntries = Object.entries(items) as [
@@ -45,6 +46,7 @@ export default function InventoryScreen() {
           );
         })}
       </ScrollView>
+      <InfoPanel />
     </SafeAreaView>
   );
 }
