@@ -23,6 +23,7 @@ import {
   GrowthInfoModal,
   HappinessInfoModal,
   HungerInfoModal,
+  IntelligenceInfoModal,
   MainInfoModal,
   MedicineInfoModal,
   PettingInfoModal,
@@ -52,6 +53,8 @@ export default function PetScreen() {
   const [isWalkInfoModalVisible, setWalkInfoModalVisible] = useState(false);
   const [isGrowthInfoModalVisible, setGrowthInfoModalVisible] = useState(false);
   const [isStaminaInfoModalVisible, setStaminaInfoModalVisible] =
+    useState(false);
+  const [isIntelligenceInfoModalVisible, setIntelligenceInfoModalVisible] =
     useState(false);
   const [isHungerInfoModalVisible, setHungerInfoModalVisible] = useState(false);
   const [isHappinessInfoModalVisible, setHappinessInfoModalVisible] =
@@ -225,7 +228,6 @@ export default function PetScreen() {
             onPress={() => {
               setMessage("");
               resetIdleTimer();
-              // playVideoForAction(feed);
               setFoodModalVisible(true);
             }}
             onLongPress={() => {
@@ -238,7 +240,6 @@ export default function PetScreen() {
           <Pressable
             style={styles.button}
             onPress={() => {
-              // playVideoForAction(pet);
               handlePet();
             }}
             onLongPress={() => {
@@ -292,6 +293,7 @@ export default function PetScreen() {
           setEnergyInfoModalVisible={setEnergyInfoModalVisible}
           setCutenessInfoModalVisible={setCutenessInfoModalVisible}
           setStaminaInfoModalVisible={setStaminaInfoModalVisible}
+          setIntelligenceInfoModalVisible={setIntelligenceInfoModalVisible}
         />
         <ActivityLog />
       </ScrollView>
@@ -329,6 +331,10 @@ export default function PetScreen() {
       <StaminaInfoModal
         isStaminaInfoModalVisible={isStaminaInfoModalVisible}
         setStaminaInfoModalVisible={setStaminaInfoModalVisible}
+      />
+      <IntelligenceInfoModal
+        isIntelligenceInfoModalVisible={isIntelligenceInfoModalVisible}
+        setIntelligenceInfoModalVisible={setIntelligenceInfoModalVisible}
       />
       <HungerInfoModal
         isHungerInfoModalVisible={isHungerInfoModalVisible}

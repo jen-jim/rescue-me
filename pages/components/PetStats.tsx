@@ -12,6 +12,9 @@ type PetStatsProps = {
   setEnergyInfoModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setCutenessInfoModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setStaminaInfoModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  setIntelligenceInfoModalVisible: React.Dispatch<
+    React.SetStateAction<boolean>
+  >;
 };
 
 export default function PetStats({
@@ -21,6 +24,7 @@ export default function PetStats({
   setEnergyInfoModalVisible,
   setCutenessInfoModalVisible,
   setStaminaInfoModalVisible,
+  setIntelligenceInfoModalVisible,
 }: PetStatsProps) {
   const { petData } = useContext(PetContext);
 
@@ -66,6 +70,16 @@ export default function PetStats({
         <Text style={styles.label}>Stamina Lvl:</Text>
         <Text style={styles.value}>{petData.growth}</Text>
         {/* add stamina to petData and some logic for stamina to increase based on activity levels */}
+      </Pressable>
+      <Pressable
+        style={styles.row}
+        onPress={() => {
+          setIntelligenceInfoModalVisible(true);
+        }}
+      >
+        <Text style={styles.label}>Intelligence Lvl:</Text>
+        <Text style={styles.value}>{petData.growth}</Text>
+        {/* add intelligence to petData and some logic for intelligence to increase based on no. of games played */}
       </Pressable>
       <Pressable
         style={styles.row}
