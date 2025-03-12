@@ -21,7 +21,7 @@ export const FoodProximityButton: React.FC<FoodProximityButtonProps> = ({
   const nearFoodArr = allFoodCoords.filter((foodCoords) => {
     const latDiff = Math.abs(userLocation.latitude - foodCoords.latitude);
     const lonDiff = Math.abs(userLocation.longitude - foodCoords.longitude);
-    const threshold = 0.001; //set to 0.001 for testing, change to 0.0005 on production
+    const threshold = 0.0005;
 
     return latDiff < threshold && lonDiff < threshold;
   });

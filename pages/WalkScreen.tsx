@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Text,
 } from "react-native";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import {
   useFocusEffect,
   useNavigation,
@@ -19,7 +19,7 @@ import { FoodMarkers } from "./components/FoodMarkers";
 import { SpecialFoodMarker } from "./components/SpecialFoodMarker";
 import { generateFoodCoords } from "../utils/generateFoodCoords";
 import { FoodProximityButton } from "./components/FoodProximityButton";
-import { foodTypes, specialFoodData } from "../utils/foodTypes";
+import { foodTypes } from "../utils/foodTypes";
 import { calculateDistance } from "../utils/calculateDistance";
 import { PetContext } from "../contexts/PetContext";
 
@@ -58,15 +58,10 @@ const requestLocationPermission = async () => {
 };
 
 export default function WalkScreen() {
-  const { petData, updateDistance } = useContext(PetContext);
+  const { petData, setPetData, updateDistance } = useContext(PetContext);
   const navigation = useNavigation();
   const [userLocation, setUserLocation] = useState<Region | null>(null);
   const [prevLocation, setPrevLocation] = useState<Region | null>(null);
-  const [foodCoords, setFoodCoords] = useState<Region[]>([]);
-  const [specialFood, setSpecialFood] = useState<{
-    coords: Region;
-    data: specialFoodData;
-  }>();
 
   const route = useRoute();
 
@@ -180,45 +175,73 @@ export default function WalkScreen() {
 
   useEffect(() => {
     if (userLocation) {
-      const foodMarkers = [];
-      const numOfFoodMarkers = 10;
-      for (let i = 0; i < numOfFoodMarkers; i++) {
-        foodMarkers.push(
-          generateFoodCoords(userLocation, deltas.latitudeDelta)
-        );
+      const today = new Date().toDateString();
+      if (
+        petData.lastFoodMarkerDate !== today ||
+        petData.foodMarkers.length === 0
+      ) {
+        const numOfFoodMarkers = 10;
+        const newFoodMarkers: Region[] = [userLocation];
+        for (let i = 0; i < numOfFoodMarkers; i++) {
+          newFoodMarkers.push(
+            generateFoodCoords(userLocation, deltas.latitudeDelta)
+          );
+        }
+        const specialFoodType =
+          foodTypes[Math.floor(Math.random() * foodTypes.length)];
+        const newSpecialFood = {
+          coords: generateFoodCoords(userLocation, deltas.latitudeDelta),
+          data: specialFoodType,
+        };
+        setPetData((prev) => ({
+          ...prev,
+          foodMarkers: newFoodMarkers,
+          specialFood: newSpecialFood,
+          lastFoodMarkerDate: today,
+        }));
       }
-      setFoodCoords(foodMarkers);
-
-      const specialFoodType =
-        foodTypes[Math.floor(Math.random() * foodTypes.length)];
-      setSpecialFood({
-        coords: generateFoodCoords(userLocation, deltas.latitudeDelta),
-        data: specialFoodType,
-      });
     }
-  }, [userLocation, deltas.latitudeDelta]);
+  }, [
+    userLocation,
+    petData.lastFoodMarkerDate,
+    petData.foodMarkers.length,
+    setPetData,
+    deltas.latitudeDelta,
+  ]);
 
   useFocusEffect(
     React.useCallback(() => {
       if ((route.params as any)?.collectedFood) {
         const collectedFood: Region = (route.params as any).collectedFood;
-        setFoodCoords((prev) =>
-          prev.filter(
+        setPetData((prevPetData) => ({
+          ...prevPetData,
+          foodMarkers: prevPetData.foodMarkers.filter(
             (marker) =>
               marker.latitude !== collectedFood.latitude ||
               marker.longitude !== collectedFood.longitude
-          )
-        );
+          ),
+        }));
+        // setFoodCoords((prev) =>
+        //   prev.filter(
+        //     (marker) =>
+        //       marker.latitude !== collectedFood.latitude ||
+        //       marker.longitude !== collectedFood.longitude
+        //   )
+        // );
         if (
-          specialFood?.coords &&
-          specialFood.coords.latitude === collectedFood.latitude &&
-          specialFood.coords.longitude === collectedFood.longitude
+          petData.specialFood?.coords &&
+          petData.specialFood.coords.latitude === collectedFood.latitude &&
+          petData.specialFood.coords.longitude === collectedFood.longitude
         ) {
-          setSpecialFood(undefined);
+          setPetData((prevPetData) => ({
+            ...prevPetData,
+            specialFood: undefined,
+          }));
+          // setSpecialFood(undefined);
         }
         navigation.setParams({ collectedFood: undefined });
       }
-    }, [navigation, route.params, specialFood?.coords])
+    }, [navigation, petData.specialFood?.coords, route.params, setPetData])
   );
 
   if (!userLocation) {
@@ -247,22 +270,17 @@ export default function WalkScreen() {
           showsUserLocation={true}
           showsMyLocationButton={true}
         >
-          {/* <Marker
-            coordinate={userLocation}
-            title="Test marker"
-            description="to test food proximity mechanics"
-          /> */}
-          <FoodMarkers foodCoords={foodCoords} />
-          <SpecialFoodMarker specialFood={specialFood} />
+          <FoodMarkers foodCoords={petData.foodMarkers} />
+          <SpecialFoodMarker specialFood={petData.specialFood} />
         </MapView>
         <View style={styles.buttonContainer}>
           <FoodProximityButton
             userLocation={userLocation}
             allFoodCoords={[
-              ...foodCoords,
-              ...(specialFood ? [specialFood.coords] : []),
+              ...(petData.specialFood ? [petData.specialFood.coords] : []),
+              ...petData.foodMarkers,
             ]}
-            specialFood={specialFood}
+            specialFood={petData.specialFood}
           />
         </View>
       </View>

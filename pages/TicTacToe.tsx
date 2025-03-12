@@ -15,7 +15,7 @@ import Video from "react-native-video";
 import { InfoPanel } from "./components/InfoPanel";
 const play = require("./assets/video/play.mp4");
 
-export default function TicTakToe({ navigation }) {
+export default function TicTacToe({ navigation }) {
   const [message, setMessage] = useState("");
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const idleTimer = useRef(null);
@@ -27,9 +27,11 @@ export default function TicTakToe({ navigation }) {
   const computer = "O";
 
   const resetIdleTimer = () => {
-    if (idleTimer.current) clearTimeout(idleTimer.current);
+    if (idleTimer.current) {
+      clearTimeout(idleTimer.current);
+    }
     idleTimer.current = setTimeout(() => {
-      setMessage("Tic Tak Toe");
+      setMessage("Tic Tac Toe");
     }, 4000);
   };
 
@@ -64,7 +66,9 @@ export default function TicTakToe({ navigation }) {
   }
 
   function handleCellClick(index) {
-    if (board[index] || winner) return;
+    if (board[index] || winner) {
+      return;
+    }
     const newBoard = [...board];
     newBoard[index] = user;
     setBoard(newBoard);
@@ -87,7 +91,9 @@ export default function TicTakToe({ navigation }) {
       square === null ? index : null
     );
     emptyIndices = emptyIndices.filter((index) => index !== null);
-    if (emptyIndices.length === 0) return;
+    if (emptyIndices.length === 0) {
+      return;
+    }
 
     const randomNum =
       emptyIndices[Math.floor(Math.random() * emptyIndices.length)];

@@ -24,6 +24,9 @@ const initialPetData: PetData = {
   totalDistanceWalked: 0,
   lastUpdatedWeek: 0,
   lastDistanceUpdate: new Date().toISOString(),
+  foodMarkers: [],
+  specialFood: undefined,
+  lastFoodMarkerDate: new Date().toDateString(),
 };
 
 export default function PetProvider({ children }: PetProviderProps) {

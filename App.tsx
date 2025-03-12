@@ -15,7 +15,7 @@ import TestNavScreen from "./pages/TestNavScreen";
 import LoadingScreen from "./pages/components/LoadingScreen";
 import MiniGames from "./pages/MiniGames";
 import PetProvider from "./contexts/PetProvider";
-import TicTakToe from "./pages/TicTakToe";
+import TicTacToe from "./pages/TicTacToe";
 import Connect4 from "./pages/Connect4";
 import LoginScreen from "./pages/LoginScreen";
 
@@ -33,7 +33,8 @@ export type StackParamList = {
   Loading: undefined;
   MiniGames: undefined;
   Connect4: undefined;
-  TicTakToe: undefined;
+  TicTacToe: undefined;
+  Login: undefined;
 };
 const Stack = createNativeStackNavigator<StackParamList>();
 
@@ -96,8 +97,8 @@ export default function App() {
                 options={{ title: "Rescue Me" }}
               />
               <Stack.Screen
-                name="TicTakToe"
-                component={TicTakToe}
+                name="TicTacToe"
+                component={TicTacToe}
                 options={{ title: "Rescue Me" }}
               />
               <Stack.Screen
@@ -108,7 +109,7 @@ export default function App() {
               <Stack.Screen
                 name="Loading"
                 component={LoadingScreen}
-                options={{ title: "Loding Screen" }}
+                options={{ title: "Loading Screen" }}
               />
               <Stack.Screen
                 name="Login"

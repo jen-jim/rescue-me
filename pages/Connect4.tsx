@@ -21,7 +21,9 @@ export default function Connect4({ navigation }) {
   const idleTimer = useRef(null);
 
   const resetIdleTimer = () => {
-    if (idleTimer.current) clearTimeout(idleTimer.current);
+    if (idleTimer.current) {
+      clearTimeout(idleTimer.current);
+    }
     idleTimer.current = setTimeout(() => {
       setMessage("Play with me!");
     }, 4000);
@@ -61,10 +63,10 @@ export default function Connect4({ navigation }) {
       <View style={styles.buttonsContainer}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("TicTakToe")}
+          onPress={() => navigation.navigate("TicTacToe")}
         >
           <Icon name="game-controller" size={24} color="white" />
-          <Text style={styles.buttonText}>Tic Tak Toe</Text>
+          <Text style={styles.buttonText}>Tic Tac Toe</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
