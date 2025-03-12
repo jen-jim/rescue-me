@@ -1,4 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Region } from "../pages/WalkScreen";
+import { specialFoodData } from "./foodTypes";
 
 export type PetData = {
   name: string | undefined;
@@ -18,6 +20,9 @@ export type PetData = {
   totalDistanceWalked: number;
   lastUpdatedWeek: number;
   lastDistanceUpdate: string;
+  foodMarkers: Region[];
+  specialFood?: { coords: Region; data: specialFoodData };
+  lastFoodMarkerDate: string;
 };
 
 export const savePetData = async (pet: PetData) => {
