@@ -128,7 +128,7 @@ export default function TicTacToe({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>🧩 Tic Tak Toe 🧩</Text>
+      <Text style={styles.title}>❌⭕️ Tic Tac Toe ⭕️❌</Text>
       <ScrollView>
         <View style={styles.container}>
           <View style={styles.petContainer}>
