@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   Animated,
-  Image,
   ScrollView,
   Pressable,
 } from "react-native";
@@ -28,8 +27,14 @@ import {
   MedicineInfoModal,
   PettingInfoModal,
   PlayInfoModal,
+  StaminaInfoModal,
   WalkInfoModal,
 } from "./components/PetPageInfoModals";
+import ActivityLog from "./components/ActivityLog";
+import Video from "react-native-video";
+
+const idle = require("./assets/video/idle.mp4");
+const pet = require("./assets/video/pet.mp4");
 
 export default function PetScreen() {
   const navigation = useNavigation();
@@ -46,6 +51,8 @@ export default function PetScreen() {
     useState(false);
   const [isWalkInfoModalVisible, setWalkInfoModalVisible] = useState(false);
   const [isGrowthInfoModalVisible, setGrowthInfoModalVisible] = useState(false);
+  const [isStaminaInfoModalVisible, setStaminaInfoModalVisible] =
+    useState(false);
   const [isHungerInfoModalVisible, setHungerInfoModalVisible] = useState(false);
   const [isHappinessInfoModalVisible, setHappinessInfoModalVisible] =
     useState(false);
@@ -56,6 +63,15 @@ export default function PetScreen() {
   const [message, setMessage] = useState("");
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const idleTimer = useRef<NodeJS.Timeout | null>(null);
+
+  const [petVideo, setPetVideo] = useState(idle);
+
+  const playVideoForAction = (video: any) => {
+    setPetVideo(video);
+    setTimeout(() => {
+      setPetVideo(idle);
+    }, 5000);
+  };
 
   // Combined refresh function that applies decay based on elapsed time.
   const refreshPetData = useCallback(async () => {
@@ -114,13 +130,17 @@ export default function PetScreen() {
     return () => clearInterval(interval);
   }, [refreshPetData]);
 
-  const handlePet = async () => {
+  const handlePet = () => {
     // increase happiness
     setPetData({
       ...petData,
       happiness: petData.happiness + 10,
     });
-    showMessage("That was nice!");
+    playVideoForAction(pet);
+    showMessage("");
+    setTimeout(() => {
+      showMessage("That was nice!");
+    }, 3000);
   };
 
   const showMessage = (text: string) => {
@@ -168,9 +188,12 @@ export default function PetScreen() {
       <ScrollView>
         <View style={styles.petContainer}>
           <View style={styles.petBox}>
-            <Image
-              source={require("./assets/video/placeholder_img.png")}
+            <Video
+              source={petVideo}
               style={styles.petImage}
+              resizeMode="contain"
+              repeat
+              muted
             />
           </View>
 
@@ -200,6 +223,9 @@ export default function PetScreen() {
           <Pressable
             style={styles.button}
             onPress={() => {
+              setMessage("");
+              resetIdleTimer();
+              // playVideoForAction(feed);
               setFoodModalVisible(true);
             }}
             onLongPress={() => {
@@ -211,7 +237,10 @@ export default function PetScreen() {
           </Pressable>
           <Pressable
             style={styles.button}
-            onPress={handlePet}
+            onPress={() => {
+              // playVideoForAction(pet);
+              handlePet();
+            }}
             onLongPress={() => {
               setPettingInfoModalVisible(true);
             }}
@@ -222,6 +251,8 @@ export default function PetScreen() {
           <Pressable
             style={styles.button}
             onPress={() => {
+              setMessage("");
+              resetIdleTimer();
               setMedicineModalVisible(true);
             }}
             onLongPress={() => {
@@ -246,19 +277,23 @@ export default function PetScreen() {
           visible={foodModalVisible}
           onClose={() => setFoodModalVisible(false)}
           showMessage={showMessage}
+          playVideoForAction={playVideoForAction}
         />
         <MedicineModal
           visible={medicineModalVisible}
           onClose={() => setMedicineModalVisible(false)}
           showMessage={showMessage}
+          playVideoForAction={playVideoForAction}
         />
         <PetStats
           setGrowthInfoModalVisible={setGrowthInfoModalVisible}
           setHungerInfoModalVisible={setHungerInfoModalVisible}
           setHappinessInfoModalVisible={setHappinessInfoModalVisible}
-          setEnergyInfoModalVisible={setGrowthInfoModalVisible}
+          setEnergyInfoModalVisible={setEnergyInfoModalVisible}
           setCutenessInfoModalVisible={setCutenessInfoModalVisible}
+          setStaminaInfoModalVisible={setStaminaInfoModalVisible}
         />
+        <ActivityLog />
       </ScrollView>
       <InfoPanel />
       <MainInfoModal
@@ -291,6 +326,10 @@ export default function PetScreen() {
         isGrowthInfoModalVisible={isGrowthInfoModalVisible}
         setGrowthInfoModalVisible={setGrowthInfoModalVisible}
       />
+      <StaminaInfoModal
+        isStaminaInfoModalVisible={isStaminaInfoModalVisible}
+        setStaminaInfoModalVisible={setStaminaInfoModalVisible}
+      />
       <HungerInfoModal
         isHungerInfoModalVisible={isHungerInfoModalVisible}
         setHungerInfoModalVisible={setHungerInfoModalVisible}
@@ -310,6 +349,3 @@ export default function PetScreen() {
     </SafeAreaView>
   );
 }
-
-//interactions happen in AR?
-//pet (3d model) should respond/animate

@@ -10,18 +10,22 @@ interface IncubationFoodModalProps {
   visible: boolean;
   onClose: () => void;
   showMessage: (message: string) => void;
+  playVideoForAction: (video: any) => void;
 }
 
 export const IncubationFoodModal: React.FC<IncubationFoodModalProps> = ({
   visible,
   onClose,
   showMessage,
+  playVideoForAction,
 }) => {
   const { inventory, setInventory } = useContext(InventoryContext);
   const navigation = useNavigation();
 
   const feedFood = async (food: keyof FoodInventory) => {
+    const feed = require("../assets/video/feed.mp4")
     showMessage("That was tasty!");
+    playVideoForAction(feed);
 
     setInventory((prevInventory) => ({
       ...prevInventory,

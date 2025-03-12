@@ -10,16 +10,19 @@ interface IncubationMedicineModalProps {
   visible: boolean;
   onClose: () => void;
   showMessage: (message: string) => void;
+  playVideoForAction: (video: any) => void;
 }
 
 export const IncubationMedicineModal: React.FC<
   IncubationMedicineModalProps
-> = ({ visible, onClose, showMessage }) => {
+> = ({ visible, onClose, showMessage, playVideoForAction }) => {
   const { inventory, setInventory } = useContext(InventoryContext);
   const navigation = useNavigation();
 
   const feedMedicine = async (medicine: keyof MedicineInventory) => {
+    const medicate = require("../assets/video/medicate.mp4")
     showMessage("Yuck!");
+    playVideoForAction(medicate);
 
     setInventory((prevInventory) => ({
       ...prevInventory,

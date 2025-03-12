@@ -17,7 +17,7 @@ export const FoodMarkers: React.FC<FoodMarkersProps> = ({ foodCoords }) => {
           title="Food"
           description="Delicious and nutritious"
         >
-          <Icon name="fast-food" size={28} color="#FF0000" />
+          <Icon name="fast-food" size={28} color="#ff6b6b" />
         </Marker>
       ))}
     </>

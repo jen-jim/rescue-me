@@ -30,6 +30,13 @@ import { MedicateButton } from "./components/MedicateButton";
 import { styles } from "./StyleSheets/IncubationScreenStyles";
 import { IncubationFoodModal } from "./components/IncubationFoodModal";
 import { IncubationMedicineModal } from "./components/IncubationMedicineModal";
+import Video from "react-native-video";
+
+const idle = require("./assets/video/idle.mp4");
+const pet = require("./assets/video/pet.mp4");
+const clean = require("./assets/video/clean.mp4");
+const feed = require("./assets/video/feed.mp4");
+const medicate = require("./assets/video/medicate.mp4");
 
 export default function IncubationScreen() {
   const navigation = useNavigation();
@@ -54,6 +61,16 @@ export default function IncubationScreen() {
   // const [healthIntervalId, setHealthIntervalId] = useState();
   const [foodModalVisible, setFoodModalVisible] = useState(false);
   const [medicineModalVisible, setMedicineModalVisible] = useState(false);
+
+  const [petVideo, setPetVideo] = useState(idle);
+
+  const playVideoForAction = (video) => {
+    setPetVideo(video);
+    setTimeout(() => {
+      setPetVideo(idle);
+    }, 5000);
+  };
+
 
   // Close modals when the screen loses focus.
   useFocusEffect(
@@ -249,7 +266,13 @@ export default function IncubationScreen() {
       <ScrollView>
         <View style={styles.petContainer}>
           <View style={styles.petModel}>
-            <Text>[Ill pet]</Text>
+            <Video
+              source={petVideo}
+              style={{ width: "100%", height: "100%", borderRadius: 10 }}
+              resizeMode="cover"
+              repeat
+              muted
+            />
           </View>
 
           <View>
@@ -310,7 +333,7 @@ export default function IncubationScreen() {
 
           <View
             style={styles.interactionButtonsContainer}
-            // style={styles.section}
+          // style={styles.section}
           >
             <FeedButton
               setFoodModalVisible={setFoodModalVisible}
@@ -321,8 +344,8 @@ export default function IncubationScreen() {
               setMedicineInfoModalVisible={setMedicineInfoModalVisible}
             />
             {[
-              { text: "Pet", icon: "hand-left", msg: "*Wags tail*" },
-              { text: "Clean", icon: "water-outline", msg: "*wet dog shake*" },
+              { text: "Pet", icon: "hand-left", msg: "*Wags tail*", video: pet },
+              { text: "Clean", icon: "water-outline", msg: "*wet dog shake*", video: clean },
             ].map((btn) => {
               return (
                 <View key={btn.text} style={styles.interactionButtonWrapper}>
@@ -335,7 +358,10 @@ export default function IncubationScreen() {
                         ? styles.buttonEnabled
                         : styles.buttonDisabled,
                     ]}
-                    onPress={() => showMessage(btn.msg)}
+                    onPress={() => {
+                      showMessage(btn.msg)
+                      playVideoForAction(btn.video);
+                    }}
                     onLongPress={() => {
                       handleInteractionInfo(btn.text);
                     }}
@@ -407,11 +433,13 @@ export default function IncubationScreen() {
         visible={foodModalVisible}
         onClose={() => setFoodModalVisible(false)}
         showMessage={showMessage}
+        playVideoForAction={playVideoForAction}
       />
       <IncubationMedicineModal
         visible={medicineModalVisible}
         onClose={() => setMedicineModalVisible(false)}
         showMessage={showMessage}
+        playVideoForAction={playVideoForAction}
       />
     </SafeAreaView>
   );
