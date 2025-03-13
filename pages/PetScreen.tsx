@@ -33,6 +33,7 @@ import {
 } from "./components/PetPageInfoModals";
 import ActivityLog from "./components/ActivityLog";
 import Video from "react-native-video";
+import MiniGames from "./MiniGames";
 
 const idle = require("./assets/video/idle.mp4");
 const pet = require("./assets/video/pet.mp4");
@@ -183,6 +184,15 @@ export default function PetScreen() {
     setMainInfoModalVisible(true);
   }
 
+  function handleplayClick() {
+    if (petData.energy <= 0) {
+      setMessage("Your Pet is Too tired");
+      resetIdleTimer();
+    } else {
+      navigation.navigate("MiniGames");
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity activeOpacity={1} onPress={handleTitle}>
@@ -215,7 +225,7 @@ export default function PetScreen() {
         <View style={styles.buttonsContainer}>
           <Pressable
             style={styles.button}
-            onPress={() => navigation.navigate("MiniGames")}
+            onPress={() => handleplayClick()}
             onLongPress={() => {
               setPlayModalVisible(true);
             }}

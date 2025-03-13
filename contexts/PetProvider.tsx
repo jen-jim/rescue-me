@@ -13,6 +13,8 @@ const initialPetData: PetData = {
   happiness: 0,
   energy: 100,
   cuteness: 1,
+  intelligence: 1,
+  gamesPlayed: 0,
   lastUpdated: Date.now(),
   beganIncubation: undefined,
   extraTime: 0,

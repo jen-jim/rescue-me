@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useContext } from "react";
 import {
   View,
   Text,
@@ -13,15 +13,18 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 import Video from "react-native-video";
 import { InfoPanel } from "./components/InfoPanel";
+import { PetContext } from "../contexts/PetContext";
 const play = require("./assets/video/play.mp4");
 
 export default function TicTacToe({ navigation }) {
+  const { petData, setPetData } = useContext(PetContext);
   const [message, setMessage] = useState("");
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const idleTimer = useRef(null);
   const [board, setBoard] = useState(Array(9).fill(null));
   const [winner, setWinner] = useState(null);
   const [playsLeft, setPlays] = useState(3);
+  const [computerTurnCount, setComputerTurnCount] = useState(0);
 
   const user = "X";
   const computer = "O";
@@ -65,7 +68,87 @@ export default function TicTacToe({ navigation }) {
     return null;
   }
 
+  function findWinningMove(board, symbol) {
+    for (let i = 0; i < board.length; i++) {
+      if (board[i] === null) {
+        const newBoard = [...board];
+        newBoard[i] = symbol;
+        if (checkWinner(newBoard) === symbol) {
+          return i;
+        }
+      }
+    }
+    return null;
+  }
+
+  function computerMove(currentBoard) {
+    // Calculate a probability that increases with each move.
+    // after 3 moves, the probability is 1 (always strategic).
+    const strategicProbability = Math.min(
+      1,
+      (computerTurnCount + 1) / (3 / petData.intelligence || 1)
+    );
+    setComputerTurnCount((prev) => prev + 1);
+
+    let move;
+
+    const randomValue = Math.random();
+
+    if (randomValue < strategicProbability) {
+      move = findWinningMove(currentBoard, computer);
+      if (move === null) {
+        move = findWinningMove(currentBoard, user);
+      }
+    }
+
+    if (move === null) {
+      let emptyIndices = currentBoard
+        .map((square, index) => (square === null ? index : null))
+        .filter((index) => index !== null);
+      move = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+    }
+
+    const newBoard = [...currentBoard];
+    newBoard[move] = computer;
+    setBoard(newBoard);
+
+    const gameWinner = checkWinner(newBoard);
+    if (gameWinner) {
+      setWinner(gameWinner);
+    }
+  }
+  function updatePetStatsAfterGame() {
+    // Increase the number of games played.
+    setPetData((prev) => {
+      const newGamesPlayed = (prev.gamesPlayed || 0) + 1;
+      let newGrowth = prev.growth;
+      let newEnergy = prev.energy;
+      let newIntelligence = prev.intelligence || 1;
+      let newHappiness = prev.happiness;
+      if (newGamesPlayed % 1 === 0) {
+        newHappiness += 7;
+        newEnergy -= 15;
+      }
+      if (newGamesPlayed % 2 === 0) {
+        newGrowth += 1;
+        newIntelligence += 1;
+      }
+      return {
+        ...prev,
+        gamesPlayed: newGamesPlayed,
+        growth: newGrowth,
+        intelligence: newIntelligence,
+        happiness: Math.min(100, newHappiness),
+        energy: Math.max(0, newEnergy),
+      };
+    });
+  }
+
   function handleCellClick(index) {
+    if (petData.energy === 0) {
+      setMessage("Your pet is too tired to play.");
+      return;
+    }
     if (board[index] || winner) {
       return;
     }
@@ -75,6 +158,8 @@ export default function TicTacToe({ navigation }) {
 
     const gameWinner = checkWinner(newBoard);
     if (gameWinner) {
+      updatePetStatsAfterGame();
+
       setWinner(gameWinner);
       return;
     }
@@ -82,28 +167,7 @@ export default function TicTacToe({ navigation }) {
     if (newBoard.includes(null)) {
       setTimeout(() => {
         computerMove(newBoard);
-      }, 500);
-    }
-  }
-
-  function computerMove(currentBoard) {
-    let emptyIndices = currentBoard.map((square, index) =>
-      square === null ? index : null
-    );
-    emptyIndices = emptyIndices.filter((index) => index !== null);
-    if (emptyIndices.length === 0) {
-      return;
-    }
-
-    const randomNum =
-      emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
-    const newBoard = [...currentBoard];
-    newBoard[randomNum] = computer;
-    setBoard(newBoard);
-
-    const gameWinner = checkWinner(newBoard);
-    if (gameWinner) {
-      setWinner(gameWinner);
+      }, 250);
     }
   }
 
@@ -150,8 +214,11 @@ export default function TicTacToe({ navigation }) {
               </Animated.View>
             )}
           </View>
-          {/* Bring back when Css is reviewed!! */}
-          {winner && <Text style={styles.winner}>🏆 Winner: {winner} 🏆</Text>}
+          {winner && (
+            <Text style={styles.winner}>
+              🏆 {winner === "X" ? "You Win" : "Your pet Wins"} 🏆
+            </Text>
+          )}
 
           <View style={styles.container}>
             <View style={styles.grid}>
@@ -162,7 +229,9 @@ export default function TicTacToe({ navigation }) {
                   onPress={() => handleCellClick(index)}
                   disabled={winner !== null}
                 >
-                  <Text style={styles.squareText}>{square}</Text>
+                  <Animated.View style={[styles.cellContent]}>
+                    <Text style={styles.squareText}>{square}</Text>
+                  </Animated.View>
                 </TouchableOpacity>
               ))}
             </View>
@@ -274,17 +343,24 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     height: 300,
     width: 300,
-    borderWidth: 2,
-    borderColor: "#000",
     marginBottom: 10,
   },
   square: {
     width: "33.33%",
     height: "33.33%",
     borderWidth: 1,
-    borderColor: "#000",
+    // borderColor: "#444",
+    backgroundColor: "#fff",
+    borderRadius: 5,
     alignItems: "center",
     justifyContent: "center",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 1, height: 1 },
+  },
+  cellContent: {
+    transform: [{ scale: 1 }],
   },
   squareText: { fontSize: 36, color: "pink" },
 
