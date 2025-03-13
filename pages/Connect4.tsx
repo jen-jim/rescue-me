@@ -108,7 +108,7 @@ function findWinningMoveConnect4(board, symbol) {
 
 export default function ConnectFour({ navigation }) {
   // Get petData from context (ensure your PetProvider includes an "intelligence" field)
-  const { petData } = useContext(PetContext);
+  const { petData, setPetData } = useContext(PetContext);
   const [board, setBoard] = useState(createEmptyBoard());
   const [winner, setWinner] = useState(null);
   const [message, setMessage] = useState("");
@@ -132,6 +132,33 @@ export default function ConnectFour({ navigation }) {
     return () => clearTimeout(idleTimer.current);
   }, [message]);
 
+  function updatePetStatsAfterGame() {
+    // Increase the number of games played.
+    setPetData((prev) => {
+      const newGamesPlayed = (prev.gamesPlayed || 0) + 1;
+      let newGrowth = prev.growth;
+      let newEnergy = prev.energy;
+      let newIntelligence = prev.intelligence || 1;
+      let newHappiness = prev.happiness;
+      if (newGamesPlayed % 1 === 0) {
+        newHappiness += 7;
+        newEnergy -= 15;
+      }
+      if (newGamesPlayed % 2 === 0) {
+        newGrowth += 1;
+        newIntelligence += 1;
+      }
+      return {
+        ...prev,
+        gamesPlayed: newGamesPlayed,
+        growth: newGrowth,
+        intelligence: newIntelligence,
+        happiness: Math.min(100, newHappiness),
+        energy: Math.max(0, newEnergy),
+      };
+    });
+  }
+
   const handleColumnPress = (col) => {
     if (winner) return;
     const newBoard = simulateDrop(board, col, user);
@@ -139,6 +166,7 @@ export default function ConnectFour({ navigation }) {
     setBoard(newBoard);
     const gameWinner = checkWinner(newBoard);
     if (gameWinner) {
+      updatePetStatsAfterGame;
       setWinner(gameWinner);
       return;
     }
@@ -166,7 +194,7 @@ export default function ConnectFour({ navigation }) {
       move = findWinningMoveConnect4(currentBoard, computer);
       // If no winning move, try to block the user.
       if (move === null) {
-        move = findWinningMoveConnect4(currentBoard, "R");
+        move = findWinningMoveConnect4(currentBoard, user);
       }
     }
     if (move === null) {
@@ -183,6 +211,7 @@ export default function ConnectFour({ navigation }) {
       setBoard(newBoard);
       const gameWinner = checkWinner(newBoard);
       if (gameWinner) {
+        updatePetStatsAfterGame();
         setWinner(gameWinner);
       }
     }
@@ -225,7 +254,7 @@ export default function ConnectFour({ navigation }) {
                     styles.cell,
                     {
                       backgroundColor: cell
-                        ? cell === "R"
+                        ? cell === user
                           ? "red"
                           : "yellow"
                         : "white",
@@ -306,7 +335,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     borderWidth: 2,
     borderColor: "#333",
-    backgroundColor: "#add8e6",
+    backgroundColor: "blue",
     alignSelf: "center", // Center it horizontally
     // Remove padding to prevent extra width
   },
