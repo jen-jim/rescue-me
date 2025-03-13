@@ -1,6 +1,8 @@
-# Viro Starter Kit
+# Rescue Me
 
 This is a [**React Native**](https://reactnative.dev) project, set up with `@reactvision/react-viro`.
+
+Here is a video demonstration of the application
 
 ## Install the application
 
