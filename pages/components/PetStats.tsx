@@ -68,7 +68,7 @@ export default function PetStats({
         }}
       >
         <Text style={styles.label}>Stamina:</Text>
-        <Text style={styles.value}>{petData.growth}</Text>
+        <Text style={styles.value}>{petData.cuteness}</Text>
         {/* add stamina to petData and some logic for stamina to increase based on activity levels */}
       </Pressable>
       <Pressable
@@ -78,8 +78,7 @@ export default function PetStats({
         }}
       >
         <Text style={styles.label}>Intelligence:</Text>
-        <Text style={styles.value}>{petData.growth}</Text>
-        {/* add intelligence to petData and some logic for intelligence to increase based on no. of games played */}
+        <Text style={styles.value}>{petData.intelligence}</Text>
       </Pressable>
       <Pressable
         style={styles.row}

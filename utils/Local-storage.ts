@@ -7,6 +7,8 @@ export type PetData = {
   hunger: number;
   happiness: number;
   energy: number;
+  intelligence: number;
+  gamesPlayed: number;
   cuteness: number;
   growth: number;
   lastUpdated: number;
