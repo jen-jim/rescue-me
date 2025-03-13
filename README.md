@@ -98,4 +98,4 @@ The app has now successfully connected to the Development Server and any changes
 
 ## Acknowledgements
 
-This project was built using the [**Viro Starter Kit**](https://github.com/ReactVision/starter-kit) for [**React Native**](https://reactnative.dev)
+This project was built using the [**React Native Viro Starter Kit**](https://github.com/ReactVision/starter-kit) from [React Vision](https://github.com/ReactVision)
