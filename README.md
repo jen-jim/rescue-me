@@ -1,8 +1,8 @@
 # Rescue Me
 
-This is a [**React Native**](https://reactnative.dev) project, set up with `@reactvision/react-viro`.
+(description from northcoders website)
 
-Here is a video demonstration of the application
+Here is a video demonstration of the application (link to northcoders website)
 
 ## Installing the Application
 
@@ -96,11 +96,6 @@ The app has now successfully connected to the Development Server and any changes
 
 -------
 
-## Next Steps
-
-Check out the [Viro React documentation](https://viro-community.readme.io/) for guides, examples, and more!
-
------- 
 ## Acknowledgements
 
-This project was built using the [Viro Starter Kit for React Native](https://github.com/ReactVision/starter-kit)
+This project was built using the [**Viro Starter Kit**](https://github.com/ReactVision/starter-kit) for [**React Native**](https://reactnative.dev)
