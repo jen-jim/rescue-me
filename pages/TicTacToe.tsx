@@ -258,6 +258,13 @@ export default function TicTacToe({ navigation }) {
           <Icon name="game-controller" size={24} color="white" />
           <Text style={styles.buttonText}>Back to Minigames</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("Pet")}
+        >
+          <Icon name="game-controller" size={20} color="white" />
+          <Text style={styles.buttonText}>Back to Your Pet</Text>
+        </TouchableOpacity>
       </View>
 
       <InfoPanel />

@@ -271,10 +271,10 @@ export default function ConnectFour({ navigation }) {
       <View style={styles.buttonsContainer}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("TicTacToe")}
+          onPress={() => navigation.navigate("MiniGames")}
         >
           <Icon name="game-controller" size={24} color="white" />
-          <Text style={styles.buttonText}>Tic Tac Toe</Text>
+          <Text style={styles.buttonText}>Back to Minigames</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={resetGame}>
           <Icon name="refresh" size={24} color="white" />

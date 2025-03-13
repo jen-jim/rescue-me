@@ -72,6 +72,13 @@ export default function MiniGames({ navigation }) {
             <Icon name="game-controller" size={24} color="white" />
             <Text style={styles.buttonText}>Connect-4</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate("Pet")}
+          >
+            <Icon name="game-controller" size={24} color="white" />
+            <Text style={styles.buttonText}>Back to Your Pet</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
       <InfoPanel />
