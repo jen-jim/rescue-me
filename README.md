@@ -24,15 +24,16 @@ Follow the [React Native - Environment Setup](https://reactnative.dev/docs/set-u
 npm install
 ```
 
-> **Note**: This project was built for android, however, if you would like to configure it to run on iOS you will need to do the following:
-
 ### iOS only:
+
+> **Note**: This project was built for android, however, if you would like to configure it to run on iOS you will need to do the following:
 
 ```bash
 cd ios
 pod install
 cd ..
 ```
+
 ## Step 3: Connect your Device to a Development Server for the Application.
 
 > **Warning**: Due to limitations of the Apple Simulator and the Android Emulator, you must run this project on a physical device.
