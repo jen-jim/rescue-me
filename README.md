@@ -1,18 +1,22 @@
 # Rescue Me
 
-(description from northcoders website)
+***Rescue them, Heal them, Take care of them!***
 
-Here is a video demonstration of the application (link to northcoders website)
+Rescue Me is a mobile Android application designed to provide an engaging and interactive pet rescue experience. Users can rescue a virtual pet in need, nurture it back to health, and care for it over time.
+
+Following the initial rescue, users must support their pet’s recovery, ensuring its well-being until it reaches full health. Once the pet has recovered, additional features become available, including virtual walks, where users can collect food and medicine through an augmented reality (AR) experience. Additionally, mini-games such as Tic-Tac-Toe and Connect Four are unlocked, offering further interactive engagement.
+
+View the [full details of our project on the Northcoders website](https://northcoders.com/project-phase/rescue-me). 
 
 ## Installing the Application
 
-...here is an apk file of the application which you can download and install on your phone...
+**Coming soon:** apk file of the application which you can download and install on your phone. 
 
 ## Creating and Running a Development Server for the Application
 
 > **Note**: This project was built without the use of a React Native Framework such as Expo.
 
-If you would like to modify the app, follow these instrucions to create and install an app-debug.apk file on your phone which is then connected to a Development Server to run the app on your phone with live updates (Hot Reloading).
+To run the app with live updates on your phone, follow these steps to generate and install an app-debug.apk, which connects to a Development Server for Hot Reloading.
  
 ## Step 1: Set up your Environment
 
