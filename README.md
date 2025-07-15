@@ -6,7 +6,7 @@ Rescue Me is a mobile Android application designed to provide an engaging and in
 
 Following the initial rescue, users must support their pet’s recovery, ensuring its well-being until it reaches full health. Once the pet has recovered, additional features become available, including virtual walks, where users can collect food and medicine through an augmented reality (AR) experience. Additionally, mini-games such as Tic-Tac-Toe and Connect Four are unlocked, offering further interactive engagement.
 
-View the [full details of our project on the Northcoders website](https://northcoders.com/project-phase/rescue-me). 
+View the [full details of our project on the Northcoders website](https://www.northcoders.com/blog/student-projects-rescue-me/). 
 
 ## Installing the Application
 
